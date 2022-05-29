@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<bean id="stv" class="org.ddongq.DI_8_set.SamsungTV">
+		<property name="price" value="50000"/>
+		<property name="speaker" ref="sony"/>
+	</bean>
+	
+	<bean id="sony" class="org.ddongq.DI_8_set.SonySpeaker"></bean>
+	<bean id="apple" class="org.ddongq.DI_8_set.AppleSpeaker"></bean>
+
+</beans>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- 
+		생성자 인젝션을 위해 <constructor-arg/> 태그를 추가하고
+		생성자 인자로 전달할 객체의 아이디를 ref 속성으로 참조한다.
+	 -->
+
+	<!-- DI_5_constructor -->
+	<bean id="stv" class="org.ddongq.DI_5_constructor.SamsungTV">
+		<constructor-arg ref="sony"/>
+	</bean>
+	
+	<bean id="sony" class="org.ddongq.DI_5_constructor.SonySpeaker"></bean>
+
+</beans>
