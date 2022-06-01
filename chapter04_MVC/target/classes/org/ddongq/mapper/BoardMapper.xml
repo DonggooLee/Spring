@@ -11,23 +11,23 @@
 		]]>
 	</select>
 	
-	<insert id="insert">
-		insert into tbl_board(bno, title, content, writer)
-		values(seq_board.nextval, #{title}, #{content}, #{writer})
-	</insert>
-	
 	<select id="read" resultType="org.ddongq.domain.BoardVO">
 		<![CDATA[
 			select * from tbl_board where bno = #{bno}
 		]]>
 	</select>
 	
+	<insert id="insert">
+		insert into tbl_board(bno, title, content, writer)
+		values(seq_board.nextval, #{title}, #{content}, #{writer})
+	</insert>
+	
 	<delete id="delete">
 		DELETE FROM tbl_board WHERE bno = #{bno}
 	</delete>
 	
 	<update id="update">
-		UPDATE tbl_board SET title = #{title}, content = #{content}, updatedate = sysdate WHERE bno = #{bno}	
+		UPDATE tbl_board SET title = #{title}, content = #{content}, writer = #{writer}, updatedate = sysdate WHERE bno = #{bno}	
 	</update>
 	
 </mapper>

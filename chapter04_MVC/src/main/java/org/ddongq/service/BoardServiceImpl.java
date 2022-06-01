@@ -27,19 +27,19 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public BoardVO get(long bno) {
-		log.info("get...."+bno);
+		log.info("get...." + bno);
 		return mapper.read(bno);
 	}
 
 	@Override
 	public void register(BoardVO vo) {
-		log.info("register...."+vo);
+		log.info("register...." + vo);
 		mapper.insert(vo);
 	}
 
 	@Override
 	public boolean modify(BoardVO vo) {
-		log.info("modify...."+vo);
+		log.info("modify...." + vo);
 		int result = mapper.update(vo);
 		if(result == 1) {
 			return true;
@@ -50,7 +50,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public boolean remove(long bno) {
-		log.info("remove...."+bno);
+		log.info("remove...." + bno);
 		return mapper.delete(bno) == 1;
 	}
 	

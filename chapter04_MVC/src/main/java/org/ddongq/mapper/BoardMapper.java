@@ -11,11 +11,11 @@ public interface BoardMapper {
 	// 전체 리스트
 	public List<BoardVO> getList();
 	
-	// 데이터 삽입
-	public void insert(BoardVO board);
-	
 	// 한 개 데이터
 	public BoardVO read(long bno);
+	
+	// 데이터 삽입
+	public void insert(BoardVO board);
 	
 	// 데이터 삭제
 	public int delete(long bno);
