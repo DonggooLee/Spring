@@ -36,12 +36,16 @@ public class SampleController {
 	}
 	
 	
+	/*
+	 * Rest 방식으로 호출하는 경우에는 화면이 아닌 데이터 자체를 전송하는 방식으로 처리되기 때문에
+	 * 데이터를 요청하는 쪽에서는 정상적인 데이터인지, 비정상적인 데이터인지를 구분할 수 있는 확실한 방법을 제공해야 함
+	 * ResponseEntity는 데이터와 함께  HTTP 헤더의 상태 메세지등을 같이 전달하는 용도로 사용
+	 * HTTP의 상태 코드와 에러 메시지등을 함께 전달할 수 있기 때문에 받는 입장에서는 확실하게 결과를 알 수 있다.
+	 * sample/check.json?height=160&weight=80  => .json 붙이면 json 형식으로 확인 가능
+	 * F12 -> 네트워크 콘솔 창 확인
+	 */
 	@GetMapping(value = "/check", params = {"height", "weight"})
 	private ResponseEntity<SampleVO> check(Double height, Double weight) {
-		// Rest 방식으로 호출하는 경우에는 화면이 아닌 데이터 자체를 전송하는 방식으로 처리되기 때문에
-		// 데이터를 요청하는 쪽에서는 정상적인 데이터인지, 비정상적인 데이터인지를 구분할 수 있는 확실한 방법을 제공해야 함
-		// ResponseEntity는 데이터와 함께  HTTP 헤더의 상태 메세지등을 같이 전달하는 용도로 사용
-		// HTTP의 상태 코드와 에러 메시지등을 함께 전달할 수 있기 때문에 받는 입장에서는 확실하게 결과를 알 수 있다.
 		SampleVO vo = new SampleVO(0, ""+height, ""+weight);	// Double => String
 		ResponseEntity<SampleVO> result = null;
 		if(height < 150) {
