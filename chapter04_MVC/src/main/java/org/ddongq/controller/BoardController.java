@@ -25,11 +25,11 @@ public class BoardController {
 	private BoardService service;
 	
 	@GetMapping("/list")
-	// 리턴 타입 String 으로 만들어야 한다. 뷰를 리턴하기 때문에..
-	// 리턴 타입 void 로 만든경우에는 메소드 명과 동일한 곳으로 .jsp 파일로 이동한다. 
-	// (Spring 에서 지원하는 기능)
+	// 리턴 타입 String 으로 만들어야 한다. 뷰를 리턴하기 때문에...
+	// 리턴 타입 void 로 만든경우에는 메소드 명과 동일한 곳으로 .jsp 로 이동한다.(Spring 에서 지원하는 기능)
 	public String list(Model model, Criteria cri) {
-		log.info("list..." + cri);
+		log.info("/list");
+		log.info("cri.............." + cri);
 		model.addAttribute("list", service.getList(cri));
 		
 		int total = service.getTotal(cri);
@@ -41,12 +41,13 @@ public class BoardController {
 	
 	@GetMapping("/register")
 	public String register() {
+		log.info("/register");
 		return "board/register";
 	}
 	
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
-		log.info("register..." + board);
+		log.info("register.............." + board);
 		// Redirect 는 경로가 보이지만 데이터를 못가지고 넘어가는 문제점을 보완한 방법
 		// 데이터를 가지고 넘어간다.(forwarding 은 경로 문제로...)
 		rttr.addFlashAttribute("result","ok");
@@ -57,6 +58,8 @@ public class BoardController {
 	@GetMapping("/get")	
 	public String get(@RequestParam("bno") long bno, Model model, Criteria cri) {
 		log.info("/get");
+		log.info("bno.............." + bno);
+		log.info("cri.............." + cri);
 		model.addAttribute("board", service.get(bno));
 		model.addAttribute("cri", cri);
 		return "board/get";
@@ -65,6 +68,8 @@ public class BoardController {
 	@GetMapping("/modify")
 	public String modify(@RequestParam("bno") long bno, Model model, Criteria cri) {
 		log.info("/modify");
+		log.info("bno.............." + bno);
+		log.info("cri.............." + cri);
 		model.addAttribute("board", service.get(bno));
 		model.addAttribute("cri", cri);
 		return "board/modify";
@@ -72,18 +77,18 @@ public class BoardController {
 	
 	@PostMapping("/modify")
 	public String modify(BoardVO board, RedirectAttributes rttr) {
-		log.info("modify..." + board);
+		log.info("modify.............." + board);
 		if(service.modify(board)) {
-			rttr.addFlashAttribute("result","success");
+			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list";
 	}
 	
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") long bno, RedirectAttributes rttr) {
-		log.info("remove..." + bno);
+		log.info("remove.............." + bno);
 		if(service.remove(bno)) {
-			rttr.addFlashAttribute("result","success");
+			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list";
 	}

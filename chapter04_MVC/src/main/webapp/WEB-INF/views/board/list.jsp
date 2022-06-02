@@ -80,7 +80,7 @@
 <!-- /.row -->
 
 <script type="text/javascript">
-
+	
 	$(function() {
 		
 		// 새 게시글 등록 버튼 눌렀을 때 
@@ -88,20 +88,24 @@
 			location.href="/board/register";
 		});
 		
+		// id = actionForm 요소를 변수에 담기
 		var actionForm = $("#actionForm");
 		
+		// class = paginate_button 요소의  a태그  클릭 이벤트
 		$(".paginate_button a").click(function(e) {
+			// 일단 이벤트 방지
 			e.preventDefault();
-			// 이름이 페이지넘 인풋 객체 찾고 .val 내가 누른 a태그의 값을 넣겠다
-			actionForm.find("input[name='pageNum']").val($(this).attr("href"))
+			// 이름이  pageNum 인   input 객체를 찾고 .val 내가 누른  a태그의 값을 넣겠다??
+			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 			actionForm.submit();
 		})
 		
-		// =============== 조회화면 이동 이벤트 처리 =================
+		// ====== 조회화면 이동 이벤트 처리 ======
+		// class = move 요소의 클릭 이벤트
 		$(".move").click(function(e) {
 			// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
-			// e.preventDefault()를 이용
 			e.preventDefault();
+			// <a href="${board.bno}"> => href 속성에 들은 값을 가져온다. this를 사용한 이유는 구분짖기 위함
 			actionForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
 			actionForm.attr("action", "/board/get");
 			actionForm.submit();
@@ -133,7 +137,6 @@
 			return;
 		}
 	};
-	
 	
 </script>
 

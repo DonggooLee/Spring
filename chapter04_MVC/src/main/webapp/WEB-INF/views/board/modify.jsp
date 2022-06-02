@@ -55,6 +55,7 @@
 
 	$(function() {
 		
+		// form 태그 액션을 바꾸기 위해 객체를 가져오기
 		var formObj = $("form");
 		
 		$("button").on("click",function(e){
@@ -63,18 +64,19 @@
 			var operation = $(this).data("oper");
 			
 			if(operation == "remove"){
+				// form 태그 action 속성을 /board/remove 로 변경
 				formObj.attr("action", "/board/remove");	
 			}else if(operation == "list"){
-				// location.href="/board/list";
-				// return;
+				// form 태그 action 속성을 /board/list 로 변경
 				formObj.attr("action", "/board/list");	
 				// get 방식으로 보내기 위해 보낼 데이터도 없음
 				formObj.attr("method", "get");	
 				// 해당요소를 복사
 				var pageNum = $("input[name='pageNum']").clone();
 				var amount = $("input[name='amount']").clone();
-				// 불필요한 데이터가 넘어가는 것을 방지하기 위해 비워준다
+				// 불필요한 데이터가 넘어가는 것을 방지하기 위해 비우기
 				formObj.empty();
+				// 페이징 처리를 위해  pageNum, amount 붙여서  던지기				
 				formObj.append(pageNum);
 				formObj.append(amount);
 			}

@@ -56,16 +56,21 @@
 
 	$(function() {
 		
+		// id = operForm 인 요소 변수에 담기
 		var operForm = $("#operForm");
 		
+		// button 태그의  data-oper 속성값이  modify 인  요소 클릭시 이벤트
 		$("button[data-oper='modify']").click(function() {
-			operForm.attr("action","/board/modify").submit();
+			// operForm 에 속성 action = /board/modify 로 만든 후 submit();
+			operForm.attr("action", "/board/modify").submit();
 		});
 		
+		// button 태그의  data-oper 속성값이  list 인  요소 클릭시 이벤트
 		$("button[data-oper='list']").click(function() {
-			// 리스트로 이동할 때는 bno 값이 필요 없기 때문에!
+			// operForm 안에는  bno 값도 있지만  리스트로 이동할 때는  필요 없기 때문에 지워주기!
 			operForm.find("#bno").remove();
-			operForm.attr("action","/board/list").submit();
+			// operForm 에 속성 action = /board/list 로 만든 후 submit();
+			operForm.attr("action", "/board/list").submit();
 		});
 		
 	})
