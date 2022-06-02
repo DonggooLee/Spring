@@ -34,7 +34,7 @@
 							<tr>
 								<td><c:out value="${board.bno}"></c:out></td>
 								<td>
-									<a class="move" href="/board/get?bno=${board.bno}">
+									<a class="move" href="${board.bno}">
 										<c:out value="${board.title}"></c:out>
 									</a>
 								</td>
@@ -45,6 +45,31 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				<!-- page -->
+				<div class="pull-right">
+					<ul class="pagination">
+						<c:if test="${pageMaker.prev }">
+							<li class="paginate_button previous">
+								<a href="${pageMaker.startPage-1 }">&lt;</a>
+							</li>
+						</c:if>
+						<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }" step="1">
+							<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active':''}">
+								<a href="${num }">${num }</a>
+							</li>
+						</c:forEach>
+						<c:if test="${pageMaker.next }">
+							<li class="paginate_button">
+								<a href="${pageMaker.endPage+1 }">&gt;</a>
+							</li>
+						</c:if>
+					</ul>
+				</div>
+				<form action="/board/list" method="get" id="actionForm">
+					<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
+					<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+				</form>
+				<!-- end page -->
 			</div>
 			<!-- /.panel-body -->
 		</div>
@@ -57,9 +82,31 @@
 <script type="text/javascript">
 
 	$(function() {
+		
+		// 새 게시글 등록 버튼 눌렀을 때 
 		$("#regBtn").click(function() {
 			location.href="/board/register";
 		});
+		
+		var actionForm = $("#actionForm");
+		
+		$(".paginate_button a").click(function(e) {
+			e.preventDefault();
+			// 이름이 페이지넘 인풋 객체 찾고 .val 내가 누른 a태그의 값을 넣겠다
+			actionForm.find("input[name='pageNum']").val($(this).attr("href"))
+			actionForm.submit();
+		})
+		
+		// =============== 조회화면 이동 이벤트 처리 =================
+		$(".move").click(function(e) {
+			// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
+			// e.preventDefault()를 이용
+			e.preventDefault();
+			actionForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
+			actionForm.attr("action", "/board/get");
+			actionForm.submit();
+		});
+		
 	});
 
 	// 결과창 출력을 위한 코드
@@ -85,15 +132,8 @@
 			alert("처리가 완료되었습니다");
 			return;
 		}
-	}
+	};
 	
-	// =============== 조회화면 이동 이벤트 처리 =================
-	/* $(".move").click(function() {
-		// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
-		// e.preventDefault()를 이용
-		e.preventDefault();
-		
-	}); */
 	
 </script>
 

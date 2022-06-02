@@ -30,8 +30,8 @@
 						<label>작성자</label>
 						<input class="form-control" name="writer">
 					</div>
-					<button type="submit" class="btn btn-primary">등록</button>
-					<button type="submit" class="btn btn-danger">목록</button>
+					<button data-oper="register" type="submit" class="btn btn-primary">등록</button>
+					<button data-oper="list" type="button" onclick="location.href='/board/list'" class="btn btn-danger">목록</button>
  					<button type="reset" class="btn btn-warning">취소</button>
 				</form>
 			</div>

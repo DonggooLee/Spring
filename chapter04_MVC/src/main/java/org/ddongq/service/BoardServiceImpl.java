@@ -3,6 +3,7 @@ package org.ddongq.service;
 import java.util.List;
 
 import org.ddongq.domain.BoardVO;
+import org.ddongq.domain.Criteria;
 import org.ddongq.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,15 @@ public class BoardServiceImpl implements BoardService{
 	public BoardServiceImpl() {}
 	
 	@Override
-	public List<BoardVO> getList() {
-		log.info("getList....");
-		return mapper.getList();
+	public List<BoardVO> getList(Criteria cri) {
+		log.info("getListWithPaging...." + cri);
+		return mapper.getListWithPaging(cri);
+	}
+	
+	@Override
+	public int getTotal(Criteria cri) {
+		log.info("getTotal...." + cri);
+		return mapper.getTotalCount(cri);
 	}
 
 	@Override
@@ -38,6 +45,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
+	public boolean remove(long bno) {
+		log.info("remove...." + bno);
+		return mapper.delete(bno) == 1;
+	}
+	
+	@Override
 	public boolean modify(BoardVO vo) {
 		log.info("modify...." + vo);
 		int result = mapper.update(vo);
@@ -48,10 +61,4 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 
-	@Override
-	public boolean remove(long bno) {
-		log.info("remove...." + bno);
-		return mapper.delete(bno) == 1;
-	}
-	
 }

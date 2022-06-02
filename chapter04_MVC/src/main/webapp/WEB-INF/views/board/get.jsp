@@ -38,8 +38,8 @@
 				
 				<form action="/board/modify" method="get" id="operForm">
 					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno }"/>'/>
-					<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'/>
-					<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'/>
+					<input type="hidden" name="pageNum" value="${cri.pageNum }">
+					<input type="hidden" name="amount" value="${cri.amount }">
 				</form>
 			</div>
 			<!-- /.panel-body -->
@@ -53,7 +53,39 @@
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript" src="/resources/js/util.js"></script>
 <script type="text/javascript">
+
+	$(function() {
+		
+		var operForm = $("#operForm");
+		
+		$("button[data-oper='modify']").click(function() {
+			operForm.attr("action","/board/modify").submit();
+		});
+		
+		$("button[data-oper='list']").click(function() {
+			// 리스트로 이동할 때는 bno 값이 필요 없기 때문에!
+			operForm.find("#bno").remove();
+			operForm.attr("action","/board/list").submit();
+		});
+		
+	})
+
 </script>
 <script type="text/javascript">
+	
+	console.log("================");
+	console.log("JS TEST");
+	
+	var bnoValue = '<c:out value="${board.bno}"/>';
+
+	// add 함수를 호출하고 필요한 인자값 3개중 에러를 제외한 2개 던져준다
+	replyService.add(
+		{bno:bnoValue, reply:'JS TEST', replyer:'tester'},
+		function(result) {
+			// js 파일에서 성공한다면 콜백 함수가 실행되면서 result값이 넘어 오는것을 받는다
+			alert("result : " + result);
+		}
+	);
+	
 </script>
 <%@include file="../include/footer.jsp" %>

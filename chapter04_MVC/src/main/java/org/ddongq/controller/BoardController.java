@@ -1,6 +1,8 @@
 package org.ddongq.controller;
 
 import org.ddongq.domain.BoardVO;
+import org.ddongq.domain.Criteria;
+import org.ddongq.domain.PageDTO;
 import org.ddongq.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,16 +21,21 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/board/*")
 public class BoardController {
 
-	// @AllArgsConstructo를 통해 받아왔기 때문에 @Setter 를 사용하지 않아도 된다! (선택사항)
+	// @AllArgsConstructo를 통해 받아왔기 때문에  @Setter를 사용하지 않아도 된다! (선택사항)
 	private BoardService service;
 	
 	@GetMapping("/list")
 	// 리턴 타입 String 으로 만들어야 한다. 뷰를 리턴하기 때문에..
 	// 리턴 타입 void 로 만든경우에는 메소드 명과 동일한 곳으로 .jsp 파일로 이동한다. 
 	// (Spring 에서 지원하는 기능)
-	public String list(Model model) {
-		log.info("list");
-		model.addAttribute("list", service.getList());
+	public String list(Model model, Criteria cri) {
+		log.info("list..." + cri);
+		model.addAttribute("list", service.getList(cri));
+		
+		int total = service.getTotal(cri);
+		log.info("total.............." + total);
+		
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
 		return "board/list";
 	}
 	
@@ -48,16 +55,18 @@ public class BoardController {
 	}
 	
 	@GetMapping("/get")	
-	public String get(@RequestParam("bno") long bno, Model model) {
+	public String get(@RequestParam("bno") long bno, Model model, Criteria cri) {
 		log.info("/get");
 		model.addAttribute("board", service.get(bno));
+		model.addAttribute("cri", cri);
 		return "board/get";
 	}
 	
 	@GetMapping("/modify")
-	public String modify(@RequestParam("bno") long bno, Model model) {
+	public String modify(@RequestParam("bno") long bno, Model model, Criteria cri) {
 		log.info("/modify");
 		model.addAttribute("board", service.get(bno));
+		model.addAttribute("cri", cri);
 		return "board/modify";
 	}
 	

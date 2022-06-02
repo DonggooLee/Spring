@@ -4,12 +4,19 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
 import org.ddongq.domain.BoardVO;
+import org.ddongq.domain.Criteria;
 
 public interface BoardMapper {
 	
-	//@Select("select * from tbl_board")
+	// @Select("select * from tbl_board")
 	// 전체 리스트
 	public List<BoardVO> getList();
+	
+	// 페이징 처리 전체 리스트
+	public List<BoardVO> getListWithPaging(Criteria cri);
+	
+	// 총 게시글 수
+	public int getTotalCount(Criteria cri);
 	
 	// 한 개 데이터
 	public BoardVO read(long bno);

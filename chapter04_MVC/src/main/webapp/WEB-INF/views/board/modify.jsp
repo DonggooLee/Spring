@@ -36,9 +36,11 @@
 					</div>
 					<input type="hidden" class="form-control" name="regDate" value='<c:out value="${board.regdate }"/>' readonly="readonly">
 					<input type="hidden" class="form-control" name="updateDate" value='<c:out value="${board.updatedate }"/>' readonly="readonly">
-					<button type="submit" class="btn btn-primary">글 수정</button>
-					<button type="submit" class="btn btn-warning">글 삭제</button>
-					<button type="submit" class="btn btn-warning">목록</button>
+					<button data-oper="modify" type="submit" class="btn btn-primary">글 수정</button>
+					<button data-oper="remove" type="submit" class="btn btn-warning">글 삭제</button>
+					<button data-oper="list" type="submit" class="btn btn-warning">목록</button>
+					<input type="hidden" name="pageNum" value="${cri.pageNum }">
+					<input type="hidden" name="amount" value="${cri.amount }">
 				</form>
 			</div>
 			<!-- /.panel-body -->
@@ -50,7 +52,38 @@
 <!-- /.row -->
 
 <script type="text/javascript">
-</script>
 
+	$(function() {
+		
+		var formObj = $("form");
+		
+		$("button").on("click",function(e){
+			e.preventDefault();
+			
+			var operation = $(this).data("oper");
+			
+			if(operation == "remove"){
+				formObj.attr("action", "/board/remove");	
+			}else if(operation == "list"){
+				// location.href="/board/list";
+				// return;
+				formObj.attr("action", "/board/list");	
+				// get 방식으로 보내기 위해 보낼 데이터도 없음
+				formObj.attr("method", "get");	
+				// 해당요소를 복사
+				var pageNum = $("input[name='pageNum']").clone();
+				var amount = $("input[name='amount']").clone();
+				// 불필요한 데이터가 넘어가는 것을 방지하기 위해 비워준다
+				formObj.empty();
+				formObj.append(pageNum);
+				formObj.append(amount);
+			}
+			
+			formObj.submit();
+			
+		})
+	})
+
+</script>
 
 <%@include file="../include/footer.jsp" %>

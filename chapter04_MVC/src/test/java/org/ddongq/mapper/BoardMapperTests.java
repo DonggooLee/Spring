@@ -3,6 +3,7 @@ package org.ddongq.mapper;
 import java.util.List;
 
 import org.ddongq.domain.BoardVO;
+import org.ddongq.domain.Criteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class BoardMapperTests {
 	@Setter(onMethod_ = @Autowired) // 전체 가져오기
 	private BoardMapper mapper;		// 인터페이스 이기 때문에 어차피 new 할 수 없다
 	
+	
 	// 전체 데이터 조회
 	/*
 	@Test
@@ -32,7 +34,18 @@ public class BoardMapperTests {
 	}
 	*/
 
+	
+	// 페이징 처리 전체 데이터 조회
+	@Test
+	public void getListWithPaging() {
+		Criteria cri = new Criteria();
+		cri.setPageNum(3);
+		cri.setAmount(10);
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		log.info("내가 출력한 결과물 : " + list);
+	}
 
+	
 	// 한 개 데이터 조회
 	/*
 	@Test
@@ -68,15 +81,17 @@ public class BoardMapperTests {
 
 	
 	// 데이터 수정
+	/*
 	@Test
 	public void getUpdate() {
 		BoardVO vo = new BoardVO();
-		vo.setBno(27);
+		vo.setBno(33);
 		vo.setTitle("06-01 제목 수정");
 		vo.setContent("06-01 내용 수정");
 		vo.setWriter("06-01 작성자 수정");
 		int result = mapper.update(vo);
 		log.info("내가 출력한 결과물 : " + result);
 	}
+	*/
 	
 }
