@@ -15,7 +15,7 @@ public interface ReplyMapper {
 	public List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") long bno);
 	
 	// 댓글 읽기
-	public ReplyVO read(long bno);
+	public ReplyVO read(long rno);
 	
 	// 댓글 삭제
 	public int delete(long bno);

@@ -74,7 +74,6 @@ public class ReplyMapperTests {
 			ReplyVO vo = new ReplyVO();
 			vo.setRno(3);
 			vo.setReply("**수정한 댓글 내용**");
-			vo.setReplyer("**수정한 댓글 작성자**");
 			int result = mapper.update(vo);
 			log.info("내가 출력한 결과물 : " + result);
 		}

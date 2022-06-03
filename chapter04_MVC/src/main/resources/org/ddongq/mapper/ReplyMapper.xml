@@ -14,7 +14,7 @@
  	</select>
  
  	<select id="read" resultType="org.ddongq.domain.ReplyVO">
-		SELECT * FROM tbl_reply where bno = #{bno}
+		SELECT * FROM tbl_reply where rno = #{rno}
  	</select>
  	
  	<delete id="delete">
@@ -22,7 +22,7 @@
  	</delete>
  	
  	<update id="update">
-		UPDATE tbl_reply SET reply = #{reply}, replyer = #{replyer}, updatedate = sysdate where rno = #{rno} 	
+		UPDATE tbl_reply SET reply = #{reply}, updatedate = sysdate where rno = #{rno} 	
  	</update>
  	
  </mapper>

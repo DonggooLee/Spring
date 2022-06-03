@@ -25,9 +25,9 @@ public class ReplyServiceImpl implements ReplyService{
 		}
 
 		@Override
-		public ReplyVO get(long bno) {
-			log.info("get...." + bno);
-			return mapper.read(bno);
+		public ReplyVO get(long rno) {
+			log.info("get...." + rno);
+			return mapper.read(rno);
 		}
 
 		@Override

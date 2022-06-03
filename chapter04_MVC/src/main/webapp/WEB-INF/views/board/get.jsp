@@ -82,15 +82,40 @@
 	console.log("JS TEST");
 	
 	var bnoValue = '<c:out value="${board.bno}"/>';
-
+	
+	replyService.get(6, function(result){
+		console.log(result);
+	});
+	
+	/* replyService.update(
+		{rno:7, reply:'댓글수정테스트'},
+		function(result) {
+			alert("result : " + result);
+		}
+	); */
+	
+	/* replyService.remove(5, function(result){
+		if(result=="success"){
+			alert("댓글이 삭제 되었습니다.")
+		}else{
+			alert("댓글이 삭제에 실패했습니다.")
+		}
+	}); */
+	
+	/* replyService.getList({bno:bnoValue, page:1}, function(list){
+			for(var i=0; i<list.length; i++){
+				console.log(list[i]);
+			};
+	}); */
+	
 	// add 함수를 호출하고 필요한 인자값 3개중 에러를 제외한 2개 던져준다
-	replyService.add(
+	/* replyService.add(
 		{bno:bnoValue, reply:'JS TEST', replyer:'tester'},
 		function(result) {
 			// js 파일에서 성공한다면 콜백 함수가 실행되면서 result값이 넘어 오는것을 받는다
 			alert("result : " + result);
 		}
-	);
+	); */
 	
 </script>
 <%@include file="../include/footer.jsp" %>
