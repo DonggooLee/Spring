@@ -46,8 +46,7 @@ public class ReplyController {
 	// produces = 출력할 데이터 포맷 
 	@PostMapping(value = "/new", 
 			consumes = "application/json", 
-			produces = {MediaType.TEXT_PLAIN_VALUE})
-	// MediaType.TEXT_PLAIN_VALUE = String 타입 
+			produces = {MediaType.TEXT_PLAIN_VALUE}) // MediaType.TEXT_PLAIN_VALUE = String 타입 
 	public ResponseEntity<String> create(@RequestBody ReplyVO vo){
 		
 		log.info("ReplyVO........." + vo);
@@ -66,8 +65,8 @@ public class ReplyController {
 	// 2. 조회
 	@GetMapping(value = "/pages/{bno}/{page}",
 			produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(@PathVariable("bno") long bno,
-			@PathVariable("page") int page){
+	public ResponseEntity<List<ReplyVO>> getList(
+			@PathVariable("bno") long bno, @PathVariable("page") int page){
 		
 		log.info("getList.......");
 		
