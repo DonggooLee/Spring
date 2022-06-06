@@ -198,17 +198,16 @@
 		
 		// 댓글 달기 버튼 클릭 이벤트
 		$("#addReplyBtn").on("click", function(e){
-		   modal.find("input").val("");               // 입력 창 비우기
-		   modalInputReplyDate.closest("div").hide();      // 등록 날짜 입력 창 숨기기
-		   //modal.find("button[id!=modalCloseBtn]").hide(); // 취소 버튼 제외 숨기기
-		   modalModBtn.hide();            // 수정 버튼 숨기기
-		   modalRemoveBtn.hide();         // 삭제 버튼 숨기기
+		   modal.find("input").val("");               			// 입력 창 비우기
+		   modalInputReplyDate.closest("div").hide();    	 	// 등록 날짜 입력 창 숨기기
+		   //modal.find("button[id!=modalCloseBtn]").hide();	// 취소 버튼 제외 숨기기
+		   modalModBtn.hide();           // 수정 버튼 숨기기
+		   modalRemoveBtn.hide();        // 삭제 버튼 숨기기
 		   modalRegisterBtn.show();      // 등록 버튼 보이기
-		   
-		   $(".modal").modal("show");      // 모달 창 보이기
+		   $(".modal").modal("show");    // 모달 창 보이기
 		});
 		
-		// (댓글 등록)취소 버튼 클릭 이벤트
+		// 댓글 등록 취소 버튼 클릭 이벤트
 		$("#modalCloseBtn").on("click", function(e){
 		   $(".modal").modal("hide");  	 // 모달 창 숨김
 		});
@@ -219,17 +218,24 @@
 		// 2. 입력 input 비워주기
 		// 3. 모달창 숨기기
 		modalRegisterBtn.on("click", function(e){
-			replyService.add(
-				{bno:bnoValue, reply:modalInputReply.val(), replyer:modalInputReplyer.val()},
-				function(result) {
-					// js 파일에서 성공한다면 콜백 함수가 실행되면서 result값이 넘어 오는것을 받는다
-					alert("result : " + result);
-					$(".modal").modal("hide");
-				}
-			);	   
+			var choice = confirm("정말 댓글을 추가 하시겠습니까?");
+			if( choice ){
+				replyService.add(
+					{bno:bnoValue, reply:modalInputReply.val(), replyer:modalInputReplyer.val()},
+					function(result) {
+						// js 파일에서 성공한다면 콜백 함수가 실행되면서 result값이 넘어 오는것을 받는다
+						alert("result : " + result);
+						$(".modal").modal("hide");
+						showList(1);
+					}
+				);	   
+			} else {
+				$(".modal").modal("hide");
+			}
 		});
+
 		
-	});
+	}); /* end : page 로드  */
 	
 	
 	// var bnoValue = '<c:out value="${board.bno}"/>';
