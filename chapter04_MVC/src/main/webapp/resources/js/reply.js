@@ -33,7 +33,7 @@ var replyService = (function() {
 			contentType : 'application/json; charset=utf-8',
 			success : function(result, status, xhr) {
 				if(callback){
-					callback(result);
+					callback(result)
 				}
 			},
 			error : function(xhr, status, er) {
@@ -53,10 +53,10 @@ var replyService = (function() {
 		
 		$.ajax({
 			type : 'get',
-			url : '/replies/pages/'+bno+'/'+page+'.json',
+			url : '/replies/pages/' + bno + '/' + page + '.json',
 			success : function(result, status, xhr) {
 				if(callback){
-					callback(result);
+					callback(result)
 				}
 			},
 			error : function(xhr, status, er) {
@@ -69,14 +69,14 @@ var replyService = (function() {
 	}
 	
 	//replyService.remove();
-	function remove(rno, status, error) {
+	function remove(rno, callback, error) {
 		
 		$.ajax({
 			type : 'delete',
 			url : '/replies/' + rno,
 			success : function(result, status, xhr) {
 				if(callback){
-					callback(result);
+					callback(result)
 				}
 			},
 			error : function(xhr, status, er) {
@@ -99,7 +99,7 @@ var replyService = (function() {
 			contentType : 'application/json; charset=utf-8',
 			success : function(result, status, xhr) {
 				if(callback){
-					callback(result);
+					callback(result)
 				}
 			},
 			error : function(xhr, status, er) {
@@ -116,10 +116,10 @@ var replyService = (function() {
 		
 		$.ajax({
 			type : 'get',
-			url : '/replies/' + rno,
+			url : '/replies/' + rno + ".json",
 			success : function(result, status, xhr) {
 				if(callback){
-					callback(result);
+					callback(result)
 				}
 			},
 			error : function(xhr, status, er) {
@@ -132,8 +132,8 @@ var replyService = (function() {
 	}
 	
 	return {
-		// add(오른쪽) 라는 함수를 add(왼쪽) 라는 명칭으로 던진다
-		// 왼쪽(키) 오른쪽(벨류:함수명) 자바스크립트 선언적 함수 부분 참고!!!!!
+		// add(오른쪽)라는 함수를  add(왼쪽)라는 명칭으로 던진다.
+		// 왼쪽(키) 오른쪽(벨류:함수명) 자바스크립트 선언적 함수 부분 참고!
 		add : add,
 		getList : getList,
 		remove : remove,

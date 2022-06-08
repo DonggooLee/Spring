@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReplyVO {
-	private long rno,bno;
+	
+	private long rno, bno;
 	private String reply, replyer;
 	private Date replyDate, updateDate;
+	
 }

@@ -18,7 +18,7 @@ public interface ReplyMapper {
 	public ReplyVO read(long rno);
 	
 	// 댓글 삭제
-	public int delete(long bno);
+	public int delete(long rno);
 	
 	// 댓글 수정
 	public int update(ReplyVO vo);

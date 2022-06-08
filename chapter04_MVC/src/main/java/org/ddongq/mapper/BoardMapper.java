@@ -2,6 +2,7 @@ package org.ddongq.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.ddongq.domain.BoardVO;
 import org.ddongq.domain.Criteria;
@@ -29,5 +30,8 @@ public interface BoardMapper {
 	
 	// 데이터 수정
 	public int update(BoardVO board);
+	
+	// replycnt 값 변경 => @param 어노테이션을 통해 매개변수를 2개 던질 수 있게 만들어줌
+	public void updateReplyCnt(@Param("bno") long bno, @Param("amount") int amount);
 	
 }

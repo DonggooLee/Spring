@@ -47,9 +47,10 @@ public class BoardController {
 	public String register(BoardVO board, RedirectAttributes rttr) {
 		log.info("register.............." + board);
 		// Redirect 는 경로가 보이지만 데이터를 못가지고 넘어가는 문제점을 보완한 방법
-		// 데이터를 가지고 넘어간다.(forwarding 은 경로 문제로...)
-		rttr.addFlashAttribute("result","ok");
+		// rttr 데이터를 가지고 넘어간다.(forwarding 은 경로 문제로...)
+		rttr.addFlashAttribute("result", "ok");
 		service.register(board);
+		// redirect: 순수 화면이동  => getMapping(/board/list) 
 		return "redirect:/board/list";
 	}
 	
