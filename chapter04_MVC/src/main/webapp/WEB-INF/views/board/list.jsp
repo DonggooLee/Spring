@@ -88,7 +88,32 @@
 			location.href="/board/register";
 		});
 		
-		// id = actionForm 요소를 변수에 담기
+		// 결과창 출력을 위한 코드
+		var result = '<c:out value="${result}"/>';
+		
+		// rttr 객체를 통해 받아온 값이 빈 값이 아닐 때(데이터 변경) 알림 메소드 실행
+		if(result != ''){
+			checkResult(result);
+		}
+		
+		// 뒤로가기 할 때 문제가 될 수 있으므로
+		// history 객체를 조작 ({정보를 담은 객체}, 뒤로가기 버튼 문자열 형태의 제목, 바꿀 url)
+		history.replaceState({},null,null);
+		function checkResult(result) {
+			if(result === '' || history.state){ // 뒤로가기 방지
+				return;
+			}
+			if(result === "ok"){ 				// 삽입 (rttr객체에 담아서 던진값이 ok)
+				alert("게시글이 삽입되었습니다");
+				return;
+			}
+			if(result === "success"){ 			// 수정,삭제 (rttr객체에 담아서 던진값이 success)
+				alert("처리가 완료되었습니다");
+				return;
+			}
+		};
+		
+		// id = actionForm form 객체 변수에 담기
 		var actionForm = $("#actionForm");
 		
 		// class = paginate_button 요소의  a태그  클릭 이벤트
@@ -113,30 +138,7 @@
 		
 	});
 
-	// 결과창 출력을 위한 코드
-	var result = '<c:out value="${result}"/>';
 	
-	// rttr 객체를 통해 받아온 값이 빈 값이 아닐 때(데이터 변경) 알림 메소드 실행
-	if(result != ''){
-		checkResult(result);
-	}
-	
-	// 뒤로가기 할 때 문제가 될 수 있으므로
-	// history 객체를 조작 ({정보를 담은 객체}, 뒤로가기 버튼 문자열 형태의 제목, 바꿀 url)
-	history.replaceState({},null,null);
-	function checkResult(result) {
-		if(result === '' || history.state){ // 뒤로가기 방지
-			return;
-		}
-		if(result === "ok"){ // 삽입
-			alert("게시글이 삽입되었습니다");
-			return;
-		}
-		if(result === "success"){ // 수정, 삭제
-			alert("처리가 완료되었습니다");
-			return;
-		}
-	};
 	
 </script>
 
