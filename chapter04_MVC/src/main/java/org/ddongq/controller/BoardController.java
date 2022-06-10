@@ -54,7 +54,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping("/get")	
+	@GetMapping("/get")
 	public String get(@RequestParam("bno") long bno, Model model, Criteria cri) {
 		log.info("/get");
 		log.info("bno.............." + bno);

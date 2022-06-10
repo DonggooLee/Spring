@@ -113,20 +113,19 @@
 			}
 		};
 		
-		// id = actionForm form 객체 변수에 담기
+		// id = actionForm <form> 객체 변수에 담기
 		var actionForm = $("#actionForm");
 		
-		// class = paginate_button 요소의  a태그  클릭 이벤트
+		// class = paginate_button 요소의  <a> 클릭 이벤트
 		$(".paginate_button a").click(function(e) {
-			// 일단 이벤트 방지
+			// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
 			e.preventDefault();
-			// 이름이  pageNum 인   input 객체를 찾고 .val 내가 누른  a태그의 값을 넣겠다??
+			// 이름이  pageNum 인   input 객체를 찾고 .val 내가 누른  a태그(this) href 속성 값을 넣겠다
 			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 			actionForm.submit();
 		})
 		
-		// ====== 조회화면 이동 이벤트 처리 ======
-		// class = move 요소의 클릭 이벤트
+		// class = move 요소의  <a> 클릭 이벤트
 		$(".move").click(function(e) {
 			// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
 			e.preventDefault();
@@ -136,9 +135,7 @@
 			actionForm.submit();
 		});
 		
-	});
-
-	
+	}); // end : onload
 	
 </script>
 

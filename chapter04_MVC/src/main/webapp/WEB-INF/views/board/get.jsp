@@ -231,12 +231,14 @@
 		   modalRemoveBtn.hide();       						// 삭제 버튼 숨기기
 		   modalRegisterBtn.show();     						// 등록 버튼 보이기
 		   $(".modal").modal("show");   						// 모달 창 보이기
-		});
+		}); // end : addReplyBtn
+		
 		
 		// 댓글 등록 취소 버튼 클릭 이벤트
 		$("#modalCloseBtn").on("click", function(e){
 		   $(".modal").modal("hide");  	 						// 모달 창 숨김
-		});
+		}); // end : modalCloseBtn
+		
 		
 		// 댓글 등록 버튼 클릭 이벤트
 		modalRegisterBtn.on("click", function(){
@@ -253,9 +255,10 @@
 			} else {
 				$(".modal").modal("hide");
 			}
-		});
+		});	// end : modalRegisterBtn
 		
-	}); /* end : page load  */
+		
+	}); // end : page load
 	
 </script>
 <%@include file="../include/footer.jsp" %>
