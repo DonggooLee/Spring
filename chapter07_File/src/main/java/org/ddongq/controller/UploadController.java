@@ -47,6 +47,8 @@ public class UploadController {
 		
 		@PostMapping("/uploadFormAction")
 		public void uploadFormPost(MultipartFile[] uploadFile, Model model) {
+			
+			// 업로드 파일이 여러개 일 수 있기 때문에 포문 사용
 			for(MultipartFile multipartFile : uploadFile) {
 				
 				String uploadFolder = "C:\\upload";
@@ -99,19 +101,18 @@ public class UploadController {
 				String uploadFileName = multipartFile.getOriginalFilename();
 				// Dto 에 넣을 때는 굳이 uuid를 붙일 필요 없다
 				attachDto.setFileName(uploadFileName);
-				// UUID 클래스 랜덤값 생성 (동일한 이름의 파일인 경우 _ 붙여주는 의미)
+				// UUID 클래스 랜덤값 생성 (동일한 이름의 파일인 경우 랜덤한 값을 _ 앞에 붙여주기 위함)
 				UUID uuid = UUID.randomUUID();
 				uploadFileName = uuid.toString() + "_" + uploadFileName;
-						
+				
 				try {
 					// File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
 					File saveFile = new File(uploadpath, uploadFileName);
+					// transferTo : 파일저장
 					multipartFile.transferTo(saveFile);
 					attachDto.setUuid(uuid.toString());
 					attachDto.setUploadPath(getFolder());
-					
 					list.add(attachDto);
-					
 				} catch (Exception e) {
 					log.error(e.getMessage());
 				}
@@ -130,11 +131,11 @@ public class UploadController {
 			return str.replace("-", File.separator);
 		}
 		
-		
 		// 파일 다운받을 때  => 매개변수로 던질땐 /download?fileName=폴더에있는 파일명.확장자 붙이면된다
 		@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 		@ResponseBody
 		public ResponseEntity<Resource> downloadFile(String fileName){
+			
 			log.info("download file : " + fileName);
 			
 			Resource resource = new FileSystemResource("c:\\upload\\" + fileName);
@@ -142,7 +143,12 @@ public class UploadController {
 			log.info("resource : " + resource);
 			
 			String resourceName = resource.getFilename();
+			log.info("resourceName : " + resourceName);
+			
 			String resourceOriginalName = resourceName.substring(resourceName.indexOf("_")+1);
+			log.info("resourceOriginalName : " + resourceOriginalName);
+			
+			// HTTP헤더는 클라이언트와 서버가 요청 또는 응답으로 부가적인 정보를 전송을 할 수 있게 한다.
 			HttpHeaders headers = new HttpHeaders();
 			
 			try {
@@ -153,26 +159,28 @@ public class UploadController {
 			}
 			
 			return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+			
 		}
-		
 		
 		@PostMapping("/deleteFile")
 		@ResponseBody
 		public ResponseEntity<String> deleteFile(String fileName){
-			log.info("deleteFile" + fileName);
-			File file;
 			
+			// fileName 에 담긴값을 사용하기 위해서는 decoder를 사용
+			// 로그 찍힌 것을 확인해 보면 특수 문자 등 다양한 문자가 깨져 있는 것을 확인  가능 (172번 줄 log와 비교)
+			log.info(" 디코딩 안한 경우 => deleteFile : " + fileName);
+			File file;
 			try {
 				file = new File("c:\\upload\\" + URLDecoder.decode(fileName, "utf-8"));
+				log.info(" 디코딩 실행한 경우 => deleteFile : " + URLDecoder.decode(fileName, "utf-8"));
 				file.delete();
-				// 파일 삭제 실패시 NOT_FOUND 코드를 보내준다
 			} catch (Exception e) {
 				e.printStackTrace();
+				// 파일 삭제 실패시 NOT_FOUND 코드를 보내준다
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
+			return new ResponseEntity<>("Delted", HttpStatus.OK);
 			
-			return new ResponseEntity<>("delted", HttpStatus.OK);
 		}
-		
 		
 }
