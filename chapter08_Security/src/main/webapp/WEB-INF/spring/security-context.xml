@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- id 는 크게 중요하지 않고 class가 중요 ! 내가 커스텀한 클래스를 태우기 위해 빈 객체 생성-->
+	<bean id="customAccessDenied" class="org.ddongq.security.CustomAccessDeniedHandler"></bean>	
+	<bean id="customLoginSuccess" class="org.ddongq.security.CustomLoginSuccessHandler"></bean>	
+	
+	<!-- auto-config / use-expressions <= admin 접속할때 필요  -->
+	<security:http auto-config="true" use-expressions="true">
+	
+		<!-- pattern => url 값과 맞춘다 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll"/>
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+		
+		<!-- 에러발생할 때 에러페이지 보여주기 위해 -->
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		<!-- 위에는 기본 아래는 내가 커스텀한 클래스를 태우기 위해 -->
+		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<!-- <security:form-login/> -->
+		<!-- 위에는 기본 아래는 내가 커스텀한 클래스를 태우기 위해 -->
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		
+		<!-- invalidate-session 로그아웃하면서 세션도 지우겠다 -->
+		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		
+		<security:csrf disabled="true"/>
+		
+	</security:http>
+	
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<!-- name = Username / {noop} <= 패스워드 인코딩 하는 과정 -->
+				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+				<!-- ROLE_MEMBER,ROLE_ADMIN admin 은 모든페이지 갈 수 있기 때문 -->
+				<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+			</security:user-service>		
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
