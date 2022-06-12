@@ -9,6 +9,7 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
+	<context:annotation-config></context:annotation-config>
 	<context:component-scan base-package="org.ddongq.service"></context:component-scan>
 	<context:component-scan base-package="org.ddongq.aop"></context:component-scan>
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
