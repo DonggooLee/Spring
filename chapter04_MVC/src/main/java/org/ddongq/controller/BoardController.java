@@ -4,6 +4,7 @@ import org.ddongq.domain.BoardVO;
 import org.ddongq.domain.Criteria;
 import org.ddongq.domain.PageDTO;
 import org.ddongq.service.BoardService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +38,14 @@ public class BoardController {
 		return "board/list";
 	}
 	
+	@PreAuthorize("isAuthenticated()")	// 인증된 사용자라면 true => 권한은 상관없이 로그인이 되어있냐 안되어 있냐만 판단
 	@GetMapping("/register")
 	public String register() {
 		log.info("/register");
 		return "board/register";
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
 		log.info("register.............." + board);
@@ -74,6 +77,9 @@ public class BoardController {
 		return "board/modify";
 	}
 	
+	// 메소드 실행 전 , 로그인한 사용자와 파라미터로 전달되는 작성자가 일치하는지 체크
+	// # = 매개변수로 넘어온걸 표현식으로 사용할 때 필수로 붙여주기!!!
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/modify")
 	public String modify(BoardVO board, RedirectAttributes rttr) {
 		log.info("modify.............." + board);

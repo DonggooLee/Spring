@@ -5,15 +5,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<!-- id 는 크게 중요하지 않고 class가 중요 ! 내가 커스텀한 클래스를 태우기 위해 빈 객체 생성-->
+	<!-- id는 해당 빈 객체를 사용할 때 ref="값"과 일치만 하면 된다. class=-->
 	<bean id="customAccessDenied" class="org.ddongq.security.CustomAccessDeniedHandler"></bean>	
 	<bean id="customLoginSuccess" class="org.ddongq.security.CustomLoginSuccessHandler"></bean>	
-	<!-- password를 숨기는 목적 -->
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	<bean id="customUserDetailService" class="org.ddongq.security.CustomUserDetailService"></bean>
 	
-	
-	<!-- auto-config / use-expressions <= admin 접속할때 필요  -->
+	<!-- 
+		auto-config auto-config='true' => 기본 로그인페이지 / HTTP 기본인증 / 로그아웃기능등을 제공 
+		use-expressions="true" => SpEL 사용한다는 의미 / admin 접속할때 필요 
+	-->
 	<security:http auto-config="true" use-expressions="true">
 	
 		<!-- pattern => url 값과 맞춘다 -->
@@ -29,12 +30,17 @@
 		<!-- <security:form-login/> -->
 		<!-- 위에는 기본 아래는 내가 커스텀한 클래스를 태우기 위해 -->
 		<!-- authentication-success-handler-ref : 로그인 권한에 부합하면 ref 값에 해당하는 bean 객체 id값을 찾아 간다 -->
-		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		<!-- <security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/> -->
+		<!-- 이제는 선택한 기능에 따라 화면을 이동 시켜야 하기 때문에 위 코드는 주석 처리 -->
+		<security:form-login login-page="/customLogin"/>
 		
-		<!-- invalidate-session 로그아웃하면서 세션도 지우겠다 -->
-		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		<!-- invalidate-session 로그아웃하면서 세션도 지우겠다 / delete-cookies : 로그아웃 시 쿠키도 삭제 40번 코드와 연결됨-->
+		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="remember-me"/>
 		
 		<security:csrf disabled="true"/>
+		
+		<!-- DB를 이용한 자동 로그인  token-validity-seconds : 쿠키 유효시간 , 604800 -> 1주일 초단위 -->
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
 		
 	</security:http>
 	

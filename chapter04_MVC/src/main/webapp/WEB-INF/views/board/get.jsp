@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="../include/header.jsp" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -33,7 +34,15 @@
 					<label>작성자</label>
 					<input class="form-control" name="writer" value='<c:out value="${board.writer }"/>' readonly="readonly">
 				</div>
-				<button data-oper="modify" class="btn btn-primary">수정</button>
+				
+				<!-- principal 객체는 변수에 담는 느낌 -->
+				<sec:authentication property="principal" var="pinfo"/>
+				<sec:authorize access="isAuthenticated()">
+					<!-- 만일 로그인 되어 있다면 작성자와 로그인 한 사용자 비교-->
+					<c:if test="${pinfo.username eq board.writer}">
+						<button data-oper="modify" class="btn btn-primary">수정</button>
+					</c:if>
+				</sec:authorize>
 				<button data-oper="list" class="btn btn-warning">목록</button>
 				
 				<form action="/board/modify" method="get" id="operForm">
@@ -56,7 +65,10 @@
       <div class = "panel panel-default">
          <div class= "panel-heading">
             <i class = "fa fa-comments fa-fw"></i> 댓글
-            <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+            <!-- 로그인 되어있냐 여부 만 판단 -->
+            <sec:authorize access="isAuthenticated()">
+	            <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+			</sec:authorize>
          </div>
          <!-- /.panel-heading -->
          <div class = "panel-body">
@@ -150,6 +162,8 @@
 		
 		var bnoValue = '<c:out value="${board.bno}"/>';
 		var replyUL = $(".chat"); // 제이쿼리 문법
+		// 현 상태는 로그인 하지 않은 경우에는 스크립트 에러가 나온다
+		var principal = '<sec:authentication property="principal.username"/>';
 		
 		// 모달 창 관련 스크립트
 		var modal = $(".modal");
@@ -202,17 +216,51 @@
 						});
 						// 댓글 삭제 버튼 클릭 이벤트
 						modalRemoveBtn.on("click", function(){
+							
+							alert(principal + "/" + modalInputReplyer.val());
+							
+							// 검증하는 부분
+							if(principal == null){
+								alert("로그인 후 사용하세요.")
+								modal.modal("hide");
+								return;
+							}
+							
+							if(principal != modalInputReplyer.val()){
+								alert("자신이 작성한 댓글만 삭제가 가능합니다.")
+								modal.modal("hide");
+								return;
+							}
+							
 							replyService.remove(rno, function(result) {
 								$(".modal").modal("hide");
 								showList(1);
 							});
+							
 						});
 						// 댓글 수정 버튼 클릭 이벤트
 						modalModBtn.on("click",function(){
+							
+							alert(principal + "/" + modalInputReplyer.val());
+							
+							// 검증하는 부분
+							if(principal == null){
+								alert("로그인 후 사용하세요.")
+								modal.modal("hide");
+								return;
+							}
+							
+							if(principal != modalInputReplyer.val()){
+								alert("자신이 작성한 댓글만 수정이 가능합니다.")
+								modal.modal("hide");
+								return;
+							}
+							
 							replyService.update({rno:rno, reply:modalInputReply.val()}, function(result) {
 								$(".modal").modal("hide");
 								showList(1);
 							});
+							
 						});
 					});
 				}; // end : else
@@ -231,6 +279,7 @@
 		   modalRemoveBtn.hide();       						// 삭제 버튼 숨기기
 		   modalRegisterBtn.show();     						// 등록 버튼 보이기
 		   $(".modal").modal("show");   						// 모달 창 보이기
+		   modalInputReplyer.val(principal).attr("readonly","readonly");	// principal 객체는 위에서 만듦 165번 코드
 		}); // end : addReplyBtn
 		
 		
@@ -251,7 +300,7 @@
 						$(".modal").modal("hide");
 						showList(1);
 					}
-				);	   
+				);
 			} else {
 				$(".modal").modal("hide");
 			}

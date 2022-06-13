@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="../include/header.jsp" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -36,11 +37,18 @@
 					</div>
 					<input type="hidden" class="form-control" name="regDate" value='<c:out value="${board.regdate }"/>' readonly="readonly">
 					<input type="hidden" class="form-control" name="updateDate" value='<c:out value="${board.updatedate }"/>' readonly="readonly">
-					<button data-oper="modify" type="submit" class="btn btn-primary">글 수정</button>
-					<button data-oper="remove" type="submit" class="btn btn-warning">글 삭제</button>
+					<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="isAuthenticated()">
+						<!-- 만일 로그인 되어 있다면 작성자와 로그인 한 사용자 비교-->
+						<c:if test="${pinfo.username eq board.writer}">
+							<button data-oper="modify" type="submit" class="btn btn-primary">글 수정</button>
+							<button data-oper="remove" type="submit" class="btn btn-warning">글 삭제</button>
+						</c:if>
+					</sec:authorize>
 					<button data-oper="list" type="submit" class="btn btn-warning">목록</button>
 					<input type="hidden" name="pageNum" value="${cri.pageNum }">
 					<input type="hidden" name="amount" value="${cri.amount }">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csfr.token }">
 				</form>
 			</div>
 			<!-- /.panel-body -->

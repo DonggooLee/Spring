@@ -11,7 +11,9 @@
 	
 	<h1>/sample/admin Page</h1>
 	
-	<!-- principal : 디테일서비스 객체 세션처럼 한번 저장되면 시큐리티 객체를 사용하면된다 + 서버 단에서도 사용이 가능하다 -->
+	<!-- principal : 
+	디테일서비스 객체 세션처럼 한번 저장되면 시큐리티 객체를 사용하면된다 + 서버 단에서도 사용이 가능하다 시큐리티 정보가 담긴다! 
+	-->
 	<p> principal : <sec:authentication property="principal"/></p>
 	<p> memberVO : <sec:authentication property="principal.member"/></p>
 	<p> 사용자 이름 : <sec:authentication property="principal.member.userName"/></p>
