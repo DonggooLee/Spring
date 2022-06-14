@@ -35,7 +35,7 @@
 					<button data-oper="register" type="submit" class="btn btn-primary">등록</button>
 					<button data-oper="list" type="button" onclick="location.href='/board/list'" class="btn btn-danger">목록</button>
  					<button type="reset" class="btn btn-warning">취소</button>
- 					<!-- 시큐리티 이용할땐  포스트 방식으로 던질 때 필요! -->
+ 					<!-- 시큐리티 이용할 때  포스트 방식으로 던질 때 필요! -->
  					<input type="hidden" name="${_csrf.parameterName}" value="${_csfr.token }">
 				</form>
 			</div>

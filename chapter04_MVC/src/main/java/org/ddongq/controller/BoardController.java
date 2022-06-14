@@ -27,7 +27,7 @@ public class BoardController {
 	
 	@GetMapping("/list")
 	// 리턴 타입 String 으로 만들어야 한다. 뷰를 리턴하기 때문에...
-	// 리턴 타입 void 로 만든경우에는 메소드 명과 동일한 곳으로 .jsp 로 이동한다.(Spring 에서 지원하는 기능)
+	// 리턴 타입 void 로 만든경우에는 URL과 동일한 .jsp 로 이동한다.(Spring 에서 지원하는 기능)
 	public String list(Model model, Criteria cri) {
 		log.info("/list");
 		log.info("cri.............." + cri);
@@ -51,8 +51,8 @@ public class BoardController {
 		log.info("register.............." + board);
 		// Redirect 는 경로가 보이지만 데이터를 못가지고 넘어가는 문제점을 보완한 방법
 		// rttr 데이터를 가지고 넘어간다.(forwarding 은 경로 문제로...)
-		rttr.addFlashAttribute("result", "ok");
 		service.register(board);
+		rttr.addFlashAttribute("result", "ok");
 		// redirect: 순수 화면이동  => getMapping(/board/list) 
 		return "redirect:/board/list";
 	}

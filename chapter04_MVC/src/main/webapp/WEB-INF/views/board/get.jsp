@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="../include/header.jsp" %>
@@ -38,7 +38,7 @@
 				<!-- principal 객체는 변수에 담는 느낌 -->
 				<sec:authentication property="principal" var="pinfo"/>
 				<sec:authorize access="isAuthenticated()">
-					<!-- 만일 로그인 되어 있다면 작성자와 로그인 한 사용자 비교-->
+					<!-- 만일 로그인 되어 있다면 작성자와 로그인 한 사용자 비교해서 일치 할 경우에만 수정 버트 표시 -->
 					<c:if test="${pinfo.username eq board.writer}">
 						<button data-oper="modify" class="btn btn-primary">수정</button>
 					</c:if>
@@ -144,7 +144,7 @@
 		
 		// button 태그의  data-oper 속성값이  list 인  요소 클릭시 이벤트
 		$("button[data-oper='list']").click(function() {
-			// operForm 안에는  bno 값도 있지만  리스트로 이동할 때는  필요 없기 때문에 지워주기!
+			// operForm 안에는  bno 값도 있지만  삭제 후 리스트로 이동할 때는  필요 없기 때문에 지워주기!
 			operForm.find("#bno").remove();
 			// operForm 에 속성 action = /board/list 로 만든 후 submit();
 			operForm.attr("action", "/board/list").submit();

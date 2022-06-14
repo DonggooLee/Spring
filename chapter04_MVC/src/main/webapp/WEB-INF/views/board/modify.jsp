@@ -62,15 +62,11 @@
 <script type="text/javascript">
 
 	$(function() {
-		
 		// form 태그 액션을 바꾸기 위해 객체를 가져오기
 		var formObj = $("form");
-		
-		$("button").on("click",function(e){
+		$("button").on("click", function(e){
 			e.preventDefault();
-			
 			var operation = $(this).data("oper");
-			
 			if(operation == "remove"){
 				// form 태그 action 속성을 /board/remove 로 변경
 				formObj.attr("action", "/board/remove");	
@@ -88,9 +84,7 @@
 				formObj.append(pageNum);
 				formObj.append(amount);
 			}
-			
 			formObj.submit();
-			
 		})
 	})
 

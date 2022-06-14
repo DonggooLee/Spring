@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="../include/header.jsp" %>
 
 <div class="row">
@@ -125,7 +125,7 @@
 			actionForm.submit();
 		})
 		
-		// class = move 요소의  <a> 클릭 이벤트
+		// class = move 요소의  <a> 클릭 이벤트 : 게시글 제목 버튼 클릭이벤트
 		$(".move").click(function(e) {
 			// <a> 클릭시 페이지 이동이 이루어지지 않게 하기 위해서
 			e.preventDefault();
