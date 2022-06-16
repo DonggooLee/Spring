@@ -29,6 +29,6 @@
 	<!-- mapper 연결해주는 package 경로 -->
 	<mybatis-spring:scan base-package="org.kg.mapper"/>
 	<!-- service 연결해주는  package 경로 -->
-	<!-- <context:component-scan base-package="org.ddongq.service"/> -->
+	<context:component-scan base-package="org.kg.service"/>
 	
 </beans>
