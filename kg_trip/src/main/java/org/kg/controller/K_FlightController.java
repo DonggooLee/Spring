@@ -1,16 +1,19 @@
 package org.kg.controller;
 
+import org.kg.domain.K_flightVO;
 import org.kg.service.FlightService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-@Controller
 @Log4j
+@Controller
 @AllArgsConstructor
 @RequestMapping("/flight/*")
 public class K_FlightController {
@@ -42,5 +45,13 @@ public class K_FlightController {
 		model.addAttribute("list", service.reservationList_());
 		return "flight/test";
 	}
+	
+//	// 비행기 항공편 추가
+//	@PostMapping("/flightInsert")
+//	public String flightInsert(K_flightVO vo) {
+//		log.info("flightInsert...........");
+//		log.info(vo);
+//		return "redirect:/flight/flightInsert";
+//	}
 	
 }

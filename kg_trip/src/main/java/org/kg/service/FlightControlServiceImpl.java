@@ -1,9 +1,7 @@
 package org.kg.service;
 
-import java.util.List;
-
 import org.kg.domain.K_flightVO;
-import org.kg.domain.testVO;
+import org.kg.domain.K_seatVO;
 import org.kg.mapper.FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +11,19 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Service
-public class FlightServiceImpl implements FlightService {
+public class FlightControlServiceImpl implements FlightControlService {
 
 	@Setter(onMethod_ = @Autowired)
 	FlightMapper mapper;
 	
-	// 항공권 예매 조회
 	@Override
-	public List<testVO> reservationList_() {
-		return mapper.reservationList();
+	public int flightInsert_(K_flightVO vo) {
+		return mapper.flightInsert(vo);
 	}
 
+	@Override
+	public int seatInsert_(K_seatVO vo) {
+		return mapper.seatInsert(vo);
+	}
+	
 }

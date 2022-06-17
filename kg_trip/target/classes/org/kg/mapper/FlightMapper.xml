@@ -3,9 +3,19 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="org.kg.mapper.FlightMapper">
-
-	<select id="resewwwst" resultType="org.kg.domain.K_reservationVO">
-			select * from k_reservation_tbl
+	
+	<!-- 항공편 추가 -->
+	<insert id="flightInsert">
+		INSERT INTO k_flight_tbl(flight_name, flight_people) VALUES (#{flight_name}, #{flight_people})
+	</insert>
+	
+	<!-- 좌석 추가 -->
+	<insert id="seatInsert">
+		INSERT INTO k_seat_tbl(seat_idx, flight_name, seat_grade, seat_name, seat_price) VALUES (k_seat_tbl_seq.nextval, #{flight_name}, #{seat_grade}, #{seat_name}, #{seat_price});
+	</insert>
+	
+	<!-- <select id="resewwwst" resultType="org.kg.domain.K_reservationVO">
+		select * from k_reservation_tbl
 	</select>
 
 	<select id="reservationList" resultType="org.kg.domain.testVO">
@@ -23,6 +33,6 @@
 				inner join k_airport_tbl t on s.ap_idx_s = t.ap_idx 
 				inner join k_airport_tbl p on s.ap_idx_d = p.ap_idx
 		]]>
-	</select>
+	</select> -->
 
 </mapper>

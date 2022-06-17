@@ -14,109 +14,183 @@
 
 		<section class="cont">
 		
-			<form action="" style="border: 1px solid black; width: 300px; margin: auto; margin-top: 100px;">
-				<table>
-					<tr>
-						<th>항공사</th>
-						<td>
-							<!-- 둘 중 하나 선택  -->
-							<!-- <fieldset>
-								<legend>항공사</legend>
-								<input type="checkbox" name="region" value="1">대한항공<br>
-								<input type="checkbox" name="region" value="2">아시아나<br>
-								<input type="checkbox" name="region" value="3">진에어<br>
-								<input type="checkbox" name="region" value="4">제주항공<br>
-								<input type="checkbox" name="region" value="5">에어서울<br>
-								<input type="checkbox" name="region" value="6">에어부산<br>
-								<input type="checkbox" name="region" value="7">티웨이항공<br>
-							</fieldset> -->
-							<select name="air_idx">
-								<option value="1">대한항공</option>
-								<option value="2">아시아나</option>
-								<option value="3">진에어</option>
-								<option value="4">제주항공</option>
-								<option value="5">에어서울</option>
-								<option value="6">에어부산</option>
-								<option value="7">티웨이항공</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>항공편명</th>
-						<td>
-							<!-- 항공편명 보여주기? -->
-							<input type="text" name="flight_name">
-						</td>
-					</tr>
-					<tr>
-						<th>비행일자</th>
-						<td>
-							<input type="date" name="start_date">
-						</td>
-					</tr>
-					<tr>
-						<th>탑승시각</th>
-						<td>
-							<input type="text" name="boarding_time" placeholder="YYYY-MM-DD HH:MM">
-						</td>
-					</tr>
-					<tr>
-						<th>출발시각</th>
-						<td>
-							<input type="text" name="depart_time" placeholder="YYYY-MM-DD HH:MM">
-						</td>
-					</tr>
-					<tr>
-						<th>도착시각</th>
-						<td>
-							<input type="text" name="arrive_time" placeholder="YYYY-MM-DD HH:MM">
-						</td>
-					</tr>
-					<tr>
-						<th>출발공항</th>
-						<td>
-							<select name="air_idx_s">
-								<option value="1">인천(ICN)</option>
-								<option value="2">제주(CJU)</option>
-								<option value="3">부산(PUS)</option>
-								<option value="4">청주(CJJ)</option>
-								<option value="5">여수(RSU)</option>
-								<option value="6">광주(KWJ)</option>
-								<option value="7">대구(TAE)</option>
-								<option value="8">김포(GMP)</option>
-								<option value="9">양양(YNY)</option>
-								<option value="10">군산(KUV)</option>
-								<option value="11">울산(USN)</option>
-								<option value="12">포항(KPO)</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>도착공항</th>
-						<td>
-							<select name="air_idx_d">
-								<option value="1">인천(ICN)</option>
-								<option value="2">제주(CJU)</option>
-								<option value="3">부산(PUS)</option>
-								<option value="4">청주(CJJ)</option>
-								<option value="5">여수(RSU)</option>
-								<option value="6">광주(KWJ)</option>
-								<option value="7">대구(TAE)</option>
-								<option value="8">김포(GMP)</option>
-								<option value="9">양양(YNY)</option>
-								<option value="10">군산(KUV)</option>
-								<option value="11">울산(USN)</option>
-								<option value="12">포항(KPO)</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align: center;"><input type="submit" value="일정추가"></td>
-					</tr>
-				</table>
-			</form>
-		
+			<div  class="flight_3" style="border: 1px solid black; width: 300px;">
+				<h1 style="text-align: center;">항공편 일정 만들기 페이지</h1>
+				<div>
+					<div>항공사</div>
+					<div>
+						<select name="air_idx">
+							<option value="1">대한항공</option>
+							<option value="2">아시아나</option>
+							<option value="3">진에어</option>
+							<option value="4">제주항공</option>
+							<option value="5">에어서울</option>
+							<option value="6">에어부산</option>
+							<option value="7">티웨이항공</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<div>항공편명</div>
+					<div><input type="text" name="flight_name"></div>
+				</div>
+				<div>
+					<div>비행일자</div>
+					<div><input type="date" name="start_date"></div>
+				</div>
+				<div>
+					<div>탑승시각</div>
+					<div><input type="text" name="boarding_time" placeholder="YYYY-MM-DD HH:MM"></div>
+				</div>
+				<div>
+					<div>출발시각</div>
+					<div><input type="text" name="depart_time" placeholder="YYYY-MM-DD HH:MM"></div>
+				</div>
+				<div>
+					<div>도착시각</div>
+					<div><input type="text" name="arrive_time" placeholder="YYYY-MM-DD HH:MM"></div>
+				</div>
+				<div>
+					<div>출발공항</div>
+					<div>
+						<select name="air_idx_s">
+							<option value="1">인천(ICN)</option>
+							<option value="2">제주(CJU)</option>
+							<option value="3">부산(PUS)</option>
+							<option value="4">청주(CJJ)</option>
+							<option value="5">여수(RSU)</option>
+							<option value="6">광주(KWJ)</option>
+							<option value="7">대구(TAE)</option>
+							<option value="8">김포(GMP)</option>
+							<option value="9">양양(YNY)</option>
+							<option value="10">군산(KUV)</option>
+							<option value="11">울산(USN)</option>
+							<option value="12">포항(KPO)</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<div>도착공항</div>
+					<div>
+						<select name="air_idx_s">
+							<option value="1">인천(ICN)</option>
+							<option value="2">제주(CJU)</option>
+							<option value="3">부산(PUS)</option>
+							<option value="4">청주(CJJ)</option>
+							<option value="5">여수(RSU)</option>
+							<option value="6">광주(KWJ)</option>
+							<option value="7">대구(TAE)</option>
+							<option value="8">김포(GMP)</option>
+							<option value="9">양양(YNY)</option>
+							<option value="10">군산(KUV)</option>
+							<option value="11">울산(USN)</option>
+							<option value="12">포항(KPO)</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<div><input type="submit" value="일정추가"></div>
+				</div>
+			</div>
+			
+			<br>
+			
+			<div class="flight_2" style="border: 1px solid black; width: 300px;">
+				<h1 style="text-align: center;">좌석 DB 페이지</h1>
+				<div>
+					<div>항공편명</div>
+					<div><input type="text" name="flight_name" value="테스트"></div>
+				</div>
+				<div>
+					<div>좌석등급</div>
+					<div>
+						<select name="seat_grade">
+							<option value="FIRST">FIRST</option>
+							<option value="2">BUSINESS</option>
+							<option value="3">ECONOMY</option>
+						</select>
+					</div>
+				</div>
+				<div>
+					<div>좌석이름</div>
+					<div><input type="text" name="seat_name" placeholder="ex) 01"></div>
+				</div>
+				<div>
+					<div>좌석가격</div>
+					<div><input type="text" name="seat_price"></div>
+				</div>
+				<div><button id="seatInsertBtn" type="button">좌석추가</button></div>
+			</div>
+			
+			<br>
+			
+			<!-- 비행기 디비 -->
+			<div class="flight_1" style="border: 1px solid black; width: 300px;">
+				<h1 style="text-align: center;">비행기 DB 페이지</h1>
+				<div>
+					<div>항공편명</div>
+					<div><input type="text" name="flight_name"></div>
+				</div>
+				<div>
+					<div>탑승인원</div>
+					<div><input type="text" name="flight_people"></div>
+				</div>
+				<div>
+					<div><button id="flightInsertBtn" type="button">항공편 추가</button></div>
+				</div>
+			</div>
+			
 		</section>
 		
+<script type="text/javascript" src="/resources/js/flight.js"></script>
+<script type="text/javascript">
+
+	console.log("로그테스트.........")
+	
+	$(function() {
+		
+		var flightInsertBtn = $("#flightInsertBtn")
+		var seatInsertBtn = $("#seatInsertBtn");
+		
+		var flight_1 = $(".flight_1");
+		var flight_2 = $(".flight_2");
+		var flight_3 = $(".flight_3");
+		////////////////////////////////////////////////////////////////////////
+		var flight_name_1 = flight_1.find("input[name='flight_name']");
+		var flight_people_1 = flight_1.find("input[name='flight_people']");
+		////////////////////////////////////////////////////////////////////////
+		var flight_name = flight_2.find("input[name='flight_name']");
+		var seat_grade = flight_2.find("select[name='seat_grade']");
+		var seat_name = flight_2.find("input[name='seat_name']");
+		var seat_price = flight_2.find("input[name='seat_price']");
+		////////////////////////////////////////////////////////////////////////
+		var boarding_time = flight_3.find("input[name='boarding_time']")
+		var depart_time = flight_3.find("input[name='depart_time']")
+		var arrive_time = flight_3.find("input[name='arrive_time']")
+		
+		// 항공편 추가 버튼 클릭 이벤트		
+		flightInsertBtn.on("click", function() {
+			
+			flightServiece.add({flight_name:flight_name_1.val(), flight_people:flight_people_1.val()},
+			function(result) {
+				alert("테스트 결과 : " + result);		
+			}); // end : 항공편 추가 버튼 종료 
+		
+		}); // end : 항공편 추가 버튼 종료
+		
+		/* // 좌석 추가 버튼 클릭 이벤트
+		seatInsertBtn.on("click", function() {
+			
+			flightServiece.addtest({flight_name:flight_name.val(), seat_name:seat_name.val(), seat_grade:seat_grade.val(), seat_price: seat_price.val()},
+			function(result) {
+				alert("테스트 결과 : " + result);	
+			}); // end : 좌석 추가 버튼 종료
+			
+		});	// end : 좌석 추가 버튼 종료 */
+		
+		
+	}); // end : onload
+	
+</script>		
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
