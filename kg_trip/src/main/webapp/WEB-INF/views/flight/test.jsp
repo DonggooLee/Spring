@@ -14,7 +14,8 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
-	<section class="cont">		<table>
+	<section class="cont">		
+		<table>
 			<thead>
 				<tr>
 					<th>이름</th>

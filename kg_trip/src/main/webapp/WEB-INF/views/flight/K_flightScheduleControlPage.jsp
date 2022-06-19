@@ -14,7 +14,7 @@
 
 		<section class="cont">
 		
-			<div  class="flight_3" style="border: 1px solid black; width: 300px;">
+			<!-- <div  class="flight_3" style="border: 1px solid black; width: 300px;">
 				<h1 style="text-align: center;">항공편 일정 만들기 페이지</h1>
 				<div>
 					<div>항공사</div>
@@ -91,7 +91,7 @@
 				<div>
 					<div><input type="submit" value="일정추가"></div>
 				</div>
-			</div>
+			</div> -->
 			
 			<br>
 			
@@ -124,8 +124,7 @@
 			
 			<br>
 			
-			<!-- 비행기 디비 -->
-			<div class="flight_1" style="border: 1px solid black; width: 300px;">
+			<form class="flight_1" style="border: 1px solid black; width: 300px;">
 				<h1 style="text-align: center;">비행기 DB 페이지</h1>
 				<div>
 					<div>항공편명</div>
@@ -136,9 +135,9 @@
 					<div><input type="text" name="flight_people"></div>
 				</div>
 				<div>
-					<div><button id="flightInsertBtn" type="button">항공편 추가</button></div>
+					<button id="flightInsertBtn" type="button">항공편 추가</button>
 				</div>
-			</div>
+			</form>
 			
 		</section>
 		
@@ -153,41 +152,21 @@
 		var seatInsertBtn = $("#seatInsertBtn");
 		
 		var flight_1 = $(".flight_1");
-		var flight_2 = $(".flight_2");
-		var flight_3 = $(".flight_3");
-		////////////////////////////////////////////////////////////////////////
 		var flight_name_1 = flight_1.find("input[name='flight_name']");
 		var flight_people_1 = flight_1.find("input[name='flight_people']");
-		////////////////////////////////////////////////////////////////////////
-		var flight_name = flight_2.find("input[name='flight_name']");
-		var seat_grade = flight_2.find("select[name='seat_grade']");
-		var seat_name = flight_2.find("input[name='seat_name']");
-		var seat_price = flight_2.find("input[name='seat_price']");
-		////////////////////////////////////////////////////////////////////////
-		var boarding_time = flight_3.find("input[name='boarding_time']")
-		var depart_time = flight_3.find("input[name='depart_time']")
-		var arrive_time = flight_3.find("input[name='arrive_time']")
 		
 		// 항공편 추가 버튼 클릭 이벤트		
 		flightInsertBtn.on("click", function() {
-			
-			flightServiece.add({flight_name:flight_name_1.val(), flight_people:flight_people_1.val()},
-			function(result) {
-				alert("테스트 결과 : " + result);		
-			}); // end : 항공편 추가 버튼 종료 
-		
+			alert("TEST 클릭 이벤트")
+			console.log("항공편명 : " + flight_name_1.val());
+			console.log("항공편인원수 : " + flight_people_1.val());
+			flightServiece.add(
+				{flight_name:flight_name_1.val(), flight_people:flight_people_1.val()},
+				function(result) {
+					alert("테스트 결과 : " + result);		
+				}
+			); 
 		}); // end : 항공편 추가 버튼 종료
-		
-		/* // 좌석 추가 버튼 클릭 이벤트
-		seatInsertBtn.on("click", function() {
-			
-			flightServiece.addtest({flight_name:flight_name.val(), seat_name:seat_name.val(), seat_grade:seat_grade.val(), seat_price: seat_price.val()},
-			function(result) {
-				alert("테스트 결과 : " + result);	
-			}); // end : 좌석 추가 버튼 종료
-			
-		});	// end : 좌석 추가 버튼 종료 */
-		
 		
 	}); // end : onload
 	

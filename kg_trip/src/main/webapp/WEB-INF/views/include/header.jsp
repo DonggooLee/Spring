@@ -8,7 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
 <title>Home</title>
-<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/defalut.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/default.css">
 <body>
 	<div class="container">
 		<header>
@@ -41,4 +41,3 @@
 			</div>
 		</header>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		
