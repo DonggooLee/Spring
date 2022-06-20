@@ -35,7 +35,7 @@ public class FlightServiceImpl implements FlightService{
 
 	// 항공편 조회
 	@Override
-	public List<K_flightVO> flightList() {
+	public List<K_flightVO> flightList_() {
 		return mapper.flightList();
 	}
 	

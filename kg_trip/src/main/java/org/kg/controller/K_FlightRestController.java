@@ -1,5 +1,7 @@
 package org.kg.controller;
 
+import java.util.List;
+
 import org.kg.domain.K_airlineVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_seatVO;
@@ -7,6 +9,7 @@ import org.kg.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +30,20 @@ public class K_FlightRestController {
 	@PostMapping(value = "/airlineInsert", 
 			consumes = "application/json", 
 			produces = {MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<String> flightInsert(@RequestBody K_airlineVO vo){
+	public ResponseEntity<String> airlineInsert(@RequestBody K_airlineVO vo){
 		log.info("K_flightVO..." + vo);
 		int insertCount = service.airlineInsert_(vo);
 		log.info("Reply Insert Count..." + insertCount);
 		return insertCount == 1 ?
 				new ResponseEntity<>("success", HttpStatus.OK) :
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// 항공편 조회
+	@GetMapping(value = "/flightList", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_flightVO>> flightList(){
+		log.info("항공편 조회...");
+		return new ResponseEntity<>(service.flightList_(), HttpStatus.OK);
 	}
 	
 	// 항공편 추가

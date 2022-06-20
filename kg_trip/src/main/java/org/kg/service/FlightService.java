@@ -15,7 +15,7 @@ public interface FlightService {
 	public int flightInsert_(K_flightVO vo);
 	
 	// 항공편 조회
-	public List<K_flightVO> flightList();
+	public List<K_flightVO> flightList_();
 	
 	// 좌석 추가
 	public int seatInsert_(K_seatVO vo);

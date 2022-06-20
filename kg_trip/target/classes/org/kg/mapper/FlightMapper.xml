@@ -14,14 +14,14 @@
 		INSERT INTO k_flight_tbl(flight_name, flight_people) VALUES (#{flight_name}, #{flight_people})
 	</insert>
   
+	<!-- 항공편 조회 -->
+	<select id="flightList" resultType="org.kg.domain.K_flightVO">
+		SELECT * FROM k_flight_tbl
+	</select>
+	
   	<!-- 좌석 추가 -->
 	<insert id="seatInsert">
 		INSERT INTO k_seat_tbl(seat_idx, flight_name, seat_grade, seat_name, seat_price) VALUES (k_seat_tbl_seq.nextval, #{flight_name}, #{seat_grade}, #{seat_name}, #{seat_price});
 	</insert>
-	
-	<!-- 항공편 조회 -->
-	<select id="flightList">
-		SELECT * FROM k_flight_tbl;
-	</select>
 	
 </mapper>

@@ -1,5 +1,6 @@
 console.log("flght.js 파일을 불러 왔습니다!")
 
+
 // 항공사 추가
 function airlineAdd(airline, callback, error){
 	$.ajax({
@@ -40,6 +41,25 @@ function flightAdd(flight, callback, error){
 		}
 	});
 } // end : flightAdd()
+
+
+// 항공편 조회
+function listFlight(callback, error) {
+	$.ajax({
+		type : 'get',
+		url : '/flightManager/flightList',
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : listFlight()
 
 
 // 좌석 추가 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +48,11 @@
 		<h1 style="text-align: center;">좌석 DB</h1>
 		<div>
 			<div>항공편명</div>
-			<div><input type="text" name="flight_name"></div>
+			<div>
+				<select name="flight_name" class="select">
+					<option>없음</option>
+				</select>
+			</div>
 		</div>
 		<div>
 			<div>좌석등급</div>
@@ -76,6 +81,21 @@
 	console.log("로그테스트...")
 
 	$(function() {
+		
+		var select = $(".select");
+		var str = '';
+		
+		// 항공편 조회
+		listFlight(function(list) {
+			if(list == null || list.length == 0){
+				return;
+			}else{
+				for(var i=0; i<list.length; i++){
+					str += "<option value=" + list[i].flight_name + ">" + list[i].flight_name + "</option>";
+				}
+				select.html(str)
+			}
+		})
 		
 		// 항공사 추가 버튼 객체
 		var airlineInsertBtn = $("#airlineInsertBtn")
@@ -116,6 +136,7 @@
 					function(result) {
 				alert("항공편 추가 결과 : " + result);		
 			})
+			// 추가한 항공편이 바로 보이게 끔!
 		}) // end : 항공편 추가 버튼 클릭 이벤트 종료
 		
 		

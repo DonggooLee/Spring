@@ -18,13 +18,18 @@ public class FlightServiceTests {
 	@Setter(onMethod_ = @Autowired)
 	private FlightService service;
 	
-	@Test
-	public void testInsert() {
-		K_flightVO vo = new K_flightVO();
-		vo.setFlight_name("ttt");
-		vo.setFlight_people(22);
-		int result = service.flightInsert_(vo);
-		log.info("내가 출력한 결과물 : " + result);
-	}
+//	@Test
+//	public void testInsert() {
+//		K_flightVO vo = new K_flightVO();
+//		vo.setFlight_name("ttt");
+//		vo.setFlight_people(22);
+//		int result = service.flightInsert_(vo);
+//		log.info("내가 출력한 결과물 : " + result);
+//	}
+	
+//	@Test
+//	public void test() {
+//		log.info("내가 출력한 결과물 : " + service.flightList_());
+//	}
 	
 }
