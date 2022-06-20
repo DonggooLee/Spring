@@ -3,7 +3,9 @@ package org.kg.controller;
 import java.util.List;
 
 import org.kg.domain.K_airlineVO;
+import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
 import org.kg.service.FlightService;
 import org.springframework.http.HttpStatus;
@@ -31,19 +33,12 @@ public class K_FlightRestController {
 			consumes = "application/json", 
 			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> airlineInsert(@RequestBody K_airlineVO vo){
-		log.info("K_flightVO..." + vo);
+		log.info("K_airlineVO..." + vo);
 		int insertCount = service.airlineInsert_(vo);
 		log.info("Reply Insert Count..." + insertCount);
 		return insertCount == 1 ?
 				new ResponseEntity<>("success", HttpStatus.OK) :
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-	// 항공편 조회
-	@GetMapping(value = "/flightList", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<K_flightVO>> flightList(){
-		log.info("항공편 조회...");
-		return new ResponseEntity<>(service.flightList_(), HttpStatus.OK);
 	}
 	
 	// 항공편 추가
@@ -70,6 +65,40 @@ public class K_FlightRestController {
 		return insertCount == 1 ?
 				new ResponseEntity<>("success", HttpStatus.OK) :
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// 일정 추가
+	@PostMapping(value = "/scheduleInsert",
+			consumes = "application/json", 
+			produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> scheduleInsert(@RequestBody K_scheduleVO vo){
+		log.info("K_scheduleVO..." + vo);
+		int insertCount = service.scheduleInsert_(vo);
+		log.info("Reply Insert Count..." + insertCount);
+		return insertCount == 1 ?
+				new ResponseEntity<>("success", HttpStatus.OK) :
+					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// 항공편 조회
+	@GetMapping(value = "/flightList", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_flightVO>> flightList(){
+		log.info("항공편 조회...");
+		return new ResponseEntity<>(service.flightList_(), HttpStatus.OK);
+	}
+	
+	// 공항 조회
+	@GetMapping(value = "/airportList", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_airportVO>> airportList(){
+		log.info("공항 조회...");
+		return new ResponseEntity<>(service.airportList_(), HttpStatus.OK);
+	}
+	
+	// 항공사 조회
+	@GetMapping(value = "/airlineList", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_airlineVO>> airlineList(){
+		log.info("항공사 조회...");
+		return new ResponseEntity<>(service.airlineList_(), HttpStatus.OK);
 	}
 	
 }

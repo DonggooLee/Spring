@@ -3,7 +3,9 @@ package org.kg.service;
 import java.util.List;
 
 import org.kg.domain.K_airlineVO;
+import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
 import org.kg.mapper.FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +34,37 @@ public class FlightServiceImpl implements FlightService{
 		log.info("vo..." + vo);
 		return mapper.flightInsert(vo);
 	}
-
-	// 항공편 조회
-	@Override
-	public List<K_flightVO> flightList_() {
-		return mapper.flightList();
-	}
 	
 	// 좌석 추가
 	@Override
 	public int seatInsert_(K_seatVO vo) {
 		log.info("vo..." + vo);
 		return mapper.seatInsert(vo);
+	}
+	
+	// 일정 추가
+	@Override
+	public int scheduleInsert_(K_scheduleVO vo) {
+		log.info("vo..."+vo);
+		return mapper.scheduleInsert(vo);
+	}
+	
+	// 항공편 조회
+	@Override
+	public List<K_flightVO> flightList_() {
+		return mapper.flightList();
+	}
+
+	// 항공사 조회
+	@Override
+	public List<K_airlineVO> airlineList_() {
+		return mapper.airlineList();
+	}
+	
+	// 공항 조회
+	@Override
+	public List<K_airportVO> airportList_() {
+		return mapper.airportList();
 	}
 	
 }

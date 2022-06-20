@@ -29,7 +29,7 @@ public class FlightServiceTests {
 	
 //	@Test
 //	public void test() {
-//		log.info("내가 출력한 결과물 : " + service.flightList_());
+//		log.info("내가 출력한 결과물 : " + service.airlineList_());
 //	}
 	
 }
