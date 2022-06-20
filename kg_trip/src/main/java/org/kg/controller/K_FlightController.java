@@ -1,57 +1,23 @@
 package org.kg.controller;
 
-import org.kg.domain.K_flightVO;
-import org.kg.service.FlightService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Controller
-@AllArgsConstructor
 @RequestMapping("/flight/*")
+@AllArgsConstructor
 public class K_FlightController {
-	
-	private FlightService service;
-	
-	// 비행기 스케줄 관리 페이지 이동
-	@GetMapping("/ScheduleControlPage")
+
+	// 관리자 비행기 스케줄 추가 페이지 이동
+	@GetMapping("scheduleManagerPage")
 	public String scheduleManager() {
-		return "flight/K_flightScheduleControlPage";
+		log.info("페이지 이동 : scheduleManagerPage...");
+		return "flight/scheduleManagerPage";
 	}
-	
-	// 항공권 예매 페이지로 이동
-	@GetMapping("/bookPage")
-	public String bookPage() {
-		return "flight/K_flightBookPage";
-	}
-	
-	// 항공권 조회 페이지 이동
-	@GetMapping("/bookCheck")
-	public String bookCheck() {
-		return "flight/K_flightBookCheckPage";
-	}
-	
-	// 예매 항공권 조회
-	@GetMapping("/test")
-	public String test(Model model) {
-		log.info("/test............");
-		model.addAttribute("list", service.reservationList_());
-		return "flight/test";
-	}
-	
-//	// 비행기 항공편 추가
-//	@PostMapping("/flightInsert")
-//	public String flightInsert(K_flightVO vo) {
-//		log.info("flightInsert...........");
-//		log.info(vo);
-//		return "redirect:/flight/flightInsert";
-//	}
 	
 }

@@ -1,10 +1,8 @@
 package org.kg.service;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kg.domain.testVO;
+import org.kg.domain.K_flightVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,11 +19,12 @@ public class FlightServiceTests {
 	private FlightService service;
 	
 	@Test
-	public void testList() {
-		// 아래 코드가 정석이지만 굳이 반복문 돌면서 실행하지 않아도 출력이 가능!
-		// log4jdbc 파일이 있기 때문...
-		List<testVO> list = service.reservationList_();
-		log.info("내가 출력한 결과물 : " + list);
+	public void testInsert() {
+		K_flightVO vo = new K_flightVO();
+		vo.setFlight_name("ttt");
+		vo.setFlight_people(22);
+		int result = service.flightInsert_(vo);
+		log.info("내가 출력한 결과물 : " + result);
 	}
 	
 }

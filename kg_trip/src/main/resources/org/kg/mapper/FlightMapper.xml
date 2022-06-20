@@ -3,36 +3,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="org.kg.mapper.FlightMapper">
+  
+	<!-- 항공사 추가 -->
+	<insert id="airlineInsert">
+		INSERT INTO k_airline_tbl(air_idx, air_code, air_name, c_type) VALUES (k_airline_tbl_seq.nextval, #{air_code}, #{air_name}, 100)
+	</insert>
 	
 	<!-- 항공편 추가 -->
 	<insert id="flightInsert">
 		INSERT INTO k_flight_tbl(flight_name, flight_people) VALUES (#{flight_name}, #{flight_people})
 	</insert>
-	
-	<!-- 좌석 추가 -->
+  
+  	<!-- 좌석 추가 -->
 	<insert id="seatInsert">
 		INSERT INTO k_seat_tbl(seat_idx, flight_name, seat_grade, seat_name, seat_price) VALUES (k_seat_tbl_seq.nextval, #{flight_name}, #{seat_grade}, #{seat_name}, #{seat_price});
 	</insert>
 	
-	<select id="resewwwst" resultType="org.kg.domain.K_reservationVO">
-		select * from k_reservation_tbl
+	<!-- 항공편 조회 -->
+	<select id="flightList">
+		SELECT * FROM k_flight_tbl;
 	</select>
-
-	<select id="reservationList" resultType="org.kg.domain.testVO">
-		<![CDATA[
-			SELECT 
-				m.m_name, f.flight_name, s.depart_time, s.arrive_time, s.boarding_time, 
-				q.seat_grade, q.seat_name, m.m_gender, t.ap_name, p.ap_name
-			FROM  
-				k_reservation_tbl r 
-				inner join k_schedule_tbl s on r.date_idx = s.date_idx
-				inner join k_flight_tbl f on r.flight_name = f.flight_name
-				inner join k_airline_tbl a on r.air_idx = a.air_idx
-				inner join k_seat_tbl q on r.seat_idx = q.seat_idx
-				inner join b_publicMember_tbl m on r.m_idx = m.m_idx
-				inner join k_airport_tbl t on s.ap_idx_s = t.ap_idx 
-				inner join k_airport_tbl p on s.ap_idx_d = p.ap_idx
-		]]>
-	</select>
-
+	
 </mapper>
