@@ -7,17 +7,16 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
-import org.kg.domain.testVO;
+import org.kg.domain.K_inputScheduleDTO;
+import org.kg.domain.K_getScheduleVO;
 import org.kg.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -83,18 +82,18 @@ public class K_FlightRestController {
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	// 항공편 조회
-	@GetMapping(value = "/flightList", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<K_flightVO>> flightList(){
-		log.info("항공편 조회...");
-		return new ResponseEntity<>(service.flightList_(), HttpStatus.OK);
-	}
-	
 	// 공항 조회
 	@GetMapping(value = "/airportList", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<List<K_airportVO>> airportList(){
 		log.info("공항 조회...");
 		return new ResponseEntity<>(service.airportList_(), HttpStatus.OK);
+	}
+	
+	// 항공편 조회
+	@GetMapping(value = "/flightList", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_flightVO>> flightList(){
+		log.info("항공편 조회...");
+		return new ResponseEntity<>(service.flightList_(), HttpStatus.OK);
 	}
 	
 	// 항공사 조회
@@ -105,10 +104,13 @@ public class K_FlightRestController {
 	}
 	
 	// 해당 일자에 항공편 조회
-	@GetMapping(value = "/getSchedule/{start_date}", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<testVO>> getSchedule(@PathVariable("start_date") String start_date){
-		log.info("일정 조회... start_date : " + start_date);
-		return new ResponseEntity<>(service.getSchedule_(start_date), HttpStatus.OK);
+	@PostMapping(value = "/getSchedule", 
+			consumes = "application/json", 
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_getScheduleVO>> getSchedule(@RequestBody K_inputScheduleDTO inputSch){
+		log.info("일정 조회...");
+		log.info("inputSch : " + inputSch);
+		return new ResponseEntity<>(service.scheduleList_(inputSch), HttpStatus.OK);
 	}
 	
 }

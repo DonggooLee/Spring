@@ -13,14 +13,14 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class K_FlightController {
 
-	// 기업회원 비행기 스케줄 관리 페이지 이동
+	// 기업회원 : 비행기 스케줄 관리 페이지 이동
 	@GetMapping("scheduleManagerPage")
 	public String scheduleManager() {
 		log.info("페이지 이동 : scheduleManagerPage...");
 		return "flight/scheduleManagerPage";
 	}
 	
-	// 항공권 조회 페이지 이동
+	// 일반회원 : 항공권 조회 페이지 이동
 	@GetMapping("scheduleListPage")
 	public String scheduleList() {
 		log.info("페이지 이동 : scheduleListPage...");

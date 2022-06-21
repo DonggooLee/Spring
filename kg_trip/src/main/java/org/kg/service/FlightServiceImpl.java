@@ -7,7 +7,8 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
-import org.kg.domain.testVO;
+import org.kg.domain.K_inputScheduleDTO;
+import org.kg.domain.K_getScheduleVO;
 import org.kg.mapper.FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,8 +71,8 @@ public class FlightServiceImpl implements FlightService{
 
 	// 일정 조회
 	@Override
-	public List<testVO> getSchedule_(String start_date) {
-		return mapper.getSchedule(start_date);
+	public List<K_getScheduleVO> scheduleList_(K_inputScheduleDTO inputSch) {
+		return mapper.scheduleList(inputSch);
 	}
 	
 }

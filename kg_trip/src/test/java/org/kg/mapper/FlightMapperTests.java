@@ -5,6 +5,7 @@ import java.sql.Date;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_inputScheduleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,8 +31,11 @@ public class FlightMapperTests {
 	
 //	@Test
 //	public void test() {
-//		String start_date = "2022-06-21";
-//		log.info("내가 출력한 결과물 : " + mapper.getSchedule(start_date));
+//		//Date start_date = new Date(2022,06,23);
+//		K_inputScheduleDTO dto = new K_inputScheduleDTO();
+//		dto.setSeat_grade("BUSINESS");
+//		dto.setStart_date("2022-06-23");
+//		log.info("내가 출력한 결과물 : " + mapper.scheduleList(dto));
 //	}
 	
 }

@@ -18,9 +18,21 @@
 			<div><input type="date" name="start_date"></div>
 		</div>
 		<div>
+			<div>좌석등급</div>
+			<div>
+				<select name="seat_grade">
+					<option value="FIRST">FIRST</option>
+					<option value="BUSINESS">BUSINESS</option>
+					<option value="ECONOMY">ECONOMY</option>
+				</select>
+			</div>
+		</div>
+		<div>
 			<button id="getScheduleBtn" type="button">일정 조회</button>
 		</div>
 	</div>
+	
+	<hr>
 	
 	<div class="listSchedule">
 		<h1> 비행일정 </h1>
@@ -44,21 +56,24 @@
 		// 일정 조회에 필요한 객체
 		var getSchedule = $(".getSchedule");
 		var start_date = getSchedule.find("input[name='start_date']");
+		var seat_grade = getSchedule.find("select[name='seat_grade']");
 		var ul = $(".ul")
 		
 		// 일정 조회 버튼 클릭 이벤트
 		getScheduleBtn.on("click", function() {
 			var str = '';
-			listSchedule(start_date.val(), function(listSch) {
+			listSchedule({seat_grade:seat_grade.val(), start_date:start_date.val()}, function(listSch) {
 				for(var i=0; i<listSch.length; i++){
-					str += "<li>"+listSch[i].start_date+"</li>";
+					str += "<li>"+displayTime(listSch[i].start_date)+"</li>";
 					str += "<li>"+listSch[i].flight_name+"</li>";
 					str += "<li>"+listSch[i].ap_name_s+"</li>";
 					str += "<li>"+listSch[i].ap_name_d+"</li>";
 					str += "<li>"+listSch[i].air_name+"</li>";
-					str += "<li>"+listSch[i].air_name+"</li>";
 					str += "<li>"+listSch[i].seat_grade+"</li>";
 					str += "<li>"+listSch[i].seat_price+"</li>";
+					str += "<li>"+listSch[i].boarding_time+"</li>";
+					str += "<li>"+listSch[i].depart_time+"</li>";
+					str += "<li>"+listSch[i].arrive_time+"</li><hr>";
 				}
 				ul.html(str)
 			})

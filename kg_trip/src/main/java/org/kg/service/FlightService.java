@@ -7,7 +7,8 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
-import org.kg.domain.testVO;
+import org.kg.domain.K_inputScheduleDTO;
+import org.kg.domain.K_getScheduleVO;
 
 public interface FlightService {
 	
@@ -33,6 +34,6 @@ public interface FlightService {
 	public List<K_airportVO> airportList_();	
 	
 	// 일정 조회
-	public List<testVO> getSchedule_(String start_date);
+	public List<K_getScheduleVO> scheduleList_(K_inputScheduleDTO inputSch);
 	
 }
