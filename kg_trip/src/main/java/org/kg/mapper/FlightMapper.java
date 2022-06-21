@@ -1,5 +1,6 @@
 package org.kg.mapper;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.kg.domain.K_airlineVO;
@@ -7,6 +8,7 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
+import org.kg.domain.testVO;
 
 public interface FlightMapper {
 	
@@ -30,5 +32,8 @@ public interface FlightMapper {
 	
 	// 공항 조회
 	public List<K_airportVO> airportList();	
+	
+	// 일정 조회 : 조건 => 비행일자
+	public List<testVO> getSchedule(String start_date);
 	
 }

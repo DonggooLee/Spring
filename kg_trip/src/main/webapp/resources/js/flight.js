@@ -140,3 +140,22 @@ function listAirline(callback, error) {
 		}
 	})
 } // end : listAirline()
+
+
+// 일정 조회
+function listSchedule(start_date, callback, error) {
+	$.ajax({
+		type : 'get',
+		url : '/flightManager/getSchedule/' + start_date,
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : listSchedule()

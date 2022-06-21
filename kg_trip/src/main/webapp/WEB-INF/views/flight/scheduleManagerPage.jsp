@@ -101,15 +101,27 @@
 		</div>
 		<div>
 			<div>탑승시각</div>
-			<div><input type="date" name="boarding_time"></div>
+			<div>
+				<!-- <input type="text" name="boarding_time"> -->
+				<input type="time" name="BH">
+				<input type="text" name="BM">
+			</div>
 		</div>
 		<div>
 			<div>출발시각</div>
-			<div><input type="date" name="depart_time"></div>
+			<div>
+				<!-- <input type="date" name="depart_time"> -->
+				<input type="text" name="DH">
+				<input type="text" name="DM">
+			</div>
 		</div>
 		<div>
 			<div>도착시각</div>
-			<div><input type="date" name="arrive_time"></div>
+			<div>
+				<!-- <input type="date" name="arrive_time"> -->
+				<input type="text" name="AH">
+				<input type="text" name="AM">
+			</div>
 		</div>
 		<div>
 			<div>출발공항</div>
@@ -211,6 +223,12 @@
 		var ap_idx_d = schedule.find("select[name='ap_idx_d']");
 		var air_idx = schedule.find("select[name='air_idx']");
 		var start_date = schedule.find("input[name='start_date']"); 
+		var BH = schedule.find("input[name='BH']"); 
+		var BM = schedule.find("input[name='BM']"); 
+		var DH = schedule.find("input[name='DH']"); 
+		var DM = schedule.find("input[name='DM']"); 
+		var AH = schedule.find("input[name='AH']"); 
+		var AM = schedule.find("input[name='AM']"); 
 		
 		// 항공사 추가 버튼 클릭 이벤트
 		airlineInsertBtn.on("click", function() {
@@ -239,6 +257,7 @@
 		
 		// 일정 추가 버튼 클릭 이벤트
 		scheduleInsertBtn.on("click", function() {
+			//alert("보딩시간:" +start_date.val()+ BH.val()+BM.val() + "출발시간:"+BH.val()+BM.val() + "도착시간:"+AH.val()+AM.val() )
 			schduleAdd({flight_name:flight_name_3.val() ,air_idx:air_idx.val(), start_date:start_date.val(), ap_idx_s:ap_idx_s.val(), ap_idx_d:ap_idx_d.val()}, 
 					function(result) {
 				alert("일정 추가 결과 : " + result)

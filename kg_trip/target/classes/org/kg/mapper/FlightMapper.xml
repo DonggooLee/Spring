@@ -42,4 +42,20 @@
 		SELECT * FROM k_airline_tbl
 	</select>
 	
+	<!-- 항공편 일정 조회 -->
+	<select id="getSchedule" resultType="org.kg.domain.testVO">
+		SELECT s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d,
+			a.air_name, q.seat_grade, q.seat_price
+		FROM k_schedule_tbl s 
+			inner join k_airport_tbl t on s.ap_idx_s = t.ap_idx 
+			inner join k_airport_tbl p on s.ap_idx_d = p.ap_idx
+			inner join k_flight_tbl f on s.flight_name = f.flight_name
+			inner join k_airline_tbl a on s.air_idx = a.air_idx
+			inner join k_seat_tbl q on f.flight_name = q.flight_name
+		WHERE s.start_date = #{start_date}
+		GROUP BY s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d,
+			a.air_name, f.flight_people, q.seat_grade, q.seat_price
+		ORDER BY s.flight_name
+	</select>
+	
 </mapper>
