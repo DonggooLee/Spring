@@ -77,15 +77,20 @@
 			s.date_idx, s.flight_name, t.ap_name_s, p.ap_name_d, s.boarding_time, s.depart_time, s.arrive_time, s.start_date, q.seat_grade, q.seat_price, q.seat_choice	
 	</select>
 	
-	<!-- 좌석배정 페이지에서 일정 좌석 조회 -->
-	<select id="choiceSeat" resultType="org.kg.domain.test">
+	<!-- 좌석배정 페이지에서 해당 조건에 맞는 좌석 조회 -->
+	<select id="choiceSeat" resultType="org.kg.domain.K_choiceSeatVO">
 		SELECT 
-			q.seat_grade, q.seat_price, q.flight_name, q.seat_idx, q.seat_name
+			q.seat_grade, q.seat_price, q.flight_name, q.seat_idx, q.seat_name, q.seat_choice, s.date_idx
 		FROM  
 			k_schedule_tbl s
 			inner join k_seat_tbl q on s.flight_name = q.flight_name
 		WHERE 
 			s.date_idx = #{date_idx} and q.flight_name = #{flight_name}
+	</select>
+	
+	<!-- 선택한 좌석에 대한 정보 조회 -->
+	<select id="getSeat" resultType="org.kg.domain.K_seatVO">
+		SELECT * FROM k_seat_tbl WHERE seat_idx = #{seat_idx}
 	</select>
 	
 </mapper>

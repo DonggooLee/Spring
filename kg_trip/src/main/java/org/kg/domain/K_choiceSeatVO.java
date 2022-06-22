@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class K_seatVO {
-	
-	private int seat_idx, seat_price, seat_choice;
-	private String flight_name, seat_grade, seat_name;
-	
+public class K_choiceSeatVO {
+
+	private int seat_price, seat_idx, seat_choice, date_idx;
+	private String seat_grade, seat_name, flight_name;
+
 }

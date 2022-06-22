@@ -27,11 +27,17 @@ public class FlightMapperTests {
 //		log.info("내가 출력한 결과물 : " + mapper.flightInsert(vo));
 //	}
 	
+//	@Test
+//	public void test() {
+//		int date_idx = 4;
+//		String flight_name = "KE779";
+//		log.info("내가 출력한 결과물 : " + mapper.choiceSeat(date_idx, flight_name));
+//	}
+	
 	@Test
 	public void test() {
-		int date_idx = 4;
-		String flight_name = "KE779";
-		log.info("내가 출력한 결과물 : " + mapper.choiceSeat(date_idx, flight_name));
+		int seat_idx = 22;
+		log.info("내가 출력한 결과물 : " + mapper.getSeat(seat_idx));
 	}
 	
 }

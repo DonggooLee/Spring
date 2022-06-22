@@ -8,7 +8,7 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
-import org.kg.domain.test;
+import org.kg.domain.K_choiceSeatVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_getScheduleVO;
 
@@ -41,7 +41,10 @@ public interface FlightMapper {
 	// 일정 선택 : 조건 => 일정번호, 좌석등급
 	public K_getScheduleVO getSchedule(@Param("date_idx") int date_idx, @Param("seat_grade") String seat_grade);
 	
-	// 좌석 조회
-	public List<test> choiceSeat(@Param("date_idx") int date_idx, @Param("flight_name") String flight_name);
+	// 좌석 조회 : 조건 => 일정번호, 항공편명
+	public List<K_choiceSeatVO> choiceSeat(@Param("date_idx") int date_idx, @Param("flight_name") String flight_name);
+	
+	// 좌석 조회 : 조건 => 좌석번호
+	public K_seatVO getSeat(@Param("seat_idx") int seat_idx);
 	
 }
