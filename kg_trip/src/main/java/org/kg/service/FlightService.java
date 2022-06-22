@@ -2,11 +2,13 @@ package org.kg.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airlineVO;
 import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
+import org.kg.domain.test;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_getScheduleVO;
 
@@ -33,7 +35,13 @@ public interface FlightService {
 	// 공항 조회
 	public List<K_airportVO> airportList_();	
 	
-	// 일정 조회
+	// 일정 조회 : 조건 => 비행일자, 좌석등급
 	public List<K_getScheduleVO> scheduleList_(K_inputScheduleDTO inputSch);
+	
+	// 일정 조회 : 조건 => 일정번호, 좌석등급
+	public K_getScheduleVO getSchedule_(@Param("date_idx") int date_idx, @Param("seat_grade") String seat_grade);
+
+	// 좌석 조회
+	public List<test> choiceSeat_(@Param("date_idx") int date_idx, @Param("flight_name") String flight_name);
 	
 }

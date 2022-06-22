@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class K_getScheduleVO {
 
-	private int seat_price;
+	private int seat_price, date_idx, seat_choice;
 	private String flight_name, ap_name_s, ap_name_d, air_name, seat_grade,
 					boarding_time, depart_time, arrive_time, start_date;
 	

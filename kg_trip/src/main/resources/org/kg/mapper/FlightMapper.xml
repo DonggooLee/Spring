@@ -45,17 +45,47 @@
 	<!-- 항공편 일정 조회 -->
 	<select id="scheduleList" resultType="org.kg.domain.K_getScheduleVO">
 		SELECT s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d, s.arrive_time,
-			a.air_name, q.seat_grade, q.seat_price, s.boarding_time, s.depart_time
+			a.air_name, q.seat_grade, q.seat_price, s.boarding_time, s.depart_time, s.date_idx
 		FROM k_schedule_tbl s 
 			inner join k_airport_tbl t on s.ap_idx_s = t.ap_idx 
 			inner join k_airport_tbl p on s.ap_idx_d = p.ap_idx
 			inner join k_flight_tbl f on s.flight_name = f.flight_name
 			inner join k_airline_tbl a on s.air_idx = a.air_idx
 			inner join k_seat_tbl q on f.flight_name = q.flight_name
-		WHERE s.start_date = #{start_date} and q.seat_grade = #{seat_grade}
-		GROUP BY s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d, s.depart_time, 
+		WHERE 
+			s.start_date = #{start_date} and q.seat_grade = #{seat_grade}
+		GROUP BY s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d, s.depart_time, s.date_idx,
 			a.air_name, f.flight_people, q.seat_grade, q.seat_price, s.arrive_time, s.boarding_time
-		ORDER BY s.flight_name
+		ORDER BY 
+			s.flight_name
+	</select>
+	
+	<!-- 회원이 선택한 항공권 일정  조회 -->
+	<select id="getSchedule" resultType="org.kg.domain.K_getScheduleVO">
+		SELECT 
+			s.date_idx, s.flight_name, t.ap_name_s, p.ap_name_d, s.boarding_time, s.depart_time, s.arrive_time, s.start_date, q.seat_grade, q.seat_price, q.seat_choice
+		FROM  
+			k_schedule_tbl s 
+			inner join k_airport_tbl t on s.ap_idx_s = t.ap_idx
+			inner join k_airport_tbl p on s.ap_idx_d = p.ap_idx
+			inner join k_flight_tbl f on s.flight_name = f.flight_name
+			inner join k_airline_tbl a on s.air_idx = a.air_idx
+			inner join k_seat_tbl q on s.flight_name = q.flight_name
+		WHERE 
+			s.date_idx = #{date_idx} and q.seat_grade = #{seat_grade}
+		GROUP BY 
+			s.date_idx, s.flight_name, t.ap_name_s, p.ap_name_d, s.boarding_time, s.depart_time, s.arrive_time, s.start_date, q.seat_grade, q.seat_price, q.seat_choice	
+	</select>
+	
+	<!-- 좌석배정 페이지에서 일정 좌석 조회 -->
+	<select id="choiceSeat" resultType="org.kg.domain.test">
+		SELECT 
+			q.seat_grade, q.seat_price, q.flight_name, q.seat_idx, q.seat_name
+		FROM  
+			k_schedule_tbl s
+			inner join k_seat_tbl q on s.flight_name = q.flight_name
+		WHERE 
+			s.date_idx = #{date_idx} and q.flight_name = #{flight_name}
 	</select>
 	
 </mapper>

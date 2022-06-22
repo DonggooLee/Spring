@@ -1,7 +1,5 @@
 package org.kg.mapper;
 
-import java.sql.Date;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kg.domain.K_flightVO;
@@ -29,13 +27,11 @@ public class FlightMapperTests {
 //		log.info("내가 출력한 결과물 : " + mapper.flightInsert(vo));
 //	}
 	
-//	@Test
-//	public void test() {
-//		//Date start_date = new Date(2022,06,23);
-//		K_inputScheduleDTO dto = new K_inputScheduleDTO();
-//		dto.setSeat_grade("BUSINESS");
-//		dto.setStart_date("2022-06-23");
-//		log.info("내가 출력한 결과물 : " + mapper.scheduleList(dto));
-//	}
+	@Test
+	public void test() {
+		int date_idx = 4;
+		String flight_name = "KE779";
+		log.info("내가 출력한 결과물 : " + mapper.choiceSeat(date_idx, flight_name));
+	}
 	
 }

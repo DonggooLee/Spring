@@ -7,6 +7,7 @@ import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
+import org.kg.domain.test;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_getScheduleVO;
 import org.kg.mapper.FlightMapper;
@@ -69,10 +70,22 @@ public class FlightServiceImpl implements FlightService{
 		return mapper.airportList();
 	}
 
-	// 일정 조회
+	// 일정 조회 : 조건 => 비행일자, 좌석등급
 	@Override
 	public List<K_getScheduleVO> scheduleList_(K_inputScheduleDTO inputSch) {
 		return mapper.scheduleList(inputSch);
+	}
+
+	// 일정 조회 : 조건 => 일정번호, 좌석등급
+	@Override
+	public K_getScheduleVO getSchedule_(int date_idx, String seat_grade) {
+		return mapper.getSchedule(date_idx, seat_grade);
+	}
+
+	// 좌석 조회 : 조건 => 일정번호, 항공편
+	@Override
+	public List<test> choiceSeat_(int date_idx, String flight_name) {
+		return mapper.choiceSeat(date_idx, flight_name);
 	}
 	
 }

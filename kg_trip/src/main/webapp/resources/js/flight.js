@@ -1,4 +1,4 @@
-console.log("flight.js 파일을 불러 왔습니다!")
+console.log("flight.js 파일을 불러 왔습니다 !")
 
 function displayTime(timeValue){
 	   var today = new Date();

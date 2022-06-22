@@ -2,7 +2,7 @@ package org.kg.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kg.domain.K_flightVO;
+import org.kg.domain.K_inputScheduleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,9 +27,12 @@ public class FlightServiceTests {
 //		log.info("내가 출력한 결과물 : " + result);
 //	}
 	
-//	@Test
-//	public void test() {
-//		log.info("내가 출력한 결과물 : " + service.airlineList_());
-//	}
+	@Test
+	public void test() {
+		K_inputScheduleDTO test = new K_inputScheduleDTO();
+		test.setSeat_grade("BUSINESS");
+		test.setStart_date("2022-06-30");
+		log.info("내가 출력한 결과물 : " + service.scheduleList_(test));
+	}
 	
 }

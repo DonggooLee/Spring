@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div>
-			<button id="getScheduleBtn" type="button">일정 조회</button>
+			<button id="getScheduleBtn">일정 조회</button>
 		</div>
 	</div>
 	
@@ -36,11 +36,9 @@
 	
 	<div class="listSchedule">
 		<h1> 비행일정 </h1>
-		<div>
-			<ul class="ul">
-				<li>일정 없음</li>
-			</ul>
-		</div>
+		<ul class="ul">
+			<li>일정 없음</li>
+		</ul>
 	</div>
 	
 <script type="text/javascript" src="/resources/js/flight.js"></script>
@@ -57,26 +55,36 @@
 		var getSchedule = $(".getSchedule");
 		var start_date = getSchedule.find("input[name='start_date']");
 		var seat_grade = getSchedule.find("select[name='seat_grade']");
-		var ul = $(".ul")
 		
 		// 일정 조회 버튼 클릭 이벤트
 		getScheduleBtn.on("click", function() {
 			var str = '';
-			listSchedule({seat_grade:seat_grade.val(), start_date:start_date.val()}, function(listSch) {
-				for(var i=0; i<listSch.length; i++){
-					str += "<li>"+displayTime(listSch[i].start_date)+"</li>";
-					str += "<li>"+listSch[i].flight_name+"</li>";
-					str += "<li>"+listSch[i].ap_name_s+"</li>";
-					str += "<li>"+listSch[i].ap_name_d+"</li>";
-					str += "<li>"+listSch[i].air_name+"</li>";
-					str += "<li>"+listSch[i].seat_grade+"</li>";
-					str += "<li>"+listSch[i].seat_price+"</li>";
-					str += "<li>"+listSch[i].boarding_time+"</li>";
-					str += "<li>"+listSch[i].depart_time+"</li>";
-					str += "<li>"+listSch[i].arrive_time+"</li><hr>";
-				}
-				ul.html(str)
+			listSchedule({seat_grade:seat_grade.val(), start_date:start_date.val()}, 
+				function(listSch) {
+					for(var i=0; i<listSch.length; i++){
+						str += "<li> 비행일자 : " + displayTime(listSch[i].start_date) + "</li>";
+						str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
+						str += "<li> 출발공항 : " + listSch[i].ap_name_s + "</li>";
+						str += "<li> 도착공항 : " + listSch[i].ap_name_d + "</li>";
+						str += "<li> 항공사명 : " + listSch[i].air_name + "</li>";
+						str += "<li> 좌석등급 : " + listSch[i].seat_grade + "</li>";
+						str += "<li> 좌석가격 : " + listSch[i].seat_price + "</li>";
+						str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
+						str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
+						str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+						str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button>";
+						str += "<hr>"
+					}
+				$(".ul").html(str)
+				// 일정 선택 버튼 클릭 이벤트
+				$(".ul button").on("click", function() {
+					// 일정번호
+					var date_idx = $(this).data("idx");
+					// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
+					location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=" + seat_grade.val();
+				})
 			})
+			
 		}) // end : 일정 조회 버튼 클릭 이벤트 종료
 		
 	}) // end : onload
