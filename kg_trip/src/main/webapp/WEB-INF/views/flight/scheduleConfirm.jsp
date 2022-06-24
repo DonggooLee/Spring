@@ -45,13 +45,13 @@
 			<tr>
 				<th>승객이름</th>
 				<td>
-					<input type="text" name="m_name">
+					<input type="text" name="m_name" value="${loginPublicInfo.m_name}">
 				</td>
 			</tr>
 			<tr>
 				<th>성별</th>
 				<td>
-					<input type="text" name="m_gender">
+					<input type="text" name="m_gender" value="${loginPublicInfo.m_gender}">
 				</td>
 			</tr>
 			<tr>
@@ -63,25 +63,31 @@
 			<tr>
 				<th>생년월일</th>
 				<td>
-					<input type="text" name="m_birth">
+					<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}">
 				</td>
 			</tr>			
 			<tr>
 				<th>회원번호</th>
 				<td>
-					<input type="text" name="m_idx">
+					<input type="text" name="m_idx" value="${loginPublicInfo.m_id}">
 				</td>
 			</tr>
 			<tr>
 				<th>이메일</th>
 				<td>
-					<input type="text" name="m_email">
+					<input type="text" name="m_email" value="${loginPublicInfo.m_email}">
 				</td>
 			</tr>
 			<tr>
 				<th>연락처</th>
 				<td>
-					<input type="text" name="m_phone">
+					<input type="text" name="m_phone" value="${loginPublicInfo.m_phone}">
+				</td>
+			</tr>
+			<tr>
+				<th>여권번호</th>
+				<td>
+					<input type="text" name="passport_num">
 				</td>
 			</tr>
 		</table>

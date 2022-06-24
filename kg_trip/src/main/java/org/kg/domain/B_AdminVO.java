@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class K_inputScheduleDTO {
+public class B_AdminVO {
 
-	private String seat_grade, start_date, ap_name_d, ap_name_s; 
+	private int a_idx, a_connect;
+	private String a_id, a_pw, a_auth;
 	
 }

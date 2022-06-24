@@ -28,13 +28,29 @@
 			</div>
 		</div>
 		<div>
+			<div>출발공항</div>
+			<div>
+				<select name="ap_name_s" class="selectAirport_s">
+					<option>없음</option>
+				</select>
+			</div>
+		</div>
+		<div>
+			<div>도착공항</div>
+			<div>
+				<select name="ap_name_d" class="selectAirport_d">
+					<option>없음</option>
+				</select>
+			</div>
+		</div>
+		<div>
 			<button id="getScheduleBtn">일정 조회</button>
 		</div>
 	</div>
 	
 	<hr>
 	
-	<div class="listSchedule">
+	<div>
 		<h1> 비행일정 </h1>
 		<ul class="ul">
 			<li>일정 없음</li>
@@ -56,10 +72,30 @@
 		var start_date = getSchedule.find("input[name='start_date']");
 		var seat_grade = getSchedule.find("select[name='seat_grade']");
 		
+		// 공항 조회에 필요한 객체
+		var selectAirport_s = $(".selectAirport_s");
+		var selectAirport_d = $(".selectAirport_d");
+		var ap_name_s = getSchedule.find("select[name='ap_name_s']");
+		var ap_name_d = getSchedule.find("select[name='ap_name_d']");
+		
+		// 공항 조회
+		listAirport(function(listAp) {
+			var str_1 = '';
+			var str_2 = '';
+			for(var i=0; i<listAp.length; i++){
+				str_1 += "<option value=" + listAp[i].ap_name_s + ">" + listAp[i].ap_name_s + "</option>";
+				str_2 += "<option value=" + listAp[i].ap_name_d + ">" + listAp[i].ap_name_d + "</option>";
+			}
+			// 출발 공항
+			selectAirport_s.html(str_1)
+			// 도착 공항
+			selectAirport_d.html(str_2)
+		})
+		
 		// 일정 조회 버튼 클릭 이벤트
 		getScheduleBtn.on("click", function() {
 			var str = '';
-			listSchedule({seat_grade:seat_grade.val(), start_date:start_date.val()}, 
+			listSchedule({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_s:ap_name_s.val(), ap_name_d:ap_name_d.val() }, 
 				function(listSch) {
 					for(var i=0; i<listSch.length; i++){
 						str += "<li> 비행일자 : " + displayTime(listSch[i].start_date) + "</li>";

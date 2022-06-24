@@ -166,7 +166,9 @@ function listSchedule(input, callback, error) {
 	$.ajax({
 		type : 'post',
 		url : '/flightManager/getSchedule',
+		// 보내는 데이터
 		data : JSON.stringify(input), 
+		// 보내는 데이터의 타입
 		contentType : 'application/json; charset=utf-8',
 		success : function(result, status, xhr) {
 			if(callback){

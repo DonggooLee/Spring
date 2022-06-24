@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="org.kg.mapper.B_CorpMemberMapper">
+  
+	<select id="getCmemberList" resultType="org.kg.domain.B_PublicMemberVO">
+		select * from b_corpMember_tbl
+	</select>
+	
+	<insert id="insertCorp">
+		insert into b_corpMember_tbl(c_idx, c_id, c_pw, c_dname,c_dphone,c_demail,c_name,c_zipcode,c_address,
+										c_intro,c_type,c_code,c_regdate,c_auth,c_connect)
+		values (B_CORPMEMBER_SEQ.nextval, #{c_id},#{c_pw},#{c_dname},#{c_dphone},#{c_demail},#{c_name},#{c_zipcode}
+				,#{c_address},#{c_intro},#{c_type},#{c_code},sysdate,'corp',0)
+	</insert>
+	
+	<select id="checkIdCorp" parameterType="String" resultType="int">
+		select count(*) from b_corpMember_tbl where c_id = #{c_id}
+	</select>
+	
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  </mapper>

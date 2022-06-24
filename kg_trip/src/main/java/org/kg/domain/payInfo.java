@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class K_inputScheduleDTO {
+public class payInfo {
 
-	private String seat_grade, start_date, ap_name_d, ap_name_s; 
+	private String payInfo;
+	private int total_amount;
 	
 }

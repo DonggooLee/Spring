@@ -53,7 +53,7 @@
 			inner join k_airline_tbl a on s.air_idx = a.air_idx
 			inner join k_seat_tbl q on f.flight_name = q.flight_name
 		WHERE 
-			s.start_date = #{start_date} and q.seat_grade = #{seat_grade}
+			s.start_date = #{start_date} and q.seat_grade = #{seat_grade} and t.ap_name_s = #{ap_name_s} and p.ap_name_d = #{ap_name_d}
 		GROUP BY s.start_date, s.flight_name, t.ap_name_s, p.ap_name_d, s.depart_time, s.date_idx,
 			a.air_name, f.flight_people, q.seat_grade, q.seat_price, s.arrive_time, s.boarding_time
 		ORDER BY 
