@@ -23,16 +23,16 @@
 				<tr>
 					<td>비밀번호</td>
 					<td><input type="password" placeholder="최소 7자 이상의 비밀번호를 만드세요."
-						name="m_pw"></td>
+						name="m_pw" id="m_pw"></td>
 					<td> 
 						<div class="check_font" id="pw_check"></div>
 					</td>
 				</tr>
 				<tr>
 					<td>비밀번호 확인</td>
-					<td><input type="password" name="m_pwcheck"></td>
+					<td><input type="password" name="m_pwcheck" id="m_pwcheck"></td>
 					<td>
-						<div class="check_font" id="pw2_check"></div>
+						<div class="check_font" id="pwcheck_check"></div>
 					</td>
 				</tr>
 				<tr>
@@ -87,7 +87,7 @@
 	//아이디 정규식
 	var idJ = /^[A-za-z0-9]{5,20}$/g;
 	// 비밀번호 정규식
-	var pwJ = /^[A-Za-z0-9]{4,12}$/; 
+	var pwJ = /^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 	// 이름 정규식
 	var nameJ = /^[가-힣]{2,10}$/;
 	// 이메일 검사 정규식
@@ -229,6 +229,38 @@
 			} else {
 				$('#name_check').text('이름을 확인해주세요');
 				$('#name_check').css('color', 'red');
+				$("#publicJoinBtn").attr("disabled", true);	
+			}
+		});
+		// 비밀번호 정규식 체크
+		$("#m_pw").blur(function() {
+			if (pwJ.test($(this).val())) {
+					console.log(pwJ.test($(this).val()));
+					$("#pw_check").text('');
+			} else {
+				$('#pw_check').text('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+				$('#pw_check').css('color', 'red');
+				$("#publicJoinBtn").attr("disabled", true);	
+			}
+		});
+		//비밀번호 체크
+		$("#m_pwcheck").blur(function() {
+			var m_pw = $('#m_pw').val();
+			var m_pwcheck = $('#m_pwcheck').val();
+			
+			console.log(m_pw);
+			console.log(m_pwcheck);
+			
+			if(m_pwcheck == ""){
+				$('#pwcheck_check').text('입력한 비밀번호를 확인해주세요.');
+				$('#pwcheck_check').css('color', 'red');
+				$("#publicJoinBtn").attr("disabled", true);	
+			}else if (m_pw == m_pwcheck) {
+					$("#pwcheck_check").text('');
+			}else {
+				$('#pwcheck_check').text('비밀번호가 일치하지 않습니다.');
+				$('#pwcheck_check').css('color', 'red');
+				$("#publicJoinBtn").attr("disabled", true);	
 			}
 		});
 

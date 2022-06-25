@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.kg.mapper.E_NoticeMapper">
+   
+   <!-- 공지글 전체 보기 -->
+   <select id = "getList" resultType="org.kg.domain.E_NoticeVO">
+      <!-- select * from tbl_board where bno > 0 
+      // 책에선 그런데 당연히 bno 0 이상이고 우린  시퀀스 쓸 거라 당연하기 때문에 where 저 절 뺄 것 -->
+      
+      <!-- cdata 안에 있는 쿼리는 순수 쿼리로 인식하게 만듦. 꺽쇠괄호 쓰고 싶거나 머 그럴 때 유용! -->
+      <![CDATA[   
+      select * from e_notice_tbl
+      ]]>
+   </select>
+   
+   <!-- list_페이징 -->
+   <select id="getListWithPaging" resultType="org.kg.domain.E_NoticeVO">
+     <![CDATA[
+         select n_num, a_idx, n_title, n_content, n_regDate, n_updDate, n_file
+         from (
+              select /*+index_desc(tbl_board pk_board) */
+                  rownum rn, n_num, a_idx, n_title, n_content, n_regDate, n_updDate, n_file, n_uuid, n_uploadPath 
+              from e_notice_tbl
+              where rownum <= #{pageNum} * #{amount} 
+               )
+         where rn > (#{pageNum}-1) * #{amount} 
+      ]]>
+   </select>
+   
+   <!-- count_전체 개수 갖고오기 -->
+   <select id="getTotalCount" resultType="int">
+      select count(*) from e_notice_tbl
+   </select>
+
+   <!-- view -->
+   <select id="view" resultType="org.kg.domain.E_NoticeVO">
+      <![CDATA[   
+      select * from e_notice_tbl where n_num = #{n_num}
+      ]]>
+   </select>
+   <!-- select는 결과타입이 여러 종류일 수 있어서.. resultType 명시해줘야  -->
+
+   <!-- 공지글 추가 -->
+   <insert id="insert">
+      insert into e_notice_tbl (n_num, a_idx, n_title, n_content, n_file, n_regDate) 
+      values (seq_e_notice_tbl.nextval, #{a_idx}, #{n_title}, #{n_content}, #{n_file,jdbcType=VARCHAR}, sysdate)
+   </insert>
+   
+   <!-- 공지글 삭제 -->
+   <delete id="remove">
+      DELETE FROM e_notice_tbl WHERE n_num = #{n_num}
+   </delete>
+
+   <!-- 공지글 수정 -->   
+   <update id="update">
+      update e_notice_tbl set n_title = #{n_title}, a_idx = #{a_idx}, n_content = #{n_content}, n_file = #{n_file,jdbcType=VARCHAR}, n_updDate = sysdate
+         where n_num = #{n_num}
+   </update>   
+
+</mapper>  

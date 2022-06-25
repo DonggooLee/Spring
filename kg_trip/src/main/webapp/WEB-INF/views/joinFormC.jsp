@@ -84,6 +84,7 @@
 						<td>기업 유형</td>
 						<td>
 							<select name="c_type">
+								<option value=""> 유형을 선택해주세요
 								<option value="100"> 항공권
 								<option value="200"> 패키지여행
 							</select>
@@ -99,7 +100,7 @@
 			<button class="btn01">회원가입</button>
 		</div>
 
-	</form>
+		</form>
 			
 			
 		

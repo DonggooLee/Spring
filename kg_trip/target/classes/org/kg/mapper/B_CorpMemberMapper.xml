@@ -4,7 +4,7 @@
   
   <mapper namespace="org.kg.mapper.B_CorpMemberMapper">
   
-	<select id="getCmemberList" resultType="org.kg.domain.B_PublicMemberVO">
+	<select id="getCmemberList" resultType="org.kg.domain.B_CorpMemberVO">
 		select * from b_corpMember_tbl
 	</select>
 	
@@ -17,6 +17,10 @@
 	
 	<select id="checkIdCorp" parameterType="String" resultType="int">
 		select count(*) from b_corpMember_tbl where c_id = #{c_id}
+	</select>
+	
+	<select id="getCmember" resultType="org.kg.domain.B_CorpMemberVO">
+		select * from b_corpMember_tbl where c_id= #{c_id} and c_pw=#{c_pw}
 	</select>
 	
   

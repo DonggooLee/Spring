@@ -27,6 +27,13 @@ public class B_corpMemberServiceImpl implements B_corpMemberService {
 		return mapper.checkIdCorp(c_id);
 	}
 
+	@Override
+	public B_CorpMemberVO loginCorp(String c_id, String c_pw) {
+		log.info("※※※※※※※※logining※※※※※※※※");
+		return mapper.getCmember(c_id, c_pw);
+	}
+
+	
 	
 	
 }

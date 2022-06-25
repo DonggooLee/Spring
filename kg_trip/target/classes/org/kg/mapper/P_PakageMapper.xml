@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="org.kg.mapper.P_PakageMapper">
+ 
+	<!-- 전체 리스트 목록 -->
+	<select id="getList" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum ,a. * from (
+			select * from p_pakage_info_tbl a 
+			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+            order by b.p_period asc) a
+		]]>
+	</select>
+	
+	<!-- 사이판 리스트 목록 -->
+	<select id="getListSai" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum ,a. * from (
+			select * from p_pakage_info_tbl a 
+			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			where a.p_region2 LIKE '사이판' and ROWNUM <= 4 order by b.p_period asc) a
+		]]>
+	</select>
+	
+	<!-- 서유럽 리스트 목록 -->
+	<select id="getListWeu" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum ,a. * from (
+			select * from p_pakage_info_tbl a 
+			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			where a.p_region1 LIKE '서유럽' and ROWNUM <= 4 order by b.p_period asc) a
+		]]>
+	</select>
+	
+	<!-- 국내섬 리스트 목록 -->
+	<select id="getListKos" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum ,a. * from (
+			select * from p_pakage_info_tbl a 
+			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			where a.p_region2 LIKE '제주도' or a.p_region2 LIKE '백령도' or a.p_region2 LIKE '울릉도' and ROWNUM <= 4 order by b.p_period asc) a
+		]]>
+	</select>
+
+	<!-- Read -->
+	<select id="read" resultType="org.kg.domain.P_Pakage_info_VO">
+		select * from p_pakage_info_tbl a inner join p_pakage_list_tbl b
+		on a.p_num = b.p_num where a.p_num = #{p_num}
+	</select>
+  	
+  	<!-- 예약 -->
+  	<insert id="insert">
+  		insert into p_pakage_reser_tbl(p_rnum, p_num, m_idx, p_rdate, p_name, p_period,
+  		m_id, m_name, m_phone, p_rpeople, p_totalfee)
+  		values(#{p_rnum}, #{p_num}, #{m_idx}, sysdate, #{p_name}, #{p_period},
+  		#{m_id}, #{m_name}, #{m_phone}, #{p_rpeople}, #{p_totalfee})
+  	</insert>
+  	
+  	<!-- 예약용 read -->
+	<select id="readp" resultType="org.kg.domain.P_Pakage_list_VO">
+		select * from p_pakage_list_tbl
+		where p_num = #{p_num}
+	</select>
+  	
+  	<!-- 예약용 update -->
+  	<update id="update">
+		update p_pakage_list_tbl set p_people = #{p_people}, p_available = #{p_available} where p_num = #{p_num}  	
+  	</update>
+  	
+  	<!-- search -->
+  	<select id="search" resultType="org.kg.domain.P_Pakage_info_VO">
+		select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		where a.p_region1 like #{region} or a.p_region2 like #{region} or a.p_country like #{region}
+           or a.p_name like #{region} order by b.p_period asc) a
+  	</select>
+  	
+ 	 <!-- 후기 등록 -->
+  	<insert id="rinsert">
+  		insert into p_review_tbl(p_renum, p_num, m_idx, m_id, p_reviewdate, p_reviewcontent, p_reviewimg, p_star)
+  		values(p_review_tbl_seq.NEXTVAL, #{p_num}, #{m_idx}, #{m_id}, sysdate, #{p_reviewcontent}, #{p_reviewimg},#{p_star})
+  	</insert>
+  	
+	<!-- 후기 리스트 목록  -->
+	<select id="getReview" resultType="org.kg.domain.P_Review_VO">
+		select * from p_Review_tbl
+		where p_num = #{p_num} order by p_reviewdate desc
+	</select>
+	
+	<!-- 평균 별점 -->
+	<select id="star" resultType="org.kg.domain.P_Review_VO">
+		select p_num, avg(p_star) as p_star from p_review_tbl where p_num = #{p_num} group by p_num
+	</select>
+	
+	
+	
+	
+	
+  	<!-- 개인 구매 패키지 리스트 목록-->
+	<select id="getmList" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum,b. * from (
+			select * from p_pakage_reser_tbl a
+			inner join p_pakage_info_tbl b
+			on a.p_num = b.p_num
+			inner join p_pakage_list_tbl c
+			on b.p_num = c.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) d 
+			on b.p_num = d.p_num
+			where a.m_idx LIKE #{m_idx} order by a.p_rnum asc) b
+		]]>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 기업 패키지 정보 등록 -->
+  	<insert id="cinserta">
+  		insert into p_pakage_info_tbl
+  	   	(p_num, c_idx, p_period, p_country, p_region1, p_region2, p_name, p_mainimg,
+  	   	p_img1, p_img2, p_img3, p_img4, p_information, p_guide, p_max, p_fee, p_division)
+  		values
+  		(#{p_num}, #{c_idx}, #{p_period}, #{p_country}, #{p_region1}, #{p_region2}, #{p_name}, #{p_mainimg},
+  		#{p_img1}, #{p_img2}, #{p_img3}, #{p_img4}, #{p_information}, #{p_guide}, #{p_max}, #{p_fee}, #{p_division})
+  	</insert>
+	
+	<!-- 기업 패키지 리스트 등록 -->
+	<insert id="cinsertb">
+		insert into p_pakage_list_tbl
+		(p_num, p_period, p_max, p_people, p_available)
+		values
+		(#{p_num}, #{p_period}, #{p_max}, #{p_people}, #{p_available})
+  	</insert>
+  	
+  	<!-- 기업 패키지 리스트 목록-->
+	<select id="getcList" resultType="org.kg.domain.P_Pakage_info_VO">
+		<![CDATA[
+			select rownum ,a. * from (
+			select * from p_pakage_info_tbl a 
+			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			where a.c_idx LIKE #{c_idx} order by b.p_period asc) a
+		]]>
+	</select>
+	
+	<!-- 기업 패키지 정보 수정 -->
+  	<update id="cupdatea">
+		update p_pakage_info_tbl set
+		p_period = #{p_period}, p_country = #{p_country}, p_region1 = #{p_region1},
+		p_region2 = #{p_region2}, p_name = #{p_name}, p_mainimg = #{p_mainimg},
+		p_img1 = #{p_img1}, p_img2 = #{p_img2}, p_img3 = #{p_img3},
+		p_img4 = #{p_img4}, p_information = #{p_information}, p_guide = #{p_guide},
+		p_max = #{p_max}, p_fee = #{p_fee}
+		where p_num = #{p_num}  	
+  	</update>
+	
+	<!-- 기업 패키지 리스트 수정 -->
+	<update id="cupdateb">
+		update p_pakage_list_tbl set
+		p_period = #{p_period}, p_max = #{p_max}
+		where p_num = #{p_num}  	
+  	</update>
+  	
+  	<!-- 기업 패키지 정보 삭제 -->
+ 	<delete id="cdeletea">
+      delete from p_pakage_info_tbl where p_num = #{p_num}
+   	</delete>
+   	
+   	<!-- 기업 패키지 리스트 삭제 -->
+ 	<delete id="cdeleteb">
+      delete from p_pakage_list_tbl where p_num = #{p_num}
+   	</delete>
+  	
+  	
+ </mapper>
