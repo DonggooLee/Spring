@@ -9,9 +9,6 @@
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
-<c:if test="${not empty cookie.user_check}">
-	<c:set value="checked" var="checked" />
-</c:if>
 
 <section class="cont3">
 	<form method="post" id="login_all">
@@ -55,10 +52,10 @@
 	$("#loginSubBtn").on("click", function() {
 		var m_id = $("input[name=m_id]").val();
 		if (typeof m_id == "undefined") {
-			$("#login_all").attr("action", "/KingTrip/loginFormC");
+			$("#login_all").attr("action", "/userC/login");
 			$("#login_all").submit();
 		} else {
-			$("#login_all").attr("action", "/login");
+			$("#login_all").attr("action", "/userP/login");
 			$("#login_all").submit();
 		}
 	});

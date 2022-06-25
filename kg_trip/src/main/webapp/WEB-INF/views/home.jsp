@@ -10,15 +10,27 @@
 <section class="cont">
 
 	<div class="event">
-		메인페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</div>
+		메인페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	</div>
 		
 	<div class="btnWrap"
 		style="width: calc(100% - 20px); margin: 20px 0; padding: 0 20px 0 0; padding-right: 20px; text-align: right;">
 		<button class="btn01">회원가입</button>
 	</div>
-	<h1><c:if test="${not empty loginPublicInfo }">${loginPublicInfo.m_id}</c:if> 마이페이지 </h1>
-	<h1><c:if test="${empty loginPublicInfo }">실패했음</c:if> 마이페이지 </h1>
+	
+	<div>
 
+		
+		<!-- 보민님 영역 -->
+		<h1><c:if test="${not empty loginPublicInfo }">${loginPublicInfo.m_id}</c:if> 마이페이지 </h1>
+		<h1><c:if test="${empty loginPublicInfo }">개인회원 로그인 안함</c:if> 마이페이지 </h1>
+		<h1><c:if test="${not empty loginCorpInfo }">${loginCorpInfo.c_id}</c:if> 마이페이지 </h1>
+		<h1><c:if test="${empty loginCorpInfo }">기업회원 로그인 안함</c:if> 마이페이지 </h1>
+		<h1><c:if test="${not empty loginAdminInfo }">${loginAdminInfo.a_id}</c:if> 마이페이지 </h1>
+		<h1><c:if test="${empty loginAdminInfo }">관리자 로그인 안함</c:if> 마이페이지 </h1>
+		
+	</div>
+	
 	<div class="contents">하이</div>
 
 </section>

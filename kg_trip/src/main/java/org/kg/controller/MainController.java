@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.kg.domain.B_AdminVO;
 import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.service.B_corpMemberService;
@@ -36,26 +37,6 @@ public class MainController {
 	private B_publicMemberService pm_service;
 	private B_corpMemberService cm_service;
 
-	@GetMapping("/test")
-	public String trew(HttpServletRequest request, Model model) {
-		
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			return "home";
-		}
-
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
-		}
-		
-		return "myPage";
-	}
-	
 	// 실행하자마자 메인페이지 이동, 로그인한다음 이동처리
 	@GetMapping("/main")
 	// @CookieValue(name="m_id", required = false) String cookieid
@@ -71,13 +52,27 @@ public class MainController {
 			return "home";
 		}
 
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_PublicMemberVO loginPublicvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_CorpMemberVO loginCorpvo = (B_CorpMemberVO) session.getAttribute("corp");
+		B_AdminVO loginAdminvo = (B_AdminVO)session.getAttribute("admin");
 
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
+		if (loginPublicvo != null) {
+			model.addAttribute("loginPublicInfo", loginPublicvo);
+			log.info(loginPublicvo);
+		}else if(loginPublicvo == null) {
+			if(loginCorpvo != null) {
+				model.addAttribute("loginCorpInfo", loginCorpvo);
+				log.info(loginCorpvo);
+			}else if(loginCorpvo == null) {
+				if(loginAdminvo != null) {
+					model.addAttribute("loginAdminInfo", loginAdminvo);
+					log.info(loginAdminvo);
+				}else {
+					model.addAttribute("loginPublicInfo", null);
+					model.addAttribute("loginCorpInfo", null);
+					model.addAttribute("loginAdminInfo",null);
+				}
+			}
 		}
 
 		return "home";
@@ -103,7 +98,7 @@ public class MainController {
 		log.info("※※※※※※※※※※※※join 성공※※※※※※※※※※※※");
 		pm_service.joinPublic(publicinfo);
 		rttr.addFlashAttribute("result", "okay");
-		return "redirect:/login";
+		return "redirect:/userP/login";
 	}
 
 	// 기업회원 가입페이지로 단순이동
@@ -119,7 +114,7 @@ public class MainController {
 		log.info("※※※※※※※※※※※※join 성공※※※※※※※※※※※※");
 		cm_service.joinCorp(corpinfo);
 		rttr.addFlashAttribute("result", "okay");
-		return "redirect:/KingTrip/login";
+		return "redirect:/userP/login";
 	}
 
 	// 개인 회원가입시 아이디 중복체크
@@ -158,6 +153,27 @@ public class MainController {
 	public String loginFormC() {
 
 		return "loginFormC";
+	}
+	
+	//마이페이지
+	@GetMapping("/myPage")
+	public String trew(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		return "publicMyPage";
 	}
 
 }
