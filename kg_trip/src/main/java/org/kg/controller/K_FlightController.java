@@ -138,6 +138,7 @@ public class K_FlightController {
 		return "flight/myReservation";
 	}
 	
+	// 카카오 페이 결제 API !
 	@RequestMapping(value = "/kakaopay")
 	@ResponseBody
 	public String kakaopay() {
