@@ -36,8 +36,7 @@ public class FlightMapperTests {
 	
 	@Test
 	public void test() {
-		int seat_idx = 22;
-		log.info("내가 출력한 결과물 : " + mapper.getSeat(seat_idx));
+		log.info("내가 출력한 결과물 : " + mapper.getReservation());
 	}
 	
 }

@@ -12,14 +12,8 @@
 	<div class="event">
 		메인페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	</div>
-		
-	<div class="btnWrap"
-		style="width: calc(100% - 20px); margin: 20px 0; padding: 0 20px 0 0; padding-right: 20px; text-align: right;">
-		<button class="btn01">회원가입</button>
-	</div>
 	
 	<div>
-
 		
 		<!-- 보민님 영역 -->
 		<h1><c:if test="${not empty loginPublicInfo }">${loginPublicInfo.m_id}</c:if> 마이페이지 </h1>
@@ -31,7 +25,19 @@
 		
 	</div>
 	
-	<div class="contents">하이</div>
+	<ul class="user">
+		<c:if test="${empty loginPublicInfo == empty loginCorpInfo == empty loginAdminInfo }">
+			<li><button class="btn03" id="adminloginBtn">관리자 로그인</button></li>
+		</c:if>
+	</ul>
+	<ul class="user">
+		<c:if test="${not empty loginAdminInfo }">
+			<li><button class="btn04" id="adminPageBtn">관리자페이지</button></li>
+			<li>
+				<button class="btn03" id="adminlogoutBtn">로그아웃</button>
+			</li>
+		</c:if>
+	</ul>
 
 </section>
 

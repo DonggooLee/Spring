@@ -94,8 +94,11 @@
 	</select>
 
 	<!-- 항공권 예약 조회  -->	
-	<select id="getBook">
-		SELECT * FROM  k_reservation_tbl r 
+	<select id="getReservation" resultType="org.kg.domain.K_getReservationVO">
+		SELECT 
+			r.date_idx, q.flight_name, a.air_name, r.ticket_date, t.ap_name_d, p.ap_name_s, r.ticket_price, r.passport_num,
+			q.seat_name, s.boarding_time, s.depart_time, s.arrive_time, m.m_name, m.m_phone, m.m_email, m.m_gender
+	    FROM  k_reservation_tbl r 
 			inner join k_schedule_tbl s on r.date_idx = s.date_idx 
 			inner join k_flight_tbl f on r.flight_name = f.flight_name
 			inner join k_airline_tbl a on r.air_idx = a.air_idx

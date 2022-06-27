@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airlineVO;
 import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_getReservationVO;
 import org.kg.domain.K_scheduleVO;
 import org.kg.domain.K_seatVO;
 import org.kg.domain.K_choiceSeatVO;
@@ -46,5 +47,8 @@ public interface FlightMapper {
 	
 	// 좌석 조회 : 조건 => 좌석번호
 	public K_seatVO getSeat(@Param("seat_idx") int seat_idx);
+	
+	// 예약 조회
+	public K_getReservationVO getReservation();
 	
 }

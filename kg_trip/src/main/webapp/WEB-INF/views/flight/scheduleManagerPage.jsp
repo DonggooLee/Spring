@@ -10,7 +10,7 @@
 </head>
 <body>
 	
-	<div class="airlineInsert" style="border: 1px solid black; width: 300px;">
+	<!-- <div class="airlineInsert" style="border: 1px solid black; width: 300px;">
 		<h1 style="text-align: center;">항공사 DB</h1>
 		<div>
 			<div>항공사 코드</div>
@@ -75,7 +75,7 @@
 		<div><button id="seatInsertBtn" type="button">좌석추가</button></div>
 	</div>
 	
-	<hr>
+	<hr> -->
 	
 	<div class="scheduleInsert" style="border: 1px solid black; width: 300px;">
 		<h1 style="text-align: center;">일정 DB</h1>
@@ -170,13 +170,13 @@
 		})
 		
 		// 항공사 조회
-		listAirline(function(listAir) {
+		/* listAirline(function(listAir) {
 			var str = '';
 			for(var i=0; i<listAir.length; i++){
 				str += "<option value=" + listAir[i].air_idx + ">" + listAir[i].air_name + "</option>";
 			}
 			selectAirline.html(str)
-		})
+		}) */
 		
 		// 항공사 추가 버튼 객체
 		var airlineInsertBtn = $("#airlineInsertBtn")

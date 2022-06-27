@@ -74,7 +74,21 @@ public class E_NoticeController {
    // view
    @GetMapping("/view")
       public String view(@RequestParam("n_num") long n_num, Model model,
-            Criteria cri) {
+            Criteria cri, HttpServletRequest request) {
+	   HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+	   
          log.info("선택된 글의 n_num"+n_num);
          model.addAttribute("notice", service.view(n_num));
          model.addAttribute("cri" , cri);
@@ -84,7 +98,22 @@ public class E_NoticeController {
 
    // insert 페이지 가기
    @GetMapping("/register")
-      public String register() {
+      public String register(HttpServletRequest request, Model model) {
+	   HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		
          log.info("/register");
          return "/notice/E_register";
       }
