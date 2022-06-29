@@ -25,7 +25,7 @@
 		<load-on-startup>1</load-on-startup>
 		
 		<!-- 파일업로드에 필요한 라이브러리 : was에서 설정을 잡아 준다 -->
-		 <multipart-config>
+		<multipart-config>
 	         <location>C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images</location>
 	         <max-file-size>20971520</max-file-size>
 	         <max-request-size>41943040</max-request-size>

@@ -19,110 +19,6 @@ function displayTime(timeValue){
 	   }
 }
 
-
-// 항공사 추가
-function airlineAdd(airline, callback, error){
-	$.ajax({
-		type : 'post',
-		url : '/flightManager/airlineInsert',
-		data : JSON.stringify(airline), 
-		contentType : 'application/json; charset=utf-8',
-		success : function(result, status, xhr) {
-			if(callback){
-				callback(result)
-			}
-		},
-		error : function(xhr, status, er) {
-			if(error){
-				error(er)
-			}
-		}
-	});
-} // end : flightAdd()
-
-
-// 항공편 추가
-function flightAdd(flight, callback, error){
-	$.ajax({
-		type : 'post',
-		url : '/flightManager/flightInsert',
-		data : JSON.stringify(flight), 
-		contentType : 'application/json; charset=utf-8',
-		success : function(result, status, xhr) {
-			if(callback){
-				callback(result)
-			}
-		},
-		error : function(xhr, status, er) {
-			if(error){
-				error(er)
-			}
-		}
-	});
-} // end : flightAdd()
-
-
-// 좌석 추가 
-function seatAdd(seat, callback, error) {
-	$.ajax({
-		type : 'post',
-		url : '/flightManager/seatInsert',
-		data : JSON.stringify(seat), 
-		contentType : 'application/json; charset=utf-8',
-		success : function(result, status, xhr) {
-			if(callback){
-				callback(result)
-			}
-		},
-		error : function(xhr, status, er) {
-			if(error){
-				error(er)
-			}
-		}
-	})
-} // end : seatAdd()
-
-
-// 일정 추가
-function schduleAdd(schdule, callback, error) {
-	$.ajax({
-		type : 'post',
-		url : '/flightManager/scheduleInsert',
-		data : JSON.stringify(schdule), 
-		contentType : 'application/json; charset=utf-8',
-		success : function(result, status, xhr) {
-			if(callback){
-				callback(result)
-			}
-		},
-		error : function(xhr, status, er) {
-			if(error){
-				error(er)
-			}
-		}
-	})
-} // end : schduleAdd()
-
-
-// 항공편 조회
-function listFlight(callback, error) {
-	$.ajax({
-		type : 'get',
-		url : '/flightManager/flightList',
-		success : function(result, status, xhr) {
-			if(callback){
-				callback(result)
-			}
-		},
-		error : function(xhr, status, er) {
-			if(error){
-				error(er)
-			}
-		}
-	})
-} // end : listFlight()
-
-
 // 공항 조회
 function listAirport(callback, error) {
 	$.ajax({
@@ -141,12 +37,13 @@ function listAirport(callback, error) {
 	})
 } // end : listAirport()
 
-
-// 항공사 조회
-function listAirline(callback, error) {
+// 항공 일정 추가
+function insertSchedule(schdule, callback, error) {
 	$.ajax({
-		type : 'get',
-		url : '/flightManager/airlineList',
+		type : 'post',
+		url : '/flightManager/insertSchedule',
+		data : JSON.stringify(schdule), 
+		contentType : 'application/json; charset=utf-8',
 		success : function(result, status, xhr) {
 			if(callback){
 				callback(result)
@@ -158,11 +55,29 @@ function listAirline(callback, error) {
 			}
 		}
 	})
-} // end : listAirline()
+} // end : insertSchedule()
 
+//항공편 조회
+function listFlight(param, callback, error) {
+	var c_aircode = param;
+	$.ajax({
+		type : 'get',
+		url : '/flightManager/flightList/' + c_aircode,
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : listFlight()
 
-// 일정 조회
-function listSchedule(input, callback, error) {
+// 일정 조회 (이코노미 좌석)
+function listScheduleEco(input, callback, error) {
 	$.ajax({
 		type : 'post',
 		url : '/flightManager/getSchedule',
@@ -181,4 +96,70 @@ function listSchedule(input, callback, error) {
 			}
 		}
 	})
-} // end : listSchedule()
+} // end : listScheduleEco()
+
+// 일정 조회 (비즈니스 좌석)
+function listScheduleBis(input, callback, error) {
+	$.ajax({
+		type : 'post',
+		url : '/flightManager/getSchedule',
+		// 보내는 데이터
+		data : JSON.stringify(input), 
+		// 보내는 데이터의 타입
+		contentType : 'application/json; charset=utf-8',
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : listScheduleBis()
+
+// 일정 조회 (퍼스트 좌석)
+function listScheduleFir(input, callback, error) {
+	$.ajax({
+		type : 'post',
+		url : '/flightManager/getSchedule',
+		// 보내는 데이터
+		data : JSON.stringify(input), 
+		// 보내는 데이터의 타입
+		contentType : 'application/json; charset=utf-8',
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : listScheduleFir()
+
+// 좌석 조회
+function getSeatList(param, callback, error) {
+	$.ajax({
+		type : 'post',
+		url : '/flight/getSeatList',
+		// 보내는 데이터
+		data : JSON.stringify(param), 
+		// 보내는 데이터의 타입
+		contentType : 'application/json; charset=utf-8',
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : getSeatList()

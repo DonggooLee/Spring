@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class K_airportVO {
 
 	private int ap_idx;
-	private String ap_name_s, ap_name_d;
+	private String ap_name_d, ap_name_a;
 	
 }

@@ -9,15 +9,18 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
-import org.kg.domain.payInfo;
-import org.kg.service.FlightService;
+import org.kg.domain.K_getSeatVO;
+import org.kg.domain.K_testDTO;
+import org.kg.service.K_FlightService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,12 +39,20 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class K_FlightController {
 	
-	private FlightService service;
+	private K_FlightService service;
 
 	// 기업회원 : 비행기 스케줄 관리 페이지 이동
 	@GetMapping("scheduleManagerPage")
-	public String scheduleManager() {
+	public String scheduleManager(HttpServletRequest request, Model model) {
 		log.info("페이지 이동 : scheduleManagerPage...");
+		HttpSession session = request.getSession(false);
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		}else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
 		return "flight/scheduleManagerPage";
 	}
 	
@@ -59,73 +70,38 @@ public class K_FlightController {
 		return "flight/reservationConfirmPage";
 	}
 	
-	// 일반회원 : 항공권 선택 후 확인 페이지 이동
+	// 일반회원 : 일정 선택 후 확인 페이지 이동
 	@GetMapping("scheduleConfirm")
-	public String scheduleConfirm(@RequestParam("date_idx") int date_idx, @RequestParam("seat_grade") String seat_grade, HttpServletRequest request, Model model) {
-		
+	public String scheduleConfirm(@RequestParam("date_idx") int date_idx, 
+			@RequestParam("seat_grade") String seat_grade, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
-		if (session == null) {
-			return "home";
-		}
-
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
 		}else {
 			model.addAttribute("loginPublicInfo", loginvo);
 			log.info(loginvo);
 		}
-		
 		log.info("페이지 이동 : scheduleConfirm...");
-		log.info("date_idx 값 : " + date_idx);
-		log.info("seat_grade 값 : " + seat_grade);
-		model.addAttribute("getSchedule", service.getSchedule_(date_idx, seat_grade));
+		log.info("date_idx 값 : " + date_idx + " / seat_grade 값 : " + seat_grade);
+		model.addAttribute("getSchedule", service.getSchedule_(date_idx));
+		model.addAttribute("seat_grade", seat_grade);
 		return "flight/scheduleConfirm";
 	}
 	
-	// 일반회원 : 확인 페이지에서 좌석배정 버튼 클릭 시 페이지 이동
-	@PostMapping("choiceSeat")
-	public String choiceSeat(@RequestParam("date_idx") int date_idx, @RequestParam("seat_grade") String seat_grade,
-			@RequestParam("flight_name") String flight_name, Model model) {
-		log.info("페이지 이동 : choiceSeat...");
-		log.info("date_idx 값 : " + date_idx);
-		log.info("seat_grade 값 : " + seat_grade);
-		log.info("flight_name 값 : " + flight_name);
-		model.addAttribute("date_idx", date_idx);
-		model.addAttribute("seat_grade", seat_grade);
-		model.addAttribute("flight_name", flight_name);
-		model.addAttribute("getSchedule", service.choiceSeat_(date_idx, flight_name));
-		return "flight/choiceSeat";
-	}
-	
-	// 일반회원 : 일정/좌석/개인정보 최종확인
-	@PostMapping("reservationConfirm")
-	public String reservationConfirm(@RequestParam("date_idx") int date_idx, @RequestParam("seat_grade") String seat_grade,
-			@RequestParam("flight_name") String flight_name, @RequestParam("seat_idx") int seat_idx, HttpServletRequest request ,Model model) {
-		
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			return "home";
-		}
-
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
+	// 일반회원 : 좌석 출력
+	@PostMapping(value = "getSeatList", 
+			consumes = "application/json", 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<K_getSeatVO> getSeatList(@RequestBody K_testDTO test){
+		int date_idx =  test.getDate_idx();
+		if(test.getSeat_grade().equals("FIRST")) {
+			return new ResponseEntity<>(service.getSeatFir_(date_idx), HttpStatus.OK);
+		}else if (test.getSeat_grade().equals("BUSINESS")) {
+			return new ResponseEntity<>(service.getSeatBis_(date_idx), HttpStatus.OK);
 		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
+			return new ResponseEntity<>(service.getSeatEco_(date_idx), HttpStatus.OK);
 		}
-		
-		log.info("페이지 이동 : reservationConfirm...");
-		log.info("date_idx 값 : " + date_idx);
-		log.info("seat_idx 값 : " + seat_idx);
-		log.info("seat_grade 값 : " + seat_grade);
-		log.info("flight_name 값 : " + flight_name);
-		model.addAttribute("getSeat", service.getSeat_(seat_idx));
-		model.addAttribute("getSchedule", service.getSchedule_(date_idx, seat_grade));
-		return "flight/reservationConfirm";
 	}
 	
 	// 일반회원 : 항공권 예약 조회

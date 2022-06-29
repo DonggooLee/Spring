@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class K_flightVO {
+public class K_getSeatVO {
 
-	private int flight_people;
-	private String flight_name, c_aircode;
+	private int economyseatprice, businessseatprice, firstseatprice, date_idx;
+	private String economyseat, businessseat, firstseat;
 	
 }

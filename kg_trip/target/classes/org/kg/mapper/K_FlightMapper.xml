@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.kg.mapper.K_FlightMapper">
+  
+	<!-- 공항 조회 -->
+	<select id="airportList" resultType="org.kg.domain.K_airportVO">
+		SELECT * FROM k_airport_tbl
+	</select>
+	
+	<!-- 항공편 조회 : 기업회원 항공사 코드랑 일치하는 항공편 -->
+	<select id="flightList" resultType="org.kg.domain.K_flightVO">
+		SELECT * FROM k_flight_tbl WHERE c_aircode = #{c_aircode}
+	</select>
+	
+	<!-- 항공편 일정 추가 -->
+	<insert id="insertSchedule">
+		INSERT INTO 
+			k_schedule_tbl(date_idx, flight_name, start_date, boarding_time, depart_time, arrive_time, ap_idx_d, ap_idx_a) 
+		VALUES 
+			(k_schedule_tbl_seq.nextval, #{flight_name}, #{start_date}, #{boarding_time}, #{depart_time}, #{arrive_time}, #{ap_idx_d}, #{ap_idx_a})
+	</insert>
+	
+	<!-- 항공권 일정 조회 : 이코노미 좌석 선택 -->
+	<select id="searchScheduleEco" resultType="org.kg.domain.K_getScheduleDTO">
+		SELECT 
+			s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a, 
+			e.economyseat, e.economyseatprice, b.c_name, s.date_idx
+		FROM k_flight_tbl f 
+			INNER JOIN k_economyseat_tbl e on f.flight_name = e.flight_name
+			INNER JOIN b_corpmember_tbl b on f.c_aircode = b.c_aircode
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_airport_tbl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN k_airport_tbl a on s.ap_idx_a = a.ap_idx
+		WHERE 
+			s.start_date = #{start_date} and d.ap_name_d = #{ap_name_d} and a.ap_name_a = #{ap_name_a}
+	</select>
+	
+	<!-- 항공권 일정 조회 : 비즈니스 좌석 선택 -->
+	<select id="searchSchedulBis" resultType="org.kg.domain.K_getScheduleDTO">
+		SELECT 
+			s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a, 
+			r.businessseat, r.businessseatprice, b.c_name, s.date_idx
+		FROM k_flight_tbl f 
+			INNER JOIN k_businessseat_tbl r on f.flight_name = r.flight_name
+			INNER JOIN b_corpmember_tbl b on f.c_aircode = b.c_aircode
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_airport_tbl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN k_airport_tbl a on s.ap_idx_a = a.ap_idx
+		WHERE 
+			s.start_date = #{start_date} and d.ap_name_d = #{ap_name_d} and a.ap_name_a = #{ap_name_a}
+	</select>
+	
+	<!-- 항공권 일정 조회 : 퍼스트 좌석 선택 -->
+	<select id="searchScheduleFir" resultType="org.kg.domain.K_getScheduleDTO">
+		SELECT 
+			s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a, 
+			t.firstseat, t.firstseatprice, b.c_name, s.date_idx
+		FROM k_flight_tbl f 
+			INNER JOIN k_firstseat_tbl t on f.flight_name = t.flight_name
+			INNER JOIN b_corpmember_tbl b on f.c_aircode = b.c_aircode
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_airport_tbl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN k_airport_tbl a on s.ap_idx_a = a.ap_idx
+		WHERE 
+			s.start_date = #{start_date} and d.ap_name_d = #{ap_name_d} and a.ap_name_a = #{ap_name_a}
+	</select>
+	
+	<!-- 이코노미 좌석 -->
+	<select id="getSeatEco" resultType="org.kg.domain.K_getSeatVO">
+		SELECT * FROM k_schedule_tbl s inner JOIN k_economyseat_tbl e on s.flight_name = e.flight_name WHERE s.date_idx = #{date_idx}
+	</select>
+	
+	<!-- 비즈니스 좌석 -->
+	<select id="getSeatBis" resultType="org.kg.domain.K_getSeatVO">
+		SELECT * FROM k_schedule_tbl s inner JOIN k_businessseat_tbl b on s.flight_name = b.flight_name WHERE s.date_idx = #{date_idx}
+	</select>
+	
+	<!-- 이코노미 좌석 -->
+	<select id="getSeatFir" resultType="org.kg.domain.K_getSeatVO">
+		SELECT * FROM k_schedule_tbl s inner JOIN k_firstseat_tbl f on s.flight_name = f.flight_name WHERE s.date_idx = #{date_idx}
+	</select>
+	
+	<!-- 일반회원 일정선택 -->
+	<select id="getSchedule" resultType="org.kg.domain.K_getScheduleDTO">
+		SELECT 
+			s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a, 
+			t.firstseat, t.firstseatprice, r.businessseat, r.businessseatprice, e.economyseat, e.economyseatprice, b.c_name, s.date_idx
+		FROM k_flight_tbl f 
+			INNER JOIN k_firstseat_tbl t on f.flight_name = t.flight_name
+			INNER JOIN k_businessseat_tbl r on f.flight_name = r.flight_name
+			INNER JOIN k_economyseat_tbl e on f.flight_name = e.flight_name
+			INNER JOIN b_corpmember_tbl b on f.c_aircode = b.c_aircode
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_airport_tbl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN k_airport_tbl a on s.ap_idx_a = a.ap_idx
+		WHERE s.date_idx = #{date_idx}
+	</select>
+	
+</mapper>
