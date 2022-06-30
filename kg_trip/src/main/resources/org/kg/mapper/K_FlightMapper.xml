@@ -69,17 +69,17 @@
 	
 	<!-- 이코노미 좌석 -->
 	<select id="getSeatEco" resultType="org.kg.domain.K_getSeatVO">
-		SELECT * FROM k_schedule_tbl s inner JOIN k_economyseat_tbl e on s.flight_name = e.flight_name WHERE s.date_idx = #{date_idx}
+		SELECT * FROM k_schedule_tbl s INNER JOIN k_economyseat_tbl e on s.flight_name = e.flight_name WHERE s.date_idx = #{date_idx}
 	</select>
 	
 	<!-- 비즈니스 좌석 -->
 	<select id="getSeatBis" resultType="org.kg.domain.K_getSeatVO">
-		SELECT * FROM k_schedule_tbl s inner JOIN k_businessseat_tbl b on s.flight_name = b.flight_name WHERE s.date_idx = #{date_idx}
+		SELECT * FROM k_schedule_tbl s INNER JOIN k_businessseat_tbl b on s.flight_name = b.flight_name WHERE s.date_idx = #{date_idx}
 	</select>
 	
 	<!-- 이코노미 좌석 -->
 	<select id="getSeatFir" resultType="org.kg.domain.K_getSeatVO">
-		SELECT * FROM k_schedule_tbl s inner JOIN k_firstseat_tbl f on s.flight_name = f.flight_name WHERE s.date_idx = #{date_idx}
+		SELECT * FROM k_schedule_tbl s INNER JOIN k_firstseat_tbl f on s.flight_name = f.flight_name WHERE s.date_idx = #{date_idx}
 	</select>
 	
 	<!-- 일반회원 일정선택 -->
@@ -97,5 +97,30 @@
 			INNER JOIN k_airport_tbl a on s.ap_idx_a = a.ap_idx
 		WHERE s.date_idx = #{date_idx}
 	</select>
+	
+	<!-- 겹치는 좌석 확인을 위한 테스트 쿼리  -->
+	<select id="checkSeat_1" resultType="org.kg.domain.K_checkSeatDTO">
+		SELECT * FROM k_flight_tbl f
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_economySeat_tbl e on f.flight_name = e.flight_name
+			INNER JOIN k_businessseat_tbl b on f.flight_name = b.flight_name
+			INNER JOIN k_firstseat_tbl r on f.flight_name = r.flight_name
+		WHERE f.flight_name = #{flight_name} and s.date_idx = #{date_idx}
+	</select>
+	
+	<select id="checkSeat_2" resultType="org.kg.domain.K_checkSeatVO">
+		SELECT r.seat_name
+		FROM k_reservation_tbl r 
+		INNER JOIN k_schedule_tbl s on r.flight_name = s.flight_name
+		WHERE r.flight_name = #{flight_name} and s.date_idx = #{date_idx}
+	</select>
+	
+	<!-- 예약하기 -->
+	<insert id="insertReservation">
+		INSERT INTO 
+			k_reservation_tbl(reservation_idx, date_idx, flight_name, m_idx, ticket_date, ticket_price, seat_name, passport_num)
+		VALUES
+			(#{reservation_idx}, #{date_idx}, #{flight_name}, #{m_idx}, sysdate, #{ticket_price}, #{seat_name}, #{passport_num})
+	</insert>
 	
 </mapper>

@@ -28,6 +28,6 @@ public class K_FlightMapperTests {
 //	@Test
 //	public void test() {
 //		log.info("테스트 결과 : " + mapper.getSeatEco(1));
-//	}
+//	}	
 	
 }

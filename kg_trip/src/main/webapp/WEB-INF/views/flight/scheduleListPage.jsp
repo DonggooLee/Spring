@@ -173,7 +173,7 @@
 							console.log(date_idx)
 						})
 				}) // end : 이코노미 좌석 선택 일정
-			}
+			} // end : else
 		}) // end : 일정 조회 버튼 클릭 이벤트 종료
 		
 	}) // end : onload

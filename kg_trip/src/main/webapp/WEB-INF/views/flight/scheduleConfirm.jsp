@@ -32,6 +32,10 @@
 				<td>${getSchedule.arrive_time }</td>
 				<td>${getSchedule.ap_name_d }</td>
 				<td>${getSchedule.ap_name_a }</td>
+				<input type="hidden" name="date_idx" value="${loginPublicInfo.m_idx}">
+				<input type="hidden" name="flight_name" value="${loginPublicInfo.m_idx}">
+				<input type="hidden" name="ticket_price" value="${loginSpecial.m}">
+				<input type="hidden" name="passport_num" value="${loginPublicInfo.m_idx}">
 			</tr>
 		</table>
 	</div>
@@ -87,22 +91,28 @@
 				<th>여권번호</th>
 				<td>
 					<input type="text" name="passport_num">
+					<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx}">
+					
 				</td>
 			</tr>
 		</table>
 	</div>
 
+	<hr>
+	
+	<h2>좌석 배정</h2>
+	<div class="choiceSeat" style="border: 1px solid black; width: 800px; height: 500px; text-align: center;"></div>
+	
+	<br>
+	
+	<div class="reservation">
+		<button>예약하기</button>
+	</div>
+	
 	<div class="hidden">
 		<!-- 좌석 등급 스크립트 처리하기 위함 -->
 		<input type="hidden" name="seat_grade" value="${seat_grade}">
 		<input type="hidden" name="date_idx" value="${getSchedule.date_idx}">
-	</div>
-	
-	<hr>
-	
-	<h2>좌석 배정</h2>
-	<div class="choiceSeat" style="border: 1px solid black; width: 800px; height: 200px; text-align: center;">
-		테스트
 	</div>
 	
 </body>
@@ -111,29 +121,67 @@
 
 	$(function() {
 		
+		// 항공권 예매를 위한 객체
+		var memberInfo = $(".memberInfo")
+		
 		// 좌석정보 얻기 위한 객체
 		var seat_grade = $(".hidden").find("input[name='seat_grade']")
 		var date_idx = $(".hidden").find("input[name='date_idx']")
+		var div = $(".choiceSeat")
 
-		// 좌석정보 불러오기
+		// 해당 항공편의 좌석정보 출력
 		getSeatList({seat_grade:seat_grade.val(), date_idx:date_idx.val()},
 				function(seat) {
-			if(seat.businessseat == null){
-				console.log("비즈니스 널 값")
+			if(seat.economyseat != null) {
+				var es = seat.economyseat
+				var split_es = es.split(',')
+				var str = '';
+				for(var i=0; i<split_es.length; i++){
+					str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_es[i]+">" + split_es[i] + "</button>"
+				}
+				div.html(str)
+				$(".choiceSeat button").on("click", function() {
+					var seat_es = $(this).data("idx")
+					alert(seat_es)
+					console.log(seat_es)
+				})
 			}
-			if(seat.economyseat == null) {
-				console.log("이코노미 널 값")
+			if(seat.businessseat != null){
+				var bs = seat.businessseat
+				var split_bs = bs.split(',')
+				var str = '';
+				for(var i=0; i<split_bs.length; i++){
+					str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
+				}
+				div.html(str)
+				$(".choiceSeat button").on("click", function() {
+					var seat_bs = $(this).data("idx")
+					alert(seat_bs)
+					console.log(seat_bs)
+				})
 			}
-			if(seat.firstseat == null){
-				console.log("퍼스트 널 값")
+			if(seat.firstseat != null){
+				var fs = seat.firstseat
+				var split_fs = fs.split(',')
+				var str = '';
+				for(var i=0; i<split_fs.length; i++){
+					str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
+				}
+				div.html(str)
+				$(".choiceSeat button").on("click", function() {
+					var seat_fs = $(this).data("idx")
+					alert(seat_fs)
+					console.log(seat_fs)
+				})
 			}
-			console.log(seat)
-			var test = seat.businessseat;
-			console.log("^^^^^^변수에 담은 값 : " + test)
-			var split_test = test.split(',')
-			console.log("잘라버린값 : " + split_test[0])
+		}) // end : 좌석정보 출력
+		
+		// 예약하기 버튼 클릭
+		$(".reservation button").on("click", function() {
 			
-		})
+			alert("버튼 클릭 테스트 !")
+			
+		}) // end : 예약하기 버튼
 		
 	}) // end : onload
 	
