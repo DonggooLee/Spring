@@ -163,3 +163,26 @@ function getSeatList(param, callback, error) {
 		}
 	})
 } // end : getSeatList()
+
+// 예약 좌석 조회
+function getReservationSeatList(param, callback, error) {
+	$.ajax({
+		type : 'post',
+		url : '/flight/getReservationSeatList',
+		// 보내는 데이터
+		data : JSON.stringify(param), 
+		// 보내는 데이터의 타입
+		contentType : 'application/json; charset=utf-8',
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : getReservationSeatList()
+

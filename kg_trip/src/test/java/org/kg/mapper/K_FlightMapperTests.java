@@ -2,6 +2,7 @@ package org.kg.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kg.domain.K_getInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,6 +29,15 @@ public class K_FlightMapperTests {
 //	@Test
 //	public void test() {
 //		log.info("테스트 결과 : " + mapper.getSeatEco(1));
+//	}	
+	
+	// 예약 좌석 테스트
+//	@Test
+//	public void test() {
+//		K_getInfoDTO info = new K_getInfoDTO();
+//		info.setDate_idx(2);
+//		info.setFlight_name("AA978");
+//		log.info("테스트 결과 : " + mapper.getReservationSeatList(info));
 //	}	
 	
 }

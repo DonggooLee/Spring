@@ -6,9 +6,11 @@ import org.kg.domain.K_getScheduleDTO;
 import org.kg.domain.K_getSeatVO;
 import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airportVO;
+import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_checkSeatDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_getInfoDTO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertReservationDTO;
 import org.kg.domain.K_insertScheduleDTO;
@@ -43,19 +45,23 @@ public interface K_FlightMapper {
 	// 좌석출력 : 퍼스트
 	public K_getSeatVO getSeatFir(int date_idx);
 	
-	/* 테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+	// 일반회원 일정선택
+	public K_getScheduleDTO getSchedule(int date_idx);
+	
 	// 예약하기
-	public int insertReservation(K_insertReservationDTO dto);
+	public int insertReservation(K_bookInfo info);
+	
+	// 예약 좌석 조회
+	public List<K_checkSeatVO> getReservationSeatList(K_getInfoDTO info);
+	
+	
+	
+	/* 테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+	
 	
 	// 좌석확인_1
 	public K_checkSeatDTO checkSeat_1(@Param("flight_name") String flight_name, @Param("date_idx") int date_idx);
 	
-	// 좌석확인_2
-	public K_checkSeatVO checkSeat_2(@Param("flight_name") String flight_name, @Param("date_idx") int date_idx);
 	/* 테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 	
-	
-	// 일반회원 일정선택
-	public K_getScheduleDTO getSchedule(int date_idx);
-
 }

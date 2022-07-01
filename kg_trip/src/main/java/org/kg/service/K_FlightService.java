@@ -6,7 +6,10 @@ import org.kg.domain.K_getScheduleDTO;
 import org.kg.domain.K_getSeatVO;
 import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airportVO;
+import org.kg.domain.K_bookInfo;
+import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
+import org.kg.domain.K_getInfoDTO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
 
@@ -41,5 +44,11 @@ public interface K_FlightService {
 	
 	// 일반회원 : 일정선택
 	public K_getScheduleDTO getSchedule_(@Param("date_idx") int date_idx);
+	
+	// 예약하기
+	public int insertReservation_(K_bookInfo info);
+	
+	// 예약 좌석 조회
+	public List<K_checkSeatVO> getReservationSeatList_(K_getInfoDTO info);
 	
 }

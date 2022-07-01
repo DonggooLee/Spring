@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpSession;
 import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.domain.K_getSeatVO;
-import org.kg.domain.K_testDTO;
+import org.kg.domain.K_bookInfo;
+import org.kg.domain.K_checkSeatVO;
+import org.kg.domain.K_getInfoDTO;
 import org.kg.service.K_FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -93,26 +96,50 @@ public class K_FlightController {
 	@PostMapping(value = "getSeatList", 
 			consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<K_getSeatVO> getSeatList(@RequestBody K_testDTO test){
-		int date_idx =  test.getDate_idx();
-		if(test.getSeat_grade().equals("FIRST")) {
+	public ResponseEntity<K_getSeatVO> getSeatList(@RequestBody K_getInfoDTO info){
+		int date_idx =  info.getDate_idx();
+		if(info.getSeat_grade().equals("FIRST")) {
 			return new ResponseEntity<>(service.getSeatFir_(date_idx), HttpStatus.OK);
-		}else if (test.getSeat_grade().equals("BUSINESS")) {
+		}else if (info.getSeat_grade().equals("BUSINESS")) {
 			return new ResponseEntity<>(service.getSeatBis_(date_idx), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(service.getSeatEco_(date_idx), HttpStatus.OK);
 		}
 	}
 	
-	// 일반회원 : 항공권 예약 조회
-	@PostMapping("myReservation")
-	public String myReservation(@RequestParam("ticket_idx") String ticket_idx, @RequestParam("start_date") String start_date,
-			@RequestParam("m_name") String m_name) {
-		log.info("ticket_idx 값 : " + ticket_idx);
-		log.info("start_date 값 : " + start_date);
-		log.info("m_name 값 : " + m_name);
-		return "flight/myReservation";
+	// 일반회원 : 예약 좌석 조회
+	@PostMapping(value = "getReservationSeatList", 
+			consumes = "application/json", 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<K_checkSeatVO>> getReservationSeatList(@RequestBody K_getInfoDTO info){
+		log.info("넘어오는 정보 확인 : " + info.getDate_idx() + "/" + info.getFlight_name());
+		return new ResponseEntity<>(service.getReservationSeatList_(info), HttpStatus.OK);
 	}
+	
+	// 예약하기
+	@PostMapping("reservation")
+	public String insertReservation(K_bookInfo bookInfo, Model model) {
+		// 난수발생 로직 만들기 !! ========================================
+		bookInfo.setReservation_idx("2022012P456789");
+		// 난수발생 로직 만들기 !! ========================================
+		log.info("예약정보..." + bookInfo);
+		int result = service.insertReservation_(bookInfo);
+		log.info("예약정보 입력 결과 : " + result);
+		model.addAttribute("result", result);
+		model.addAttribute("info", bookInfo);
+		log.info("페이지 이동 : reservation...");
+		return "flight/reservation";
+	}
+	
+	// 일반회원 : 항공권 예약 조회
+//	@PostMapping("myReservation")
+//	public String myReservation(@RequestParam("ticket_idx") String ticket_idx, @RequestParam("start_date") String start_date,
+//			@RequestParam("m_name") String m_name) {
+//		log.info("ticket_idx 값 : " + ticket_idx);
+//		log.info("start_date 값 : " + start_date);
+//		log.info("m_name 값 : " + m_name);
+//		return "flight/myReservation";
+//	}
 	
 	// 카카오 페이 결제 API !
 	@RequestMapping(value = "/kakaopay")

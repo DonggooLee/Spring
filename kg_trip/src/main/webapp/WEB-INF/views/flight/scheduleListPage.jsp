@@ -104,7 +104,7 @@
 								str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 								str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
 								str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-								str += "<li> 좌석가격 : " + listSch[i].firstseatprice + "</li>";
+								str += "<li> 티켓가격 : " + listSch[i].firstseatprice + "</li>";
 								str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 								str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 								str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
@@ -169,7 +169,7 @@
 							// 일정번호
 							var date_idx = $(this).data("idx");
 							// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
-							location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=ECONOMY";;
+							location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=ECONOMY";
 							console.log(date_idx)
 						})
 				}) // end : 이코노미 좌석 선택 일정
