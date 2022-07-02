@@ -113,18 +113,14 @@
 		WHERE r.flight_name = #{flight_name} and s.date_idx = #{date_idx}
 	</select>
 	
-	<!-- 예약조회 -->
-	<select id="getResrvationInfo" resultType="org.kg.domain.K_getResrvationInfoVO">
-		SELECT 
-			p.m_name, p.m_gender, f.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a,
-			r.reservation_idx, r.seat_name
-		FROM k_reservation_tbl r
-			INNER JOIN b_publicmember_tbl p ON r.m_idx = p.m_idx
-			INNER JOIN k_flight_tbl f ON r.flight_name = f.flight_name
-			INNER JOIN k_schedule_tbl s ON r.date_idx = s.date_idx
-			INNER JOIN k_airport_tbl d ON s.ap_idx_d = d.ap_idx
-			INNER JOIN k_airport_tbl a ON s.ap_idx_a = a.ap_idx
-		WHERE r.reservation_idx = #{reservation_idx}
+	<!-- 겹치는 좌석 확인을 위한 테스트 쿼리  -->
+	<select id="checkSeat_1" resultType="org.kg.domain.K_checkSeatDTO">
+		SELECT * FROM k_flight_tbl f
+			INNER JOIN k_schedule_tbl s on f.flight_name = s.flight_name
+			INNER JOIN k_economySeat_tbl e on f.flight_name = e.flight_name
+			INNER JOIN k_businessseat_tbl b on f.flight_name = b.flight_name
+			INNER JOIN k_firstseat_tbl r on f.flight_name = r.flight_name
+		WHERE f.flight_name = #{flight_name} and s.date_idx = #{date_idx}
 	</select>
 	
 </mapper>

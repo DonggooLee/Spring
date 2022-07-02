@@ -40,7 +40,7 @@
 					<nav>
 						<ul>
 							<li><a href='/flight/scheduleListPage'>항공권</a></li>
-							<li><a href='/flight/scheduleBookPage'>예약조회</a></li>
+							<li><a href='/flight/reservationConfirmPage'>예약조회</a></li>
 							<li><a href='/flight/scheduleManagerPage'>항공권 관리 페이지</a></li>
 							<li><a href='/pakage/P_pakageMain'>패키지</a></li>
 							<li><a href="/notice/list">고객센터</a></li>

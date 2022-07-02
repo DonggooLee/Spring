@@ -11,7 +11,6 @@ import org.kg.domain.K_checkSeatDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_getInfoDTO;
-import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertReservationDTO;
 import org.kg.domain.K_insertScheduleDTO;
@@ -55,7 +54,14 @@ public interface K_FlightMapper {
 	// 예약 좌석 조회
 	public List<K_checkSeatVO> getReservationSeatList(K_getInfoDTO info);
 	
-	// 예약조회
-	public K_getResrvationInfoVO getResrvationInfo(String reservation_idx);
+	
+	
+	/* 테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+	
+	
+	// 좌석확인_1
+	public K_checkSeatDTO checkSeat_1(@Param("flight_name") String flight_name, @Param("date_idx") int date_idx);
+	
+	/* 테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 	
 }

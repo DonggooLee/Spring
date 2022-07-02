@@ -9,7 +9,6 @@ import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_getInfoDTO;
-import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
 import org.kg.mapper.K_FlightMapper;
@@ -96,12 +95,6 @@ public class K_FlightServiceImpl implements K_FlightService{
 	@Override
 	public List<K_checkSeatVO> getReservationSeatList_(K_getInfoDTO info) {
 		return mapper.getReservationSeatList(info);
-	}
-
-	// 예약조회
-	@Override
-	public K_getResrvationInfoVO getResrvationInfo_(String reservation_idx) {
-		return mapper.getResrvationInfo(reservation_idx);
 	}
 	
 }

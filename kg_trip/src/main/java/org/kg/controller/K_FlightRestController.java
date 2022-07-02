@@ -5,7 +5,6 @@ import java.util.List;
 import org.kg.domain.K_getScheduleDTO;
 import org.kg.domain.K_airportVO;
 import org.kg.domain.K_flightVO;
-import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
 import org.kg.service.K_FlightService;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -73,14 +71,6 @@ public class K_FlightRestController {
 		}else {
 			return new ResponseEntity<>(service.searchScheduleEco_(inputSch), HttpStatus.OK);
 		}
-	}
-	
-	// 일반회원 : 항공권 예약 조회
-	@GetMapping(value = "myReservation/{reservation_idx}", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<K_getResrvationInfoVO> myReservation(@PathVariable("reservation_idx") String reservation_idx) {
-		log.info("항공권 예약조회 테스트 !.....");
-		log.info("reservation_idx..." + reservation_idx);
-		return new ResponseEntity<>(service.getResrvationInfo_(reservation_idx), HttpStatus.OK);
 	}
 	
 }
