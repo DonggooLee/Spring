@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import org.kg.domain.K_getSeatVO;
 import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_getInfoDTO;
+import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.service.K_FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -67,10 +69,10 @@ public class K_FlightController {
 	}
 	
 	// 일반회원 : 항공권 예약 조회 페이지 이동
-	@GetMapping("reservationConfirmPage")
+	@GetMapping("scheduleBookPage")
 	public String reservationConfirmPage() {
-		log.info("페이지 이동 : reservationConfirmPage...");
-		return "flight/reservationConfirmPage";
+		log.info("페이지 이동 : scheduleBookPage...");
+		return "flight/scheduleBookPage";
 	}
 	
 	// 일반회원 : 일정 선택 후 확인 페이지 이동
@@ -112,16 +114,21 @@ public class K_FlightController {
 			consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<K_checkSeatVO>> getReservationSeatList(@RequestBody K_getInfoDTO info){
-		log.info("넘어오는 정보 확인 : " + info.getDate_idx() + "/" + info.getFlight_name());
+		log.info("넘어오는 정보 확인 : " + info.getDate_idx() + " / " + info.getFlight_name());
 		return new ResponseEntity<>(service.getReservationSeatList_(info), HttpStatus.OK);
 	}
 	
-	// 예약하기
+	// 일반회원 : 예약하기
 	@PostMapping("reservation")
 	public String insertReservation(K_bookInfo bookInfo, Model model) {
-		// 난수발생 로직 만들기 !! ========================================
-		bookInfo.setReservation_idx("2022012P456789");
-		// 난수발생 로직 만들기 !! ========================================
+		Random ran = new Random();
+		String ridx = "";
+		for(int i=0; i<5; i++) {
+			String num = String.valueOf(ran.nextInt(10));
+			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
+			ridx += (str+num);
+		}
+		bookInfo.setReservation_idx("2022"+ridx);
 		log.info("예약정보..." + bookInfo);
 		int result = service.insertReservation_(bookInfo);
 		log.info("예약정보 입력 결과 : " + result);
@@ -131,15 +138,6 @@ public class K_FlightController {
 		return "flight/reservation";
 	}
 	
-	// 일반회원 : 항공권 예약 조회
-//	@PostMapping("myReservation")
-//	public String myReservation(@RequestParam("ticket_idx") String ticket_idx, @RequestParam("start_date") String start_date,
-//			@RequestParam("m_name") String m_name) {
-//		log.info("ticket_idx 값 : " + ticket_idx);
-//		log.info("start_date 값 : " + start_date);
-//		log.info("m_name 값 : " + m_name);
-//		return "flight/myReservation";
-//	}
 	
 	// 카카오 페이 결제 API !
 	@RequestMapping(value = "/kakaopay")

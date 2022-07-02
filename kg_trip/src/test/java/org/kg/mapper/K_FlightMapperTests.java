@@ -40,4 +40,10 @@ public class K_FlightMapperTests {
 //		log.info("테스트 결과 : " + mapper.getReservationSeatList(info));
 //	}	
 	
+	// 예약 조회 테스트
+	@Test
+	public void test() {
+		log.info("테스트 결과 : " + mapper.getResrvationInfo("2022013P456789"));
+	}
+	
 }

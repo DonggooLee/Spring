@@ -123,7 +123,6 @@
 
 	$(function() {
 		
-		
 		// 좌석정보 얻기 위한 객체
 		var seat_grade = $(".hidden").find("input[name='seat_grade']")
 		var date_idx = $(".hidden").find("input[name='date_idx']")
@@ -145,7 +144,7 @@
 			getReservationSeatList({flight_name:flight_name.val(), date_idx:date_idx.val()}, 
 					function(seatList) {
 				
-				// 이코노미석 선택할 시
+				// 이코노미석 선택
 				if(seat.economyseat != null) {
 					var pEs = seat.economyseatprice
 					$("#ticketPrice").html(pEs)
@@ -153,18 +152,13 @@
 					var split_es = es.split(',')
 					var str = '';
 					for(var i=0; i<split_es.length; i++){
-						console.log("기본값 : " + split_es[i])
-						console.log("기본값 : " + seatList[i].seat_name)
-						for (var j=0; j<seatList.length; i++) {
+						for(var j=0; j<seatList.length; j++) {
+							// 중복되는 값 => idx 값 다르게 줘서 구분하기
 							if(split_es[i] == seatList[j].seat_name ) {
-								console.log("중복값 : " + split_es[i])
-							}else{
-								console.log("중복아닌 값 : " + split_es[i])													
+								str += "<button style='padding: 15px; background-color: gray; margin: 5px;' id=seat_es disabled='disabled' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
 							}
 						}
-						//console.log("항공기 좌석 리스트 : " + split_es[i])
-						//console.log("이미 예약된 좌석 리스트 : " + seatList[i].seat_name)
-						//str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_es[i]+">" + split_es[i] + "</button>"
+						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_es[i]+">" + split_es[i] + "</button>"
 					}
 					div.html(str)
 					$(".choiceSeat button").on("click", function() {
@@ -175,82 +169,59 @@
 						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
 						$("#myForm").append(bookInfo_)
 						/* 
-						테스트 데이터! 
-						bookInfo = {date_idx:date_idx.val(), flight_name:flight_name.val(), m_idx:m_idx.val(), 
-							ticket_price:pEs, seat_name:seat_es, passport_num:passport_num.val()}
-						console.log(bookInfo.date_idx)
-						console.log(bookInfo.flight_name)
-						console.log(bookInfo.m_idx)
-						console.log(bookInfo.ticket_price)
-						console.log(bookInfo.seat_name)
-						console.log(bookInfo.passport_num)
+							비동기로 태울 때 필요한 테스트 데이터! ★★★
+							bookInfo = {date_idx:date_idx.val(), flight_name:flight_name.val(), m_idx:m_idx.val(), 
+								ticket_price:pEs, seat_name:seat_es, passport_num:passport_num.val()}
+							console.log(bookInfo.date_idx+bookInfo.flight_name+bookInfo.m_idx+bookInfo.ticket_price
+									+bookInfo.seat_name+bookInfo.passport_num);
 						*/
 					})
-				}
-			
+				} // end : 이코노미석 선택
+				// 비즈니스석 선택
+				if(seat.businessseat != null){
+					var pBs = seat.businessseatprice
+					$("#ticketPrice").html(pBs)
+					var bs = seat.businessseat
+					var split_bs = bs.split(',')
+					var str = '';
+					for(var i=0; i<split_bs.length; i++){
+						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_bs data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
+					}
+					div.html(str)
+					$(".choiceSeat button").on("click", function() {
+						var seat_bs = $(this).data("idx")
+						alert("선택한 좌석 번호 : " + seat_bs)
+						bookInfo_ += "<input type='text' name='ticket_price' value=" + pBs + ">"
+						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_bs + ">"
+						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
+						$("#myForm").append(bookInfo_)
+					})
+				} // end : 비즈니스석 선택
+				// 퍼스트석 선택
+				if(seat.firstseat != null){
+					var pFs = seat.firstseatprice
+					$("#ticketPrice").html(pFs)
+					var fs = seat.firstseat
+					var split_fs = fs.split(',')
+					var str = '';
+					for(var i=0; i<split_fs.length; i++){
+						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_fs data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
+					}
+					div.html(str)
+					$(".choiceSeat button").on("click", function() {
+						var seat_fs = $(this).data("idx")
+						alert("선택한 좌석 번호 : " + seat_fs)
+						bookInfo_ += "<input type='text' name='ticket_price' value=" + pFs + ">"
+						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_fs + ">"
+						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
+						$("#myForm").append(bookInfo_)
+					})
+				} // end : 퍼스트석 선택
+				
 			}) // end : 이미 선택된 좌석정보
 			
-			
-			// 비즈니스석 선택할 시
-			if(seat.businessseat != null){
-				var pBs = seat.businessseatprice
-				$("#ticketPrice").html(pBs)
-				var bs = seat.businessseat
-				var split_bs = bs.split(',')
-				var str = '';
-				for(var i=0; i<split_bs.length; i++){
-					str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
-				}
-				div.html(str)
-				$(".choiceSeat button").on("click", function() {
-					var seat_bs = $(this).data("idx")
-					alert("선택한 좌석 번호 : " + seat_bs)
-					bookInfo_ += "<input type='text' name='ticket_price' value=" + pBs + ">"
-					bookInfo_ += "<input type='text' name='seat_name' value=" + seat_bs + ">"
-					bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
-					$("#myForm").append(bookInfo_)
-					/* 테스트 데이터! */
-					bookInfo = {date_idx:date_idx.val(), flight_name:flight_name.val(), m_idx:m_idx.val(), 
-						ticket_price:pBs, seat_name:seat_bs, passport_num:passport_num.val()}
-					console.log(bookInfo.date_idx)
-					console.log(bookInfo.flight_name)
-					console.log(bookInfo.m_idx)
-					console.log(bookInfo.ticket_price)
-					console.log(bookInfo.seat_name)
-					console.log(bookInfo.passport_num)
-				})
-			}
-			// 퍼스트석 선택할 시
-			if(seat.firstseat != null){
-				var pFs = seat.firstseatprice
-				$("#ticketPrice").html(pFs)
-				var fs = seat.firstseat
-				var split_fs = fs.split(',')
-				var str = '';
-				for(var i=0; i<split_fs.length; i++){
-					str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_es data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
-				}
-				div.html(str)
-				$(".choiceSeat button").on("click", function() {
-					var seat_fs = $(this).data("idx")
-					alert("선택한 좌석 번호 : " + seat_fs)
-					bookInfo_ += "<input type='text' name='ticket_price' value=" + pFs + ">"
-					bookInfo_ += "<input type='text' name='seat_name' value=" + seat_fs + ">"
-					bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
-					$("#myForm").append(bookInfo_)
-					/* 테스트 데이터! */
-					bookInfo = {date_idx:date_idx.val(), flight_name:flight_name.val(), m_idx:m_idx.val(), 
-						ticket_price:pFs, seat_name:seat_fs, passport_num:passport_num.val()}
-					console.log(bookInfo.date_idx)
-					console.log(bookInfo.flight_name)
-					console.log(bookInfo.m_idx)
-					console.log(bookInfo.ticket_price)
-					console.log(bookInfo.seat_name)
-					console.log(bookInfo.passport_num)
-				})
-			}
 		}) // end : 해당 항공편의 좌석정보 출력
-		
+
 		
 		// 예약하기 버튼 클릭
 		$(".reservation button").on("click", function() {
@@ -259,7 +230,6 @@
 			$("#myForm").submit()
 			
 		}) // end : 예약하기 버튼
-		
 		
 	}) // end : onload
 	
