@@ -6,12 +6,12 @@
 	
 	<section class="cont">
 	
-		<div style="border: 1px solid black; width: 500px; padding: 20px;">
+		<div style="border: 1px solid black; width: 255px; padding: 20px;">
 			<h1 style="text-align: center;">예약정보</h1>
 			<br>
-			<h3>예약번호: ${bookNum}</h3>
+			<h3>예약번호 : ${bookNum}</h3>
 			<br>
-			<table>
+			<table style="padding: 10px;">
 				<tr><th>이름</th><td>${bookInfo.m_name }</td></tr>
 				<tr><th>항공편명</th><td>${bookInfo.flight_name }</td></tr>
 				<tr><th>비행일자</th><td>${bookInfo.start_date }</td></tr>
@@ -23,8 +23,21 @@
 				<tr><th>좌석번호</th><td>${bookInfo.seat_name }</td></tr>
 			</table>
 		</div>
+		<br>
+		<div>
+			<button id="mainBtn">메인페이지</button>
+		</div>
 		
 	</section>
+	
+<script type="text/javascript">
+
+	//메인페이지 버튼 클릭 이벤트
+	$("#mainBtn").on("click", function() {
+		location.href = "/KingTrip/main";
+	}) // end : 메인페이지 버튼 클릭 이벤트
+
+</script>
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>

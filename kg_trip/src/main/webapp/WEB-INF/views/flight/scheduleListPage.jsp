@@ -46,14 +46,13 @@
 			</div>
 			<br>
 			<div>
-				<button id="getScheduleBtn" style="display: block; margin: auto;">일정조회</button>
+				<button id="getScheduleBtn">일정조회</button>
 			</div>
 		</div>
 		
 		<br><br>
 		
-		<div class="schedule">
-		</div>
+		<div class="schedule"></div>
 	
 	</section>
 	

@@ -17,10 +17,26 @@
 	.left-width{
 		width: 900px;
 	}
+	
+	.conted {
+	/* position: relative; */
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	height: 15000px;
+	background-color: #F0FFFF;
+	
+
+	을지가 수정한 것들 !! 여기부터
+	background-color: gray;
+	border: 2px solid pink;
+	padding: 20px;
+	을지가 수정한 것들 !! 여기까지
+	}
 </style>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
-		<section class="cont">
+		<section class="conted">
 			<div class="left-view">
 				<div class="left-width" height="100px"><h1>${board.p_name }</h1></div>
 				<div class="left-width">
@@ -105,13 +121,14 @@
 			</div>
 			<div class="right-view">
 				<div>
-					<fmt:formatNumber value="${board.p_fee }" pattern="#,###" />원 /(1인)
-					<form action="people" method="post">
+					<fmt:formatNumber value="${board.p_fee }" pattern="#,###" />원 /(1인)<br>
+					예약 가능 인원 : <input type="text" name="p_available" value="${board.p_available }" readonly="readonly"><br>
+					<form action="people" method="post" id="operForm">
 						<input type="number" name="people">명
 						<input type="hidden" name="p_num" value="${board.p_num }">
-						<input type="submit" value="예약하기">
+						<input type="submit" value="예약하기" name="reser">
 					</form>
-					<a class="wish" href='${board.p_num }'>위시리스트 담기</a>
+					<%-- <a class="wish" href='${board.p_num }'>위시리스트 담기</a> --%>
 				</div>
 			</div>
 				<form action="/pakage/P_pakageList" method="get" id="actionForm">
@@ -119,19 +136,30 @@
 		</section>
 		
 <script type="text/javascript">
-
-var actionForm = $("#actionForm");
-
 $(function(){
-	
-	 $(".reser").click(function(e){
-         e.preventDefault();
-         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-         actionForm.attr("action", "/pakage/P_reservation");
-         console.log(actionForm);
-         actionForm.submit();
-      });
-});	
+    var operForm=$("#operForm");
+    
+    $('input[name=reser]').click(function(e){
+    	
+    	var pe = parseInt($('input[name=people]').val());
+    	var av = parseInt($("input[name=p_available]").val());
+    	
+    	if(pe < 1){
+	    	e.preventDefault();
+    		alert("1명 이상 선택해주세요.");
+    		return;
+    	}
+    	
+    	if(pe > av){
+	    	e.preventDefault();
+    		alert("예약 가능한 인원보다 많습니다.");
+    		return;
+    	}
+    	
+    	
+    });
+ });
+ 
 
 
 </script>

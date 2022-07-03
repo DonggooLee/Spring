@@ -1,26 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
 <%@ page session="false" %>
-<!-- <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-
-
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
 		<section class="cont">
-		
-			<div class="event">
-				안녕
-			</div>
-			<div class="btnWrap" style="width:calc(100% - 20px); margin:20px 0; padding:0 20px 0 0; padding-right:20px; text-align: right;">
-				<button class="btn01">회원가입</button>
-			</div>
-			
-			<div class="contents">
-				레.지.스/텨ㅓ!!!!!!!!!!!!!!!!!!!
-				
+			<div class="contents" style="display: flex; justify-content: center;">
 				<form action="/notice/register" method="post" role="form" enctype="multipart/form-data">
 				<!-- enctype 멀티 어쩌고 삭제하니까 400 에러 사라짐 -->
 					<table>
@@ -42,11 +28,6 @@
 								<td>파일</td>
 								<td class="uploadDiv">
 									<input type="file" name="uploadFile" multiple="multiple" style="float: left;">
-									<!-- <div class="uploadResult">
-										<ul>
-										</ul>
-									</div> 
-									<button id="uploadBtn">Upload</button> -->
 								</td>
 							</tr>
 						</tbody>
@@ -64,20 +45,20 @@
 						</tfoot>
 					</table>
 				</form>
-			</div>
-		
+			</div>	<!-- div contents end -->
 		</section>
 		
 <style>
 	td{
-		border: 1px solid pink;
+		border: 1px solid hotpink;
 		text-align: center;
 	}		
 		
 </style>
 <script type="text/javascript">
 	$(function() {
-		/*
+		// ajax 태워보려 했으나 실패.. 
+		/* 
 		var operForm = $("#operForm");
 		
 		var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -169,14 +150,14 @@
 				}
 			})
 		}); // end onload
-		
+		*/
 		var operForm = $("#operForm");
 
 		// register; button인데 type이 register인 것. []에 속성 찾아서 쓸 수 있는 것-> 클릭이벤트나 온 넣을 수 있음
 		$("button[data-oper='register']").click(function(e) {
 			operForm.attr("action", "/notice/register").submit(); // action을 보드 모디파이에 작성한 후 submit
 		});
-		*/
+		
 	}); 
 </script>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->

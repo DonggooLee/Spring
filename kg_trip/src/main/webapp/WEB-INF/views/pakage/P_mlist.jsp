@@ -22,7 +22,7 @@
 					             <div>
 					             	<table style="background-color: white">
 					             		<tr>
-					             			<td colspan="2">패키지 번호</td>
+					             			<td colspan="2">예약번호</td>
 					             			
 					             			<td>지역</td>
 					             			<td>패키지명</td>
@@ -42,7 +42,7 @@
 					                 			<c:out value="${mlist.p_region2}"></c:out>
 				                 			</td>
 				                 			<td>
-			         						    <a class="move" href='${mlist.p_num }'>
+			         						   <a href="/pakage/P_get?p_num=${mlist.p_num }">
 						                 			<c:out value="${mlist.p_name}"></c:out>
 				                 				</a>
 				                 			</td>
@@ -54,9 +54,16 @@
 						                 		<c:out value="${mlist.p_rpeople}"></c:out>
 				                 			</td>
 				                 			<td>
-				                 				<a class="movea" href='${mlist.p_num }'>결제취소하기</a>
+				                 				<a class="move" href='/pakage/P_mdelete?p_rnum=${mlist.p_rnum }&p_num=${mlist.p_num }'>결제취소하기</a>
 				                 				/
-				                 				<a class="moveb" href='${mlist.p_num }'>후기작성</a>
+				                 				<c:choose>
+				                 					<c:when test="${mlist.p_renum == 0}">
+					                 					<a class="move" href='/pakage/P_rinsert?p_rnum=${mlist.p_rnum }&p_num=${mlist.p_num }'>후기작성하기</a>
+				                 					</c:when>
+				                 					<c:otherwise>
+					                 					 <a href="/pakage/P_get?p_num=${mlist.p_num }">후기작성완료</a>
+				                 					</c:otherwise>
+				                 				</c:choose>
 				                 			</td>
 					             		</tr>
 				             		</table>
@@ -71,38 +78,6 @@
 		</section>
 		
 <script type="text/javascript">
-	var actionForm = $("#actionForm");
-	
-	$(function(){
-		
-		 $(".move").click(function(e){
-	         e.preventDefault();
-	         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-	         actionForm.attr("action", "/pakage/P_get");
-	         console.log(actionForm);
-	         actionForm.submit();
-	      });
-		 
-		 $(".movea").click(function(e){
-	         e.preventDefault();
-	         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-	         actionForm.attr("action", "/pakage/P_cmodify");
-	         console.log(actionForm);
-	         actionForm.submit();
-	      });
-		 
-		 $(".moveb").click(function(e){
-	         e.preventDefault();
 
-			 if(confirm("삭제하시겠습니까?")){
-		         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-		         actionForm.attr("action", "/pakage/P_cdelete");
-		         console.log(actionForm);
-		         actionForm.submit();
-			 }else{
-				 history.back();
-			 }
-	      });
-	});
 </script>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>

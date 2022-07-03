@@ -10,10 +10,6 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
 		<section class="cont">
-			<div>
-	            <form action="/pakage/P_pakageList" method="get" id="actionForm">
-	            </form>
-			</div>
 			<h2>c_dname 님의 패키지 목록</h2>
 			<div>
 				<c:choose>
@@ -43,7 +39,7 @@
 					                 			<c:out value="${clist.p_region2}"></c:out>
 				                 			</td>
 				                 			<td>
-			         						    <a class="move" href='${clist.p_num }'>
+			         						    <a href="/pakage/P_get?p_num=${clist.p_num }">
 						                 			<c:out value="${clist.p_name}"></c:out>
 				                 				</a>
 				                 			</td>
@@ -67,9 +63,9 @@
 				                 				<c:out value="${clist.p_division}"></c:out>
 				                 			</td>
 				                 			<td>
-				                 				<a class="movea" href='${clist.p_num }'>수정</a>
+				                 				  <a href="/pakage/P_cmodify?p_num=${clist.p_num }">수정</a>
 				                 				 /
-				                 				<a class="moveb" href='${clist.p_num }'> 삭제</a>
+				                 				 <a href="/pakage/P_cdelete?p_num=${clist.p_num }"> 삭제</a>
 				                 			</td>
 					             		</tr>
 				             		</table>
@@ -84,38 +80,6 @@
 		</section>
 		
 <script type="text/javascript">
-	var actionForm = $("#actionForm");
-	
-	$(function(){
-		
-		 $(".move").click(function(e){
-	         e.preventDefault();
-	         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-	         actionForm.attr("action", "/pakage/P_get");
-	         console.log(actionForm);
-	         actionForm.submit();
-	      });
-		 
-		 $(".movea").click(function(e){
-	         e.preventDefault();
-	         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-	         actionForm.attr("action", "/pakage/P_cmodify");
-	         console.log(actionForm);
-	         actionForm.submit();
-	      });
-		 
-		 $(".moveb").click(function(e){
-	         e.preventDefault();
 
-			 if(confirm("삭제하시겠습니까?")){
-		         actionForm.append("<input type='hidden' name='p_num' value='"+$(this).attr("href")+"'>"); 
-		         actionForm.attr("action", "/pakage/P_cdelete");
-		         console.log(actionForm);
-		         actionForm.submit();
-			 }else{
-				 history.back();
-			 }
-	      });
-	});
 </script>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>

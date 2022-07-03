@@ -7,8 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
-	<h2> 결제성공 페 이 지 </h2>
-	
+
+	<h1>페이지 이동 테스트 입니다.</h1>
+
 </body>
 </html>

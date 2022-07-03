@@ -1,6 +1,7 @@
 package org.kg.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -13,6 +14,9 @@ import org.kg.domain.P_Pakage_list_VO;
 import org.kg.domain.P_Pakage_reser_VO;
 import org.kg.domain.P_Review_VO;
 import org.kg.service.P_PakageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -60,6 +65,22 @@ public class P_Controller {
 		return "pakage/P_pakageMain";
 	}
 
+	// 위시리스트 insert
+	@PostMapping(value = "/P_wishinsert", 
+			consumes = "application/json", 
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<String> winsert(@RequestParam("p_num") String p_num,
+			@RequestParam("m_idx") int m_idx) {
+		
+		int insertCount = service.wishinsert(p_num, m_idx);
+		
+		return insertCount == 1?
+				new ResponseEntity<>("success", HttpStatus.OK) :
+					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
 	// P_get 상세페이지 이동, 후기
 	@GetMapping("/P_get")
 	public String get(HttpServletRequest request, @RequestParam("p_num") String p_num, Model model) {
@@ -78,7 +99,12 @@ public class P_Controller {
 			log.info(loginvo);
 		}
 		
+		
 		model.addAttribute("board", service.get(p_num));		// 상세 내용
+		
+		
+		
+		
 		model.addAttribute("review", service.getReview(p_num));	// 후기 리스트 목록
 		model.addAttribute("star", service.star(p_num));		// 평균 별점
 		
@@ -87,42 +113,8 @@ public class P_Controller {
 		return "/pakage/P_get";
 	}
 	
-	// P_rinsert 후기 등록페이지 이동
-	@GetMapping("/P_rinsert")
-	public String rinsert(Model model) {
-	
-		return "pakage/P_rinsert";
-	}
-	
-	// 후기 등록
-	@PostMapping("/uploadFormAction") 
-	public String uploadFormAction(MultipartFile[] uploadFile, P_Review_VO rboard, Model model) {
-		
-		String uploadFolder = "C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images";
-		
-		for(MultipartFile multipartFile : uploadFile) {
-		
-			log.info("--------------------------");
-			log.info("upload File Name : " + multipartFile.getOriginalFilename());
-			log.info("upload File Size : " +multipartFile.getSize());
-			
-			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
-			
-			try { 
-				multipartFile.transferTo(saveFile);
-			 } catch(Exception e) {
-				log.error(e.getMessage());
-			 }
-			
-			rboard.setP_reviewimg(multipartFile.getOriginalFilename());	// 파일 업로드
-			
-			log.info(rboard);
-			
-			service.rregister(rboard);									// 후기 등록
-		}
-		return "/pakage/P_pakageMain";
-	}
-	
+
+
 
 	// P_reservation 예약페이지 이동
 	@RequestMapping(value = "people", method = RequestMethod.POST)
@@ -177,7 +169,7 @@ public class P_Controller {
 			rttr.addFlashAttribute("result", "ok");
 	
 		
-		return "redirect:/pakage/P_pakageMain";
+		return "redirect:/pakage/P_mlist";
 	}
 	
 	// P_allList 전체 리스트 페이지 이동
@@ -203,31 +195,115 @@ public class P_Controller {
 		return "pakage/P_allList";
 	}
 	
-	// P_search 검색 결과 페이지 이동
-	@PostMapping("/P_search")
-	public String search(HttpServletRequest request, String region, P_Pakage_info_VO board, Model model) {
+	// P_allList 검색 결과
+	@PostMapping(value = "/P_jebal", 
+			consumes = "application/json", 
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> search(@RequestParam("region") String region) {
 		
-		HttpSession session = request.getSession(false);
-		if (session == null) {
-			return "home";
-		}
-
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
-		}
+		log.info("region........." + region);
 		
 		region = "%"+region+"%";
-		model.addAttribute("list", service.search(region));
-		return "pakage/P_search";
+		
+		return new ResponseEntity<>(service.search(region), HttpStatus.OK);
+	}
+
+	
+	// P_allList 가격낮은순
+	@PostMapping(value = "/P_linka",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linka() {
+		
+		return new ResponseEntity<>(service.linka(), HttpStatus.OK);
 	}
 	
-	/////////////////////////////////////////////////////////////
+	// P_allList 가격높은순
+	@PostMapping(value = "/P_linkb",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linkb() {
+		
+		return new ResponseEntity<>(service.linkb(), HttpStatus.OK);
+	}
 	
+	// P_allList 날짜빠른순
+	@PostMapping(value = "/P_linkc",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linkc() {
+		
+		return new ResponseEntity<>(service.linkc(), HttpStatus.OK);
+	}
+	// P_allList 날짜느린순
+	@PostMapping(value = "/P_linkd",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linkd() {
+		
+		return new ResponseEntity<>(service.linkd(), HttpStatus.OK);
+	}
+	// P_allList 후기많은순
+	@PostMapping(value = "/P_linke",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linke() {
+		
+		return new ResponseEntity<>(service.linke(), HttpStatus.OK);
+	}
+	
+	// P_allList 별점높은순
+	@PostMapping(value = "/P_linkf",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> linkf() {
+		
+		return new ResponseEntity<>(service.linkf(), HttpStatus.OK);
+	}
+	
+	// P_allList 유럽검색
+	@PostMapping(value = "/P_slinka",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> slinka() {
+		
+		return new ResponseEntity<>(service.slinka(), HttpStatus.OK);
+	}
+	// P_allList 동남아일본검색
+	@PostMapping(value = "/P_slinkb",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> slinkb() {
+		
+		return new ResponseEntity<>(service.slinkb(), HttpStatus.OK);
+	}
+	// P_allList 하와이검색
+	@PostMapping(value = "/P_slinkc",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> slinkc() {
+		
+		return new ResponseEntity<>(service.slinkc(), HttpStatus.OK);
+	}
+	// P_allList 괌사이판검색
+	@PostMapping(value = "/P_slinkd",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> slinkd() {
+		
+		return new ResponseEntity<>(service.slinkd(), HttpStatus.OK);
+	}
+	// P_allList 국내여행검색
+	@PostMapping(value = "/P_slinke",
+			consumes = "application/json",
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> P_slinke() {
+		
+		return new ResponseEntity<>(service.slinke(), HttpStatus.OK);
+	}
+	
+	
+	/////////////////////////////////////////////////////////////
 	
 	// P_mlist 개인 구매 패키지 리스트 페이지 이동
 	@GetMapping("/P_mlist")
@@ -237,9 +313,9 @@ public class P_Controller {
 		if (session == null) {
 			return "home";
 		}
-
+		
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
+		
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
 		}else {
@@ -256,9 +332,127 @@ public class P_Controller {
 		return "pakage/P_mlist";
 	}
 	
+	// 개인 예약취소
+	@GetMapping("/P_mdelete")
+	public String mdelete(HttpServletRequest request, @RequestParam("p_rnum") String p_rnum,
+			@RequestParam("p_num") String p_num, Model model) {
+
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+		
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+
+		// 개인 예약취소 update - list테이블 예약가능인원 증가
+		
+		P_Pakage_reser_VO board = new P_Pakage_reser_VO();
+		board = service.mread(p_rnum);
+		
+		
+		P_Pakage_list_VO liboard = new P_Pakage_list_VO();
+		liboard = service.getp(p_num);
+		
+		log.info(liboard);
+		
+		liboard.setP_people(liboard.getP_people() - board.getP_rpeople());
+		liboard.setP_available(liboard.getP_available() + board.getP_rpeople());
+		service.mupdatea(liboard);
+		
+		
+		// 개인 예약취소 delete
+		service.mdeletea(p_rnum);
+		
+		model.addAttribute("listWeu", service.getListWeu()); // 서유럽 리스트 목록
+		model.addAttribute("listSai", service.getListSai()); // 사이판 리스트 목록
+		model.addAttribute("listkos", service.getListKos()); // 국내섬 리스트 목록
+		
+		return "/pakage/P_pakageMain";
+	}
 	
+	// P_rinsert 후기 등록페이지 이동
+	@GetMapping("/P_rinsert")
+	public String rinsert(HttpServletRequest request, @RequestParam("p_rnum") String p_rnum,
+			@RequestParam("p_num") String p_num, Model model) {
 	
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		model.addAttribute("p_rnum", p_rnum);
+		model.addAttribute("p_num", p_num);
+		
+		return "pakage/P_rinsert";
+	}
 	
+	// 후기 등록
+	@PostMapping("/uploadFormAction") 
+	public String uploadFormAction(HttpServletRequest request, MultipartFile[] uploadFile, P_Review_VO rboard, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		String uploadFolder = "C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images";
+		
+		for(MultipartFile multipartFile : uploadFile) {
+		
+			log.info("--------------------------");
+			log.info("upload File Name : " + multipartFile.getOriginalFilename());
+			log.info("upload File Size : " +multipartFile.getSize());
+			
+			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+			
+			try { 
+				multipartFile.transferTo(saveFile);
+			 } catch(Exception e) {
+				log.error(e.getMessage());
+			 }
+			
+			rboard.setP_reviewimg(multipartFile.getOriginalFilename());	// 파일 업로드
+			
+			log.info(rboard);
+			
+			service.rregister(rboard); // 후기 등록
+			
+			String p_num = rboard.getP_num();
+			
+			model.addAttribute("board", service.get(p_num));		// 상세 내용
+			model.addAttribute("review", service.getReview(p_num));	// 후기 리스트 목록
+			model.addAttribute("star", service.star(p_num));		// 평균 별점
+			
+		}
+		return "/pakage/P_get";
+	}
+	
+
 	
 	
 	

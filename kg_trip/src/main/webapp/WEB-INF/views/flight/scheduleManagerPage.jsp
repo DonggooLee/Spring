@@ -126,7 +126,9 @@
 
 		// 일정 추가 버튼 클릭 이벤트
 		scheduleInsertBtn.on("click", function() {
-			if(start_date.val() == ""){
+			if(flight_name.val() == "없음"){
+				alert("잘못된 접근 입니다. (기업회원 전용)")
+			}else if (start_date.val() == "") {
 				alert("비행일자를 입력해 주세요")
 			}else if(boarding_time.val() == ""){
 				alert("탑승시각을 입력해 주세요")
@@ -136,13 +138,15 @@
 				alert("도착시각을 입력해 주세요")
 			}else if (ap_idx_d.val() == ap_idx_a.val()) {
 				alert("출발공항과 도착공항을 다르게 입력해 주세요")
+			}else {
+				// 항공편 일정 추가
+				insertSchedule({flight_name:flight_name.val(), start_date:start_date.val(), boarding_time:boarding_time.val(),
+					depart_time:depart_time.val(), arrive_time:arrive_time.val(), ap_idx_d:ap_idx_d.val(), ap_idx_a:ap_idx_a.val()}, 
+					function(result) {
+						alert("일정이 정상적으로 추가되었습니다!")
+						console.log(result)
+				}) // end : 항공편 일정 추가
 			}
-			insertSchedule({flight_name:flight_name.val(), start_date:start_date.val(), boarding_time:boarding_time.val(),
-				depart_time:depart_time.val(), arrive_time:arrive_time.val(), ap_idx_d:ap_idx_d.val(), ap_idx_a:ap_idx_a.val()}, 
-				function(result) {
-					alert("일정이 정상적으로 추가되었습니다!")
-					console.log(result)
-			})
 		}) // end : 일정 추가 버튼 클릭 이벤트 종료
 		
 	}) // end : onload

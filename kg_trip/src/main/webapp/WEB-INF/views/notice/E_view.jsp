@@ -12,60 +12,58 @@
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
 <section class="cont">
-
-	<div class="event">안녕</div>
-	<div class="btnWrap"
-		style="width: calc(100% - 20px); margin: 20px 0; padding: 0 20px 0 0; padding-right: 20px; text-align: right;">
-		<button class="btn01">회원가입</button>
-	</div>
-
-	<div class="contents">
+	<div class="contents" style="display: flex; justify-content: center;">
 		<form method="get">
 			<table>
 				<tbody>
 					<tr>
-						<td class="wider">글번호</td>
+						<td>글번호</td>
 						<td><c:out value="${notice.n_num }" /></td>
 					</tr>
 					<tr>
-						<td class="wider">작성자</td>
-						<!-- 나중에 a_idx 통해서 작성자 이름/닉네임 가져올 예정 -->
-						<td><c:out value="${notice.a_idx }" /></td>
+						<td>작성자</td>
+						<!-- 나중에 m_idx 통해서 작성자 이름/닉네임 가져올 예정 -->
+						<td><c:out value="${notice.m_idx }" /></td>
 					</tr>
 					<tr>
-						<td class="wider">제목</td>
+						<td>제목</td>
 						<td><c:out value="${notice.n_title }" /></td>
 					</tr>
 					<tr>
-						<td class="wider">내용</td>
+						<td>내용</td>
 						<td><c:out value="${notice.n_content }" /></td>
 					</tr>
 					<tr>
-						<td class="wider">글등록일</td>
+						<td>파일</td>
+						<td>
+							<c:out value="${notice.n_file }" />	<!-- 경로 띄우기 -->
+							<%-- <img alt="이미지" src="<spring:url value='C:\\upload\\${notice.n_file }'/>"> --%>
+							<img alt="이미지" src="<spring:url value='\\image\\upload\\${notice.n_file }'/>">
+							<img src="C:\\upload\\${notice.n_file }">
+							<!-- <img alt="이미지" src="C:\\upload\\${notice.n_file }" width="800px"> -->
+							<%-- <img alt="이미지!" src="/register?name=${notice.n_file }"> --%>
+						</td>
+					</tr>
+					<tr>
+						<td>글등록일</td>
 						<td><fmt:formatDate value="${notice.n_regDate}"
 										pattern="yyyy년 MM월 dd일" />
 						</td>
 					</tr>
 					<tr>
-						<td>
-							<c:out value="${notice.n_file }" />	<!-- 경로 띄우기 -->
-							<%-- <img alt="이미지" src="<spring:url value='\image\${notice.n_file }'/>"> --%>
-							<img alt="이미지" src="/resources/images/${notice.n_file }" width="800px">
-													<%-- <img alt="이미지!" src="/register?name=${notice.n_file }"> --%>
-						</td>
 					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
 						<td colspan="2" class="center">
-							<button data-oper="modify" >글 수정</button>
-							<button data-oper="remove" >글 삭제</button> 
+							<!-- session에 a_auth가 admin일 때 등록 버튼 보이도록 --> 
+							<c:if test="${loginPublicInfo.m_auth == 'admin' }">
+								<button data-oper="modify" >글 수정</button>
+								<button data-oper="remove" >글 삭제</button> 
+							</c:if>
 							<button data-oper="list" >목록</button> 
-									<!-- <input type="button" name="modify" value="수정" onclick="go_modify(this.form)">
-									<input type="button" name="remove" value="삭제" onclick="go_remove(this.form)"> -->
+							
 							<input type="hidden" id="n_num" name="n_num" value='<c:out value="${notice.n_num }"/>' />
-							<input type="hidden" name="pageNum" value="${cri.pageNum }">
-							<input type="hidden" name="amount" value="${cri.amount}">
 						</td>
 					</tr>
 					<tr>
@@ -76,7 +74,7 @@
 				</tfoot>
 			</table>
 		</form>
-	</div>
+	</div>	<!-- div contents end -->
 </section>
 
 <style>
@@ -84,8 +82,9 @@
 		width: 100px;
 	}
 	
-	.td {
-		style: 1px solid pink;
+	td {
+		border: 1px solid hotpink;
+		te
 	}
 	
 	.center {
@@ -105,8 +104,8 @@ $(function() {
 		if (operation == 'modify') {
 			formObj.attr("action", "/notice/modify"); 
 
-			var pageNumTag = $("input[name='pageNum']").clone();
-			var amountTag = $("input[name='amount']").clone();
+			var nowPageTag = $("input[name='nowPage']").clone();
+			var cntPageTag = $("input[name='cntPage']").clone();
 
 		}else if(operation == 'remove'){
 			formObj.attr("action", "/notice/remove"); 
@@ -115,18 +114,17 @@ $(function() {
 		}else if (operation == 'list') {
 			formObj.attr("action", "/notice/list"); //리스트로 보냄
 
-			var pageNumTag = $("input[name='pageNum']").clone();
-			var amountTag = $("input[name='amount']").clone();
+			var nowPageTag = $("input[name='nowPage']").clone();
+			var cntPageTag = $("input[name='cntPage']").clone();
 
 			formObj.empty(); //form 안에있는 모든 데이터들을 다 날려버림
 
-			formObj.append(pageNumTag);
-			formObj.append(amountTag);
+			formObj.append(nowPageTag);
+			formObj.append(cntPageTag);
 		}
 		formObj.submit();
 	});
 });
-
 </script>
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->

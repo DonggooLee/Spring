@@ -77,11 +77,72 @@ public class P_PakageServiceImpl implements P_PakageService {
 		return mapper.search(region);
 	}
 	
-	// 후기 등록
+	// 가격낮은순
 	@Override
-	public void rregister(P_Review_VO rboard) {
-		mapper.rinsert(rboard);
+	public List<P_Pakage_info_VO> linka() {
+		return mapper.linka();
 	}
+	
+	// 가격높은순
+	@Override
+	public List<P_Pakage_info_VO> linkb() {
+		return mapper.linkb();
+	}
+
+	// 날짜빠른순
+	@Override
+	public List<P_Pakage_info_VO> linkc() {
+		return mapper.linkc();
+	}
+
+	// 날짜느린순
+	@Override
+	public List<P_Pakage_info_VO> linkd() {
+		return mapper.linkd();
+	}
+
+	// 후기많은순
+	@Override
+	public List<P_Pakage_info_VO> linke() {
+		return mapper.linke();
+	}
+	
+	// 별점높은순
+	@Override
+	public List<P_Pakage_info_VO> linkf() {
+		return mapper.linkf();
+	}
+	
+	// 유럽검색
+	@Override
+	public List<P_Pakage_info_VO> slinka() {
+		return mapper.slinka();
+	}
+
+	// 동남아일본검색
+	@Override
+	public List<P_Pakage_info_VO> slinkb() {
+		return mapper.slinkb();
+	}
+
+	// 하와이검색
+	@Override
+	public List<P_Pakage_info_VO> slinkc() {
+		return mapper.slinkc();
+	}
+
+	// 괌사이판검색
+	@Override
+	public List<P_Pakage_info_VO> slinkd() {
+		return mapper.slinkd();
+	}
+
+	// 국내여행검색
+	@Override
+	public List<P_Pakage_info_VO> slinke() {
+		return mapper.slinke();
+	}
+
 
 	// 후기 리스트 목록
 	@Override
@@ -94,9 +155,15 @@ public class P_PakageServiceImpl implements P_PakageService {
 	public P_Review_VO star(String p_num) {
 		return mapper.star(p_num);
 	}
+	
+	// 위시리스트 추가
+	@Override
+	public int wishinsert(String p_num, int m_idx) {
+		return mapper.wishinsert(p_num, m_idx);
+	}
 
 	
-	
+	////////////////////////////////////////////////////////
 	
 	
 	// 개인 구매 패키지 리스트 목록
@@ -105,11 +172,44 @@ public class P_PakageServiceImpl implements P_PakageService {
 		return mapper.getmList(m_idx);
 	}
 	
+	// 개인 예약 read
+	@Override
+	public P_Pakage_reser_VO mread(String p_rnum) {
+		return mapper.mread(p_rnum);
+	}
 	
+	// 개인 예약 취소
+	@Override
+	public boolean mdeletea(String p_rnum) {
+		int result = mapper.mdeletea(p_rnum);
+		
+		if(result == 1){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
+	// 개인 예약 취소 update
+	@Override
+	public int mupdatea(P_Pakage_list_VO liboard) {
+		return mapper.mupdatea(liboard);
+	}
 	
+	// 후기 등록
+	@Override
+	public void rregister(P_Review_VO rboard) {
+		mapper.rinsert(rboard);
+	}
 	
+	// 전체 후기 리스트 목록
+	@Override
+	public List<P_Review_VO> allreview() {
+		return mapper.allreview();
+	}
+
 	
+	////////////////////////////////////////////////////////
 	
 	
 	// 기업 패키지 정보 등록 
@@ -156,6 +256,7 @@ public class P_PakageServiceImpl implements P_PakageService {
 		}
 	}
 
+	// 기업 패키지 리스트 삭제
 	@Override
 	public boolean cdeletea(String p_num) {
 		
@@ -167,7 +268,8 @@ public class P_PakageServiceImpl implements P_PakageService {
 			return false;
 		}
 	}
-
+	
+	// 기업 패키지 리스트 삭제
 	@Override
 	public boolean cdeleteb(String p_num) {
 		int result = mapper.cdeleteb(p_num);
@@ -180,8 +282,10 @@ public class P_PakageServiceImpl implements P_PakageService {
 	}
 
 
-	
-	
-	
+
+
+
+
+
 	
 }

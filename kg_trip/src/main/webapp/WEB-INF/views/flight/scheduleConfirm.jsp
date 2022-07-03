@@ -9,10 +9,9 @@
 	
 		<h2>여정 정보</h2>
 		<br>
-		<div class="scheduleInfo" style="border: 1px solid black; width: 730px; height: 60px; padding: 10px;">
+		<div class="scheduleInfo" style="border: 1px solid black; width: 670px; height: 60px; padding: 10px;">
 			<table>
 				<tr>
-					<th>일정번호</th>
 					<th>항공편명</th>
 					<th>비행일자</th>
 					<th>좌석등급</th>
@@ -24,7 +23,6 @@
 					<th>티켓가격</th>
 				</tr>
 				<tr>
-					<td>${getSchedule.date_idx }</td>
 					<td>${getSchedule.flight_name }</td>
 					<td><fmt:formatDate value="${getSchedule.start_date }" pattern="yyyy-MM-dd"/></td>
 					<td>${seat_grade }</td>
@@ -89,6 +87,8 @@
 			<button id="goBackBtn">뒤로가기</button>
 			&nbsp;
 			<button id="reservationBtn">예약하기</button>
+			&nbsp;
+			<button id="payBtn">결제하기</button>
 		</div>
 		
 		<div class="hidden">
@@ -226,6 +226,28 @@
 			
 		}) // end : 해당 항공편의 좌석정보 출력
 		
+		// 뒤로가기 버튼 클릭 이벤트
+		$("#goBackBtn").on("click", function() {
+			history.back()
+		}) // end : 뒤로가기 버튼 클릭 이벤트
+		
+		// 결제하기 버튼 클릭 이벤트
+		$("#payBtn").on("click", function() {
+			var price = 15000;
+			$.ajax({
+				type : 'post',
+				url : '/flightManager/kakaopay/' + price,
+				dataType: 'json',
+				success : function(data) {
+					var box = data.next_redirect_pc_url
+					window.open(box)
+					console.log(data)
+				},
+				error : function(error) {
+					alert(error)
+				}
+			}) // end : ajax()
+		}) // end : 테스트 버튼 클릭 이벤트
 		
 		// 예약하기 버튼 클릭 이벤트
 		$("#reservationBtn").on("click", function() {
@@ -233,13 +255,6 @@
 			//각종 데이터 예외처리 하기
 			$("#myForm").submit()
 		}) // end : 예약하기 버튼 클릭 이벤트
-		
-		
-		// 뒤로가기 버튼 클릭 이벤트
-		$("#goBackBtn").on("click", function() {
-			history.back()
-		}) // end : 뒤로가기 버튼 클릭 이벤트
-		
 		
 	}) // end : onload
 	

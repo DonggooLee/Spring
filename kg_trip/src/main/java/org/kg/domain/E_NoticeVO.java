@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class E_NoticeVO {
 
-	private int n_num, a_idx;
+	private int n_num, m_idx;
 	private String n_title, n_content;
 	private Date n_regDate, n_updDate;
 	

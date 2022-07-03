@@ -14,24 +14,55 @@
       select * from e_notice_tbl
       ]]>
    </select>
-   
-   <!-- list_페이징 -->
+
    <select id="getListWithPaging" resultType="org.kg.domain.E_NoticeVO">
      <![CDATA[
-         select n_num, a_idx, n_title, n_content, n_regDate, n_updDate, n_file
-         from (
-              select /*+index_desc(tbl_board pk_board) */
-                  rownum rn, n_num, a_idx, n_title, n_content, n_regDate, n_updDate, n_file, n_uuid, n_uploadPath 
-              from e_notice_tbl
-              where rownum <= #{pageNum} * #{amount} 
-               )
-         where rn > (#{pageNum}-1) * #{amount} 
+		select * from (
+      		select /*+index_desc(tbl_board pk_board) */
+          	rownum rn, n_num, m_idx, n_title, n_content, n_regDate, n_updDate, n_file, n_uuid, n_uploadPath 
+      		from ( select * from e_notice_tbl
+      			where
+	  ]]>
+	      		<if test="searchType == 'title'">n_title like '%'||#{searchName}||'%'</if>
+	      		<if test="searchType == 'content'">n_content like '%'||#{searchName}||'%'</if>
+	      		<if test="searchType == 'ticont'">
+	      			n_title like '%'||#{searchName}||'%' or n_content like '%'||#{searchName}||'%'
+	      		</if>
+	      		<if test="searchType == null or searchType == '' ">1=1</if>
+	      
+	  <![CDATA[
+	     		order by n_num desc)
+		     	where rownum <= #{nowPage} * #{cntPerPage}  )
+					 where rn > (#{nowPage}-1) * #{cntPerPage} 
       ]]>
    </select>
    
+   
+   
+   
+   <!-- 검색 기능 ; where 절이 검색 조건   
+   <select id="getListWithPaging" resultType="org.kg.domain.E_NoticeVO">
+     <![CDATA[
+		select * from (
+			select /*+index_desc(tbl_board pk_board) */
+			rownum rn, n_num, m_idx, n_title, n_content, n_regDate, n_updDate, n_file, n_uuid, n_uploadPath 
+	      	from e_notice_tbl
+	        where (n_title like '%#{n_title}%' or n_content like '%#{n_content}%' )
+			and rownum <= #{nowPage} * #{cntPerPage}  )
+		where rn > (#{nowPage}-1) * #{cntPerPage}
+       ]]>
+   </select>        
+    -->
+    
    <!-- count_전체 개수 갖고오기 -->
    <select id="getTotalCount" resultType="int">
-      select count(*) from e_notice_tbl
+      select count(*) as total from e_notice_tbl 
+      	where <if test="searchType == 'title'">title like '%'||#{searchName}||'%'</if>
+      			<if test="searchType == 'content'">content like '%'||#{searchName}||'%'</if>
+      			<if test="searchType == 'ticont'">
+      				title like '%'||#{searchName}||'%' or content like '%'||#{searchName}||'%'
+      			</if>
+      			<if test="searchType == null or searchType == '' ">1=1</if>
    </select>
 
    <!-- view -->
@@ -44,8 +75,8 @@
 
    <!-- 공지글 추가 -->
    <insert id="insert">
-      insert into e_notice_tbl (n_num, a_idx, n_title, n_content, n_file, n_regDate) 
-      values (seq_e_notice_tbl.nextval, #{a_idx}, #{n_title}, #{n_content}, #{n_file,jdbcType=VARCHAR}, sysdate)
+      insert into e_notice_tbl (n_num, m_idx, n_title, n_content, n_file, n_regDate) 
+      values (seq_e_notice_tbl.nextval, #{m_idx}, #{n_title}, #{n_content}, #{n_file,jdbcType=VARCHAR}, sysdate)
    </insert>
    
    <!-- 공지글 삭제 -->
@@ -55,7 +86,7 @@
 
    <!-- 공지글 수정 -->   
    <update id="update">
-      update e_notice_tbl set n_title = #{n_title}, a_idx = #{a_idx}, n_content = #{n_content}, n_file = #{n_file,jdbcType=VARCHAR}, n_updDate = sysdate
+      update e_notice_tbl set n_title = #{n_title}, m_idx = #{m_idx}, n_content = #{n_content}, n_file = #{n_file,jdbcType=VARCHAR}, n_updDate = sysdate
          where n_num = #{n_num}
    </update>   
 

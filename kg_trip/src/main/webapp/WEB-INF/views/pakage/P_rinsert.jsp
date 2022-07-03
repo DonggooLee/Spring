@@ -38,9 +38,10 @@
 					<table>
 						<tr>
 							<td>
-								<input type="hidden" name="p_num" value="ita001">
-								<input type="hidden" name="m_idx" value="1">
-								<input type="hidden" name="m_id" value="m_id">
+								<input type="hidden" name="p_rnum" value="${p_rnum}">
+								<input type="hidden" name="p_num" value="${p_num}">
+								<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx}">
+								<input type="hidden" name="m_id" value="${loginPublicInfo.m_id}">
 							</td>
 							<td>
 							</td>

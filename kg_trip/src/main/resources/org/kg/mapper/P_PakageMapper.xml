@@ -11,6 +11,7 @@
 			select * from p_pakage_info_tbl a 
 			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
             order by b.p_period asc) a
 		]]>
 	</select>
@@ -22,6 +23,7 @@
 			select * from p_pakage_info_tbl a 
 			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
 			where a.p_region2 LIKE '사이판' and ROWNUM <= 4 order by b.p_period asc) a
 		]]>
 	</select>
@@ -33,6 +35,8 @@
 			select * from p_pakage_info_tbl a 
 			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+			
 			where a.p_region1 LIKE '서유럽' and ROWNUM <= 4 order by b.p_period asc) a
 		]]>
 	</select>
@@ -44,6 +48,7 @@
 			select * from p_pakage_info_tbl a 
 			inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+			left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
 			where a.p_region2 LIKE '제주도' or a.p_region2 LIKE '백령도' or a.p_region2 LIKE '울릉도' and ROWNUM <= 4 order by b.p_period asc) a
 		]]>
 	</select>
@@ -79,16 +84,121 @@
 		select * from p_pakage_info_tbl a 
 		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
 		where a.p_region1 like #{region} or a.p_region2 like #{region} or a.p_country like #{region}
            or a.p_name like #{region} order by b.p_period asc) a
   	</select>
   	
- 	 <!-- 후기 등록 -->
-  	<insert id="rinsert">
-  		insert into p_review_tbl(p_renum, p_num, m_idx, m_id, p_reviewdate, p_reviewcontent, p_reviewimg, p_star)
-  		values(p_review_tbl_seq.NEXTVAL, #{p_num}, #{m_idx}, #{m_id}, sysdate, #{p_reviewcontent}, #{p_reviewimg},#{p_star})
-  	</insert>
+  	<!-- 가격 낮은순 -->
+  	<select id="linka" resultType="org.kg.domain.P_Pakage_info_VO">
+		select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by a.p_fee asc NULLS LAST) a
+  	</select>
   	
+  	<!-- 가격 높은순 -->
+  	<select id="linkb" resultType="org.kg.domain.P_Pakage_info_VO">
+		select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by a.p_fee desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 날짜 빠른순 -->
+  	<select id="linkc" resultType="org.kg.domain.P_Pakage_info_VO">
+		select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by a.p_period asc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 날짜 느린순 -->
+  	<select id="linkd" resultType="org.kg.domain.P_Pakage_info_VO">
+		select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by a.p_period desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 후기 많은 순 -->
+  	<select id="linke" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+        left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by d.rcount desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 별점 높은 순 -->
+  	<select id="linkf" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		order by c.p_star desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 유럽검색 -->
+  	<select id="slinka" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		where a.p_region1 like '서유럽' order by c.p_star desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 동남아일본검색 -->
+  	<select id="slinkb" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		where a.p_region1 like '동남아' or a.p_country like '일본' order by c.p_star desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 하와이검색 -->
+  	<select id="slinkc" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		where a.p_region2 like '하와이' order by c.p_star desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 괌사이판검색 -->
+  	<select id="slinkd" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		where a.p_region2 like '괌' or a.p_region2 like '사이판' order by c.p_star desc NULLS LAST) a
+  	</select>
+  	
+  	<!-- 국내여행검색 -->
+  	<select id="slinke" resultType="org.kg.domain.P_Pakage_info_VO">
+        select rownum ,a. * from (
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		where a.p_country like '한국' order by c.p_star desc NULLS LAST) a
+  	</select>
+  		
 	<!-- 후기 리스트 목록  -->
 	<select id="getReview" resultType="org.kg.domain.P_Review_VO">
 		select * from p_Review_tbl
@@ -99,6 +209,14 @@
 	<select id="star" resultType="org.kg.domain.P_Review_VO">
 		select p_num, avg(p_star) as p_star from p_review_tbl where p_num = #{p_num} group by p_num
 	</select>
+	
+  	<!-- 위시리스트 추가 -->
+  	<insert id="wishinsert">
+  		insert into p_wish_tbl(w_num, m_idx, p_num)
+  		values(p_wish_tbl_seq.NEXTVAL, #{m_idx}, #{p_num})
+  	</insert>
+	
+	
 	
 	
 	
@@ -115,13 +233,34 @@
 			on b.p_num = c.p_num 
 			left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) d 
 			on b.p_num = d.p_num
-			where a.m_idx LIKE #{m_idx} order by a.p_rnum asc) b
+			left join (select p_rnum, p_renum from p_review_tbl) e
+            on a.p_rnum = e.p_rnum
+			where a.m_idx LIKE #{m_idx} order by b.p_period asc) b
 		]]>
 	</select>
 	
+	<!-- 개인 예약용 read -->
+	<select id="mread" resultType="org.kg.domain.P_Pakage_reser_VO">
+		select * from p_pakage_reser_tbl
+		where p_rnum = #{p_rnum}
+	</select>
+	
+	<!-- 개인 예약 취소 -->
+ 	<delete id="mdeletea">
+      delete from p_pakage_reser_tbl where p_rnum = #{p_rnum}
+   	</delete>
+	
+	<!-- 개인 예약 취소 update -->
+  	<update id="mupdatea">
+		update p_pakage_list_tbl set p_people = #{p_people}, p_available = #{p_available} where p_num = #{p_num}  	
+  	</update>
 	
 	
-	
+	<!-- 후기 등록 -->
+  	<insert id="rinsert">
+  		insert into p_review_tbl(p_renum, p_rnum, p_num, m_idx, m_id, p_reviewdate, p_reviewcontent, p_reviewimg, p_star)
+  		values(p_review_tbl_seq.NEXTVAL, #{p_rnum}, #{p_num}, #{m_idx}, #{m_id}, sysdate, #{p_reviewcontent}, #{p_reviewimg},#{p_star})
+  	</insert>
 	
 	
 	

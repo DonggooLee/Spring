@@ -42,7 +42,7 @@
 					success : function(info) {
 						var str = '';
 						if (info.reservation_idx == undefined && info.flight_name == undefined) {
-							alert("예약번호를 다시 확인해 주세요")
+							alert("존재하지 않는 예약번호 입니다")
 							$(".searchBox").find("input[name='checkBook']").val("");
 						}else{
 							str += "<tr><th colspan='2'>예약 정보</th></tr>";

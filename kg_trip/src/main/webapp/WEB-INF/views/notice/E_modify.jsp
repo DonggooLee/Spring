@@ -54,11 +54,11 @@
 									<button data-oper="modify" type="submit">글 수정</button>
 									<input type="reset" value="새로쓰기.!!!">
 									<input type="button" value="목록.!!!">
-									<!-- <button data-oper="list" type="submit">글 수정</button>
-										onclick="location.href = '/notice/list'"> -->
+									
 									<input type="hidden" id="n_num" name="n_num" value='<c:out value="${notice.n_num }"/>' />
-									<input type="hidden" name="pageNum" value="${cri.pageNum }">
-               						<input type="hidden" name="amount" value="${cri.amount}">
+               						<input type="hidden" name="nowPage" value="${pageMaker.nowPage }"> 
+									<input type="hidden" name="cntPage" value="${pageMaker.cntPage}">
+									<input type="hidden" name="cntPerPage" value="${pageMaker.cntPerPage}">
 								</td>
 							</tr>
 						</tfoot>
@@ -86,20 +86,20 @@
 			if (operation == 'modify') {
 				formObj.attr("action", "/notice/modify"); //리스트로 보냄
 
-				var pageNumTag = $("input[name='pageNum']").clone();
-				var amountTag = $("input[name='amount']").clone();
+				var nowPageTag = $("input[name='nowPage']").clone();
+				var cntPageTag = $("input[name='cntPage']").clone();
 
 			} else if (operation == 'list') {
 				formObj.attr("action", "/notice/list"); //리스트로 보냄
 				formObj.attr("method", "get"); 			//메소드를 get방식으로 변경
 
-				var pageNumTag = $("input[name='pageNum']").clone();
-				var amountTag = $("input[name='amount']").clone();
+				var nowPageTag = $("input[name='nowPage']").clone();
+				var cntPageTag = $("input[name='cntPage']").clone();
 
 				formObj.empty(); //form 안에있는 모든 데이터들을 다 날려버림
 
-				formObj.append(pageNumTag);
-				formObj.append(amountTag);
+				formObj.append(nowPageTag);
+				formObj.append(cntPageTag);
 
 			}
 			formObj.submit();
