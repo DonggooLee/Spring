@@ -1,71 +1,79 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page session="false" %>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+<!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 	
-	<div class="scheduleInsert" style="border: 1px solid black; width: 300px;">
-		<h1 style="text-align: center;">일정 DB</h1>
-		<div>
-			<div>항공편명</div>
+	<section class="cont">
+	
+		<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
+			<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 관리</h1>
+			<br>
 			<div>
-				<select name="flight_name" class="selectFlight">
-					<option>없음</option>
-				</select>
+				<div>
+					<b>항공편명</b>&nbsp;&nbsp;
+					<select name="flight_name" class="selectFlight">
+						<option>없음</option>
+					</select>
+				</div>
 			</div>
-		</div>
-		<div>
-			<div>항공사</div>
-			<div>${loginCorpInfo.c_name}</div>
-		</div>
-		<div>
-			<div>비행일자</div>
-			<div><input type="date" name="start_date"></div>
-		</div>
-		<div>
-			<div>탑승시각</div>
-			<div><input type="time" name="boarding_time"></div>
-		</div>
-		<div>
-			<div>출발시각</div>
-			<div><input type="time" name="depart_time"></div>
-		</div>
-		<div>
-			<div>도착시각</div>
-			<div><input type="time" name="arrive_time"></div>
-		</div>
-		<div>
-			<div>출발공항</div>
+			<br>
 			<div>
-				<select name="ap_idx_d" class="selectAirport_d">
-					<option>없음</option>
-				</select>
+				<div>
+					<b>비행일자</b>&nbsp;&nbsp;
+					<input type="date" name="start_date">
+				</div>
 			</div>
-		</div>
-		<div>
-			<div>도착공항</div>
+			<br>
 			<div>
-				<select name="ap_idx_a" class="selectAirport_a">
-					<option>없음</option>
-				</select>
+				<div>
+					<b>탑승시각</b>&nbsp;&nbsp;
+					<input type="time" name="boarding_time">
+				</div>
 			</div>
+			<br>
+			<div>
+				<div>
+					<b>출발시각</b>&nbsp;&nbsp;
+					<input type="time" name="depart_time">
+				</div>
+			</div>
+			<br>
+			<div>
+				<div>
+					<b>도착시각</b>&nbsp;&nbsp;
+					<input type="time" name="arrive_time">
+				</div>
+			</div>
+			<br>
+			<div>
+				<div>
+					<b>출발공항</b>&nbsp;&nbsp;
+					<select name="ap_idx_d" class="selectAirport_d">
+						<option>없음</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<div>
+				<div>
+					<b>도착공항</b>&nbsp;&nbsp;
+					<select name="ap_idx_a" class="selectAirport_a">
+						<option>없음</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<div>
+				<button id="scheduleInsertBtn" type="button">일정 추가</button>
+			</div>
+			<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
 		</div>
-		<div>
-			<button id="scheduleInsertBtn" type="button">일정 추가</button>
-		</div>
-		<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
-	</div>
+		
+	</section>
 	
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
-
-	console.log("테스트 로그...")
 
 	$(function() {
 		
@@ -118,15 +126,28 @@
 
 		// 일정 추가 버튼 클릭 이벤트
 		scheduleInsertBtn.on("click", function() {
+			if(start_date.val() == ""){
+				alert("비행일자를 입력해 주세요")
+			}else if(boarding_time.val() == ""){
+				alert("탑승시각을 입력해 주세요")
+			}else if(depart_time.val() == ""){
+				alert("출발시각을 입력해 주세요")
+			}else if(arrive_time.val() == ""){
+				alert("도착시각을 입력해 주세요")
+			}else if (ap_idx_d.val() == ap_idx_a.val()) {
+				alert("출발공항과 도착공항을 다르게 입력해 주세요")
+			}
 			insertSchedule({flight_name:flight_name.val(), start_date:start_date.val(), boarding_time:boarding_time.val(),
 				depart_time:depart_time.val(), arrive_time:arrive_time.val(), ap_idx_d:ap_idx_d.val(), ap_idx_a:ap_idx_a.val()}, 
 				function(result) {
-					alert("일정 추가 결과 : " + result)
+					alert("일정이 정상적으로 추가되었습니다!")
+					console.log(result)
 			})
 		}) // end : 일정 추가 버튼 클릭 이벤트 종료
 		
 	}) // end : onload
 
 </script>
-</body>
-</html>
+
+<!-- 이 부분 내용만 수정 (바디 작성 부분)-->
+<jsp:include page="/WEB-INF/views/include/footer.jsp"/>

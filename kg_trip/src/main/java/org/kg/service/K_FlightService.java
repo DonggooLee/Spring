@@ -10,6 +10,8 @@ import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_getInfoDTO;
+import org.kg.domain.K_getReservationIdxDTO;
+import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
 
@@ -50,5 +52,11 @@ public interface K_FlightService {
 	
 	// 예약 좌석 조회
 	public List<K_checkSeatVO> getReservationSeatList_(K_getInfoDTO info);
+	
+	// 예약조회
+	public K_getResrvationInfoVO getResrvationInfo_(String reservation_idx);
+	
+	// 예약번호 조회
+	public K_getReservationIdxDTO getReservationIdx_(K_bookInfo info);
 	
 }
