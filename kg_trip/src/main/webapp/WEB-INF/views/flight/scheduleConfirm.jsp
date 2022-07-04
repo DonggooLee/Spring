@@ -123,6 +123,8 @@
 
 	$(function() {
 		
+		var price = "";
+		
 		// 좌석정보 얻기 위한 객체
 		var seat_grade = $(".hidden").find("input[name='seat_grade']")
 		var date_idx = $(".hidden").find("input[name='date_idx']")
@@ -146,6 +148,12 @@
 				// 이코노미석 선택
 				if(seat.economyseat != null) {
 					var pEs = seat.economyseatprice
+					price = pEs;
+					/* 표시되는 가격 */
+           			function AmountCommas(val){
+           			    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+           			}
+           			pEs = AmountCommas(pEs)+'원 '
 					$("#ticketPrice").html(pEs)
 					var es = seat.economyseat
 					var split_es = es.split(',')
@@ -156,9 +164,9 @@
 								str += "<button style='padding: 15px; background-color: gray; margin: 5px;' disabled='disabled' id='test' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
 								i++;
 								/* undefined 제거하기 위한 테스트 */
-								if(split_es[i] == undefined){
+								/* if(split_es[i] == undefined){
 									console.log("=====테스트=====")
-								}
+								} */
 							}
 						}
 						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id='test' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
@@ -167,7 +175,7 @@
 					$(".choiceSeat button").on("click", function() {
 						var seat_es = $(this).data("idx")
 						alert("선택한 좌석 번호 : " + seat_es)
-						bookInfo_ += "<input type='text' name='ticket_price' value=" + pEs + ">"
+						bookInfo_ += "<br><input type='text' name='ticket_price' value=" + pEs + ">"
 						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_es + ">"
 						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
 						// 예약버튼 누르면 안에 있는 값 다지우고 다시 만들기 ?
@@ -184,6 +192,7 @@
 				// 비즈니스석 선택
 				if(seat.businessseat != null){
 					var pBs = seat.businessseatprice
+					price = pBs;
 					$("#ticketPrice").html(pBs)
 					var bs = seat.businessseat
 					var split_bs = bs.split(',')
@@ -204,6 +213,7 @@
 				// 퍼스트석 선택
 				if(seat.firstseat != null){
 					var pFs = seat.firstseatprice
+					price = pFs;
 					$("#ticketPrice").html(pFs)
 					var fs = seat.firstseat
 					var split_fs = fs.split(',')
@@ -233,10 +243,8 @@
 		
 		// 결제하기 버튼 클릭 이벤트
 		$("#payBtn").on("click", function() {
-			var price = 15000;
 			$.ajax({
-				type : 'post',
-				url : '/flightManager/kakaopay/' + price,
+				url : '/flight/kakaopay?price='+price,
 				dataType: 'json',
 				success : function(data) {
 					var box = data.next_redirect_pc_url
@@ -251,7 +259,6 @@
 		
 		// 예약하기 버튼 클릭 이벤트
 		$("#reservationBtn").on("click", function() {
-			//alert("예약하기 버튼 클릭 이벤트")
 			//각종 데이터 예외처리 하기
 			$("#myForm").submit()
 		}) // end : 예약하기 버튼 클릭 이벤트

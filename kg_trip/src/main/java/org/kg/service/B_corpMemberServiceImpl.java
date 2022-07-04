@@ -1,5 +1,7 @@
 package org.kg.service;
 
+import java.util.List;
+
 import org.kg.domain.B_CorpMemberVO;
 import org.kg.mapper.B_CorpMemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class B_corpMemberServiceImpl implements B_corpMemberService {
 	public B_CorpMemberVO loginCorp(String c_id, String c_pw) {
 		log.info("※※※※※※※※logining※※※※※※※※");
 		return mapper.getCmember(c_id, c_pw);
+	}
+
+	@Override
+	public List<B_CorpMemberVO> corpList() {
+		log.info("회원 조회 중");
+		return mapper.getCmemberList();
 	}
 
 	

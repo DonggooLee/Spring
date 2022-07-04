@@ -26,6 +26,7 @@
 								<li><button class="btn03" id="joinBtn">회원가입</button></li>
 							</c:if>
 							<c:if test="${loginPublicInfo.m_auth == 'admin' }">
+								<li>${loginPublicInfo.m_id } 님 </li>
 								<li><a href='/Admin/adminPage'>관리자 페이지</a></li>
 								<li><button class="btn03" id="logoutBtn">로그아웃</button></li>
 							</c:if>

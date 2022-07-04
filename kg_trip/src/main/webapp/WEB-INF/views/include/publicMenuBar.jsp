@@ -14,7 +14,6 @@
 								<a class="move" href='/pakage/P_mlist'>패키지 예약내역</a>
 								<li>항공권 예약내역</li>
 							</ul>
-						<a class="move" href='/pakage/P_rinsert'>여행 후기</a>
 						<li>커뮤니티</li>
 							<ul>
 								<li> 내 게시글</li>

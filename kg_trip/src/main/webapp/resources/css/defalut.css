@@ -85,10 +85,17 @@
 		padding: 0;
 	}
 	ul.main_menubar{}
+	
 	ul.main_menubar > li {
 		display:inline-block; width:17%; padding:5px 10px;
 		  text-align:center; position: relative;
 	}
+	
+	ul.main_menubar > li a{
+	    text-decoration: none;
+	    color: #666d75;
+    }
+    
 	ul.main_menubar > li:hover{background: #fff}
 	
 	ul.main_menubar > li ul.menu5_submenu{
@@ -157,6 +164,7 @@
 		text-align: center;
 		border: 1px solid #41d4b8;
 	}
+	
 	.btn03 {
 		background: #fff;
 		color: #41d4b8;
@@ -166,6 +174,7 @@
 		border: 1px solid #41d4b8;
 		font-weight: bold;
 	}
+	
 	.btn04 {
 		color: #666d75;
 		padding: 7px 15px;

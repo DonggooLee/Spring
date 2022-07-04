@@ -12,8 +12,8 @@
 		메인
 	</div>
 	
-	<div style="border: 1px solid black; height: 500px;">
-		이미지 영역
+	<div style="height: 500px; ">
+		<img src="/resources/images/main2.jpg" style="width: 100%; height: 100%;">
 	</div>
 	
 

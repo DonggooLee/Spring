@@ -1,6 +1,8 @@
 package org.kg.service;
 
 
+import java.util.List;
+
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.mapper.B_PublicMemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,12 @@ public class B_publicMemberServiceImpl implements B_publicMemberService{
 	public B_PublicMemberVO loginPublic(String m_id, String m_pw) {
 		log.info("※※※※※※※※logining※※※※※※※※");
 		return mapper.getPmember(m_id, m_pw);
+	}
+
+	@Override
+	public List<B_PublicMemberVO> publicList() {
+		log.info("회원조회 나가신다");
+		return mapper.getPmemberList();
 	}
 	
 	

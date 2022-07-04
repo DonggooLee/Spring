@@ -1,5 +1,7 @@
 package org.kg.service;
 
+import java.util.List;
+
 import org.kg.domain.B_PublicMemberVO;
 
 public interface B_publicMemberService {
@@ -9,5 +11,6 @@ public interface B_publicMemberService {
 	public int publicEmailCheck(String m_email);
 	public int publicPhoneCheck(String m_phone);
 	public B_PublicMemberVO loginPublic(String m_id, String m_pw);
+	public List<B_PublicMemberVO> publicList();
 	
 }

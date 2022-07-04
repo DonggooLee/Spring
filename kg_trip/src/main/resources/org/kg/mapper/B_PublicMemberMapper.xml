@@ -29,6 +29,7 @@
 	<select id="getPmember" resultType="org.kg.domain.B_PublicMemberVO">
 		select * from b_publicMember_tbl where m_id= #{m_id} and m_pw=#{m_pw}
 	</select>
+	
   
 
   
