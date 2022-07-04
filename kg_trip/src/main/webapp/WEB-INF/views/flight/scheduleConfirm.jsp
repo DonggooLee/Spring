@@ -86,8 +86,6 @@
 		<div class="reservation">
 			<button id="goBackBtn">뒤로가기</button>
 			&nbsp;
-			<button id="reservationBtn">예약하기</button>
-			&nbsp;
 			<button id="payBtn">결제하기</button>
 		</div>
 		
@@ -97,7 +95,7 @@
 			<input type="hidden" name="date_idx" value="${getSchedule.date_idx}">
 		</div>
 		
-		<form action="myReservation" method="post" id="myForm">
+		<form id="myForm">
 			<input type="hidden" name="date_idx" value="${getSchedule.date_idx}">
 			<input type="hidden" name="flight_name" value="${getSchedule.flight_name}">
 			<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx}">
@@ -106,7 +104,7 @@
 	</section>
 	
 <style>
-	/* 좌석 배정 테스트용 : 이코노미 좌석만 적용 */
+	/* 좌석 버튼 이벤트 테스트용 */
 	#test:hover {
 		background-color: blue;
 		font-weight: bold;
@@ -123,19 +121,25 @@
 
 	$(function() {
 		
+		// 가격을 하나의 변수에 담기 위한 전역 변수 선언
 		var price = "";
-		
+
 		// 좌석정보 얻기 위한 객체
-		var seat_grade = $(".hidden").find("input[name='seat_grade']")
-		var date_idx = $(".hidden").find("input[name='date_idx']")
 		var div = $(".choiceSeat")
+		var date_idx = $(".hidden").find("input[name='date_idx']")
+		var seat_grade = $(".hidden").find("input[name='seat_grade']")
 		
 		// 항공권 예매를 위한 객체
+		var seat = '';
 		var bookInfo_ = '';
-		var bookInfo = {};
 		var m_idx = $("#myForm").find("input[name='m_idx']")
 		var flight_name = $("#myForm").find("input[name='flight_name']")
 		var passport_num = $(".memberInfo").find("input[name='passport_num']")
+		
+		// 티켓 가격에 천단위 구분을 위한 함수
+		function AmountCommas(val){
+		    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+		}
 
 		// 해당 항공편의 좌석정보 출력
 		getSeatList({seat_grade:seat_grade.val(), date_idx:date_idx.val()},
@@ -149,10 +153,6 @@
 				if(seat.economyseat != null) {
 					var pEs = seat.economyseatprice
 					price = pEs;
-					/* 표시되는 가격 */
-           			function AmountCommas(val){
-           			    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
-           			}
            			pEs = AmountCommas(pEs)+'원 '
 					$("#ticketPrice").html(pEs)
 					var es = seat.economyseat
@@ -163,73 +163,140 @@
 							if(split_es[i] == seatList[j].seat_name ) {
 								str += "<button style='padding: 15px; background-color: gray; margin: 5px;' disabled='disabled' id='test' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
 								i++;
-								/* undefined 제거하기 위한 테스트 */
-								/* if(split_es[i] == undefined){
-									console.log("=====테스트=====")
-								} */
 							}
 						}
 						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id='test' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
 					}
 					div.html(str)
+					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
 						var seat_es = $(this).data("idx")
-						alert("선택한 좌석 번호 : " + seat_es)
-						bookInfo_ += "<br><input type='text' name='ticket_price' value=" + pEs + ">"
-						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_es + ">"
-						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
-						// 예약버튼 누르면 안에 있는 값 다지우고 다시 만들기 ?
-						$("#myForm").append(bookInfo_)
-						/* 
-							비동기로 태울 때 필요한 테스트 데이터! ★★★
-							bookInfo = {date_idx:date_idx.val(), flight_name:flight_name.val(), m_idx:m_idx.val(), 
-								ticket_price:pEs, seat_name:seat_es, passport_num:passport_num.val()}
-							console.log(bookInfo.date_idx+bookInfo.flight_name+bookInfo.m_idx+bookInfo.ticket_price
-									+bookInfo.seat_name+bookInfo.passport_num);
-						*/
-					})
+						// 로그인 유무 따른 예외처리
+						if(m_idx.val() != ""){
+							alert("선택한 좌석 번호 : " + seat_es)
+							// 결제하기 버튼 클릭 이벤트
+							$("#payBtn").on("click", function() {
+								// 예매를 위한 객체 생성
+								var param = {m_idx:m_idx.val(), seat_name:seat_es, date_idx:date_idx.val(), 
+									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
+								// 카카오 결제 API
+								kakaoPay(param, function(data) {
+									var box = data.next_redirect_pc_url
+									window.open(box)
+									console.log(data)
+								})
+							}) // end : 결제하기 버튼 클릭 이벤트
+						}else {
+							alert("로그인이 필요한 서비스 입니다.")
+							if(!confirm("로그인 하시겠습니까?")){
+								// 취소 버튼 클릭 시
+								return;
+							}else{
+								// 확인 버튼 클릭 시
+								location.href = "${pageContext.request.contextPath}/Member/login";
+							}
+						} // end : 로그인 유무 따른 예외처리
+					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 이코노미석 선택
+				
 				// 비즈니스석 선택
 				if(seat.businessseat != null){
 					var pBs = seat.businessseatprice
 					price = pBs;
+           			pBs = AmountCommas(pBs)+'원 '
 					$("#ticketPrice").html(pBs)
 					var bs = seat.businessseat
 					var split_bs = bs.split(',')
 					var str = '';
-					for(var i=0; i<split_bs.length; i++){
-						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_bs data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
+           			for(var i=0; i<split_bs.length; i++){
+						for(var j=0; j<seatList.length; j++) {
+							if(split_bs[i] == seatList[j].seat_name ) {
+								str += "<button style='padding: 15px; background-color: gray; margin: 5px;' disabled='disabled' id='test' data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
+								i++;
+							}
+						}
+						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id='test' data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
 					}
 					div.html(str)
+					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
 						var seat_bs = $(this).data("idx")
-						alert("선택한 좌석 번호 : " + seat_bs)
-						bookInfo_ += "<input type='text' name='ticket_price' value=" + pBs + ">"
-						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_bs + ">"
-						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
-						$("#myForm").append(bookInfo_)
-					})
+						// 로그인 유무 따른 예외처리
+						if(m_idx.val() != ""){
+							alert("선택한 좌석 번호 : " + seat_bs)
+							// 결제하기 버튼 클릭 이벤트
+							$("#payBtn").on("click", function() {
+								// 예매를 위한 객체 생성
+								var param = {m_idx:m_idx.val(), seat_name:seat_bs, date_idx:date_idx.val(), 
+									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
+								// 카카오 결제 API
+								kakaoPay(param, function(data) {
+									var box = data.next_redirect_pc_url
+									window.open(box)
+									console.log(data)
+								})
+							}) // end : 결제하기 버튼 클릭 이벤트
+						}else {
+							alert("로그인이 필요한 서비스 입니다.")
+							if(!confirm("로그인 하시겠습니까?")){
+								// 취소 버튼 클릭 시
+								return;
+							}else{
+								// 확인 버튼 클릭 시
+								location.href = "${pageContext.request.contextPath}/Member/login";
+							}
+						} // end : 로그인 유무 따른 예외처리
+					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 비즈니스석 선택
+				
 				// 퍼스트석 선택
 				if(seat.firstseat != null){
 					var pFs = seat.firstseatprice
 					price = pFs;
+           			pFs = AmountCommas(pFs)+'원 '
 					$("#ticketPrice").html(pFs)
 					var fs = seat.firstseat
 					var split_fs = fs.split(',')
 					var str = '';
-					for(var i=0; i<split_fs.length; i++){
-						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id=seat_fs data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
+           			for(var i=0; i<split_fs.length; i++){
+						for(var j=0; j<seatList.length; j++) {
+							if(split_fs[i] == seatList[j].seat_name ) {
+								str += "<button style='padding: 15px; background-color: gray; margin: 5px;' disabled='disabled' id='test' data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
+								i++;
+							}
+						}
+						str += "<button style='padding: 15px; background-color: white; margin: 5px;' id='test' data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
 					}
 					div.html(str)
+					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
 						var seat_fs = $(this).data("idx")
-						alert("선택한 좌석 번호 : " + seat_fs)
-						bookInfo_ += "<input type='text' name='ticket_price' value=" + pFs + ">"
-						bookInfo_ += "<input type='text' name='seat_name' value=" + seat_fs + ">"
-						bookInfo_ += "<input type='text' name='passport_num' value=" + passport_num.val() + ">"
-						$("#myForm").append(bookInfo_)
-					})
+						// 로그인 유무 따른 예외처리
+						if(m_idx.val() != ""){
+							alert("선택한 좌석 번호 : " + seat_fs)
+							// 결제하기 버튼 클릭 이벤트
+							$("#payBtn").on("click", function() {
+								// 예매를 위한 객체 생성
+								var param = {m_idx:m_idx.val(), seat_name:seat_fs, date_idx:date_idx.val(), 
+									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
+								// 카카오 결제 API
+								kakaoPay(param, function(data) {
+									var box = data.next_redirect_pc_url
+									window.open(box)
+									console.log(data)
+								})
+							}) // end : 결제하기 버튼 클릭 이벤트
+						}else {
+							alert("로그인이 필요한 서비스 입니다.")
+							if(!confirm("로그인 하시겠습니까?")){
+								// 취소 버튼 클릭 시
+								return;
+							}else{
+								// 확인 버튼 클릭 시
+								location.href = "${pageContext.request.contextPath}/Member/login";
+							}
+						} // end : 로그인 유무 따른 예외처리
+					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 퍼스트석 선택
 				
 			}) // end : 이미 선택된 좌석정보
@@ -240,28 +307,6 @@
 		$("#goBackBtn").on("click", function() {
 			history.back()
 		}) // end : 뒤로가기 버튼 클릭 이벤트
-		
-		// 결제하기 버튼 클릭 이벤트
-		$("#payBtn").on("click", function() {
-			$.ajax({
-				url : '/flight/kakaopay?price='+price,
-				dataType: 'json',
-				success : function(data) {
-					var box = data.next_redirect_pc_url
-					window.open(box)
-					console.log(data)
-				},
-				error : function(error) {
-					alert(error)
-				}
-			}) // end : ajax()
-		}) // end : 테스트 버튼 클릭 이벤트
-		
-		// 예약하기 버튼 클릭 이벤트
-		$("#reservationBtn").on("click", function() {
-			//각종 데이터 예외처리 하기
-			$("#myForm").submit()
-		}) // end : 예약하기 버튼 클릭 이벤트
 		
 	}) // end : onload
 	

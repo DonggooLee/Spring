@@ -139,7 +139,6 @@
 									str += "<ul>";
 									str += "<h2>비행일정</h2>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 비행일자 : " + displayTime(listSch[i].start_date) + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
@@ -172,7 +171,6 @@
 									str += "<ul>";
 									str += "<h2>비행일정</h2>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 비행일자 : " + displayTime(listSch[i].start_date) + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";

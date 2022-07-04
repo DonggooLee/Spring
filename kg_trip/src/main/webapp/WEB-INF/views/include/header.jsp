@@ -21,7 +21,7 @@
 					<div class="logo">청춘트립</div>
 					<div class="test">
 						<div class="search">
-							<input type="text" value="검색">
+							<input type="text" value="검색" style="width: 200px; height: 25px; border-radius: 15px; border: 1px solid;">
 						</div>
 						<ul class="user">
 							<c:if test="${empty loginPublicInfo == empty loginCorpInfo }">
@@ -63,7 +63,6 @@
 									<li>1:1문의</li>
 								</ul>
 							</li>
-							
 						</ul>
 					</nav>
 				</div>

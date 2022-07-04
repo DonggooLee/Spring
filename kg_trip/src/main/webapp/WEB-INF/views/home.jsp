@@ -9,14 +9,12 @@
 <section class="cont">
 
 	<div class="event">
-		메인
 	</div>
 	
 	<div style="height: 500px; ">
 		<img src="/resources/images/main2.jpg" style="width: 100%; height: 100%;">
 	</div>
 	
-
 </section>
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->

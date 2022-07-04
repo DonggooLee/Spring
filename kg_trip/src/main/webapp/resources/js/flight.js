@@ -186,4 +186,26 @@ function getReservationSeatList(param, callback, error) {
 	})
 } // end : getReservationSeatList()
 
-
+// 카카오 결제(예약하기) API
+function kakaoPay(param, callback, error) {
+	$.ajax({
+		type : 'post',
+		url : '/flight/kakaopay',
+		// 컨트롤러에 보내는 데이터
+		data : JSON.stringify(param),
+		// 서버 측에서 전송받은 데이터의 형식 (받는 데이터 형식)
+		dataType: 'json',
+		// 서버 측에 보내는 데이터의 타입 (보내는 데이터 형식)
+		contentType : 'application/json; charset=utf-8',
+		// 요청이 성공 했을 때 호출 할 콜백 함수
+		success : function(data) {
+			if(callback){
+				callback(data)
+			}
+		},
+		error : function(error) {
+			alert(error)
+			console.log(error)
+		}
+	})
+} // end : 카카오 결제(예약하기) API
