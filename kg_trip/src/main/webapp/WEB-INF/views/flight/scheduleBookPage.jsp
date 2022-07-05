@@ -8,7 +8,7 @@
 	
 		<div class="searchBox">
 			<h1>예약 조회</h1><br>
-			<input type="text" name="checkBook" value="202206301AA2BD"><br><br>
+			<input type="text" name="checkBook" value="20220703P456789"><br><br>
 			<button id="mainBtn">메인페이지</button>
 			&nbsp;
 			<button id="bookBtn">예약조회</button>
@@ -16,10 +16,10 @@
 		
 		<br><br>
 		
-		<div>
-			<table class="bookInfo"></table>
-		</div>
-	
+		<div><table class="bookInfo"></table></div>
+		<br>
+		<div class="refund"></div>
+			
 	</section>
 	
 <script type="text/javascript" src="/resources/js/flight.js"></script>
@@ -57,10 +57,29 @@
 							str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
 							str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
 							$(".bookInfo").html(str)
+							$(".refund").html("<button id='refundBtn'>항공권 환불</button>")
+							// 환불하기 버튼 클릭 이벤트
+							$("#refundBtn").on("click", function() {
+								if(confirm("정말 환불하시겠습니까?")){
+									// 확인 클릭 시 : 항공권 환불
+									refundReservation(reservation_idx, function(result) {
+										if(result == "success"){
+											alert("환불이 정상적으로 완료됐습니다.")
+											location.href = "/KingTrip/main";
+										}else{
+											alert("삭제에 실패 하였습니다.")
+											return;
+										}
+									})
+								}else{
+									// 취소 클릭 시
+									return;
+								}
+							}) // end : 환불하기 버튼 클릭 이벤트
 						}
 					}
 				}) // end : ajax()
-			} // end : else => 예약번호 유무에 따른 예외처리
+			}
 		}) // end : 예약 조회 버튼 클릭 이벤트
 		
 		// 메인페이지 버튼 클릭 이벤트

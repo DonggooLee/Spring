@@ -110,5 +110,17 @@ public class K_FlightServiceImpl implements K_FlightService{
 	public K_getReservationIdxDTO getReservationIdx_(K_bookInfo info) {
 		return mapper.getReservationIdx(info);
 	}
+
+	// 항공권 환불
+	@Override
+	public int refundReservation_(String reservation_idx) {
+		return mapper.refundReservation(reservation_idx);
+	}
+
+	// 항공권 예약 내역 (회원별)
+	@Override
+	public List<K_getResrvationInfoVO> getBookingList_(int m_idx) {
+		return mapper.getBookingList(m_idx);
+	}
 	
 }

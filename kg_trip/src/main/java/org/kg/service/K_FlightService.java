@@ -59,4 +59,10 @@ public interface K_FlightService {
 	// 예약번호 조회
 	public K_getReservationIdxDTO getReservationIdx_(K_bookInfo info);
 	
+	// 항공권 환불
+	public int refundReservation_(String reservation_idx);
+	
+	// 항공권 예약 내역 (회원별)
+	public List<K_getResrvationInfoVO> getBookingList_(int m_idx);
+	
 }

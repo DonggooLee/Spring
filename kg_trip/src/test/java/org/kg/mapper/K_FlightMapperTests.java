@@ -56,4 +56,17 @@ public class K_FlightMapperTests {
 //		log.info("테스트 결과 : " + mapper.getReservationIdx(info));
 //	}
 	
+	// 항공권 환불
+//	@Test
+//	public void test() {
+//		log.info("테스트 결과 : " + mapper.refundReservation("2022B1R3F8M4Z4"));
+//	}
+	
+	// 항공권 예약 내역 (회원별)
+//	@Test
+//	public void test() {
+//		String m_idx = "1";
+//		log.info("테스트 결과 : " + mapper.getBookingList(m_idx));
+//	}
+	
 }

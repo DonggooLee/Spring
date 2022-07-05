@@ -122,7 +122,7 @@ public class K_FlightController {
 		}else {
 			return new ResponseEntity<>(service.getSeatEco_(date_idx), HttpStatus.OK);
 		}
-	}
+	}  
 	
 	// 일반회원 : 예약 좌석 조회
 	@PostMapping(value = "getReservationSeatList", 
@@ -165,9 +165,9 @@ public class K_FlightController {
 				String parameter = "cid=TC0ONETIME&"
 						+ "partner_order_id=partner_order_id&"
 						+ "partner_user_id=KingTrip&"
-						+ "item_name="+bookInfo.getFlight_name()+"_Flight&quantity=1&total_amount="+bookInfo.getTicket_price()+"&"
+						+ "item_name="+bookInfo.getFlight_name()+"_"+bookInfo.getSeat_name()+"&quantity=1&total_amount="+bookInfo.getTicket_price()+"&"
 						+ "vat_amount=200&tax_free_amount=0&"
-						+ "approval_url=http://localhost:8080/flight/book?reservation_idx="+bookIdx+"&"
+						+ "approval_url=http://localhost:8080/flight/success?reservation_idx="+bookIdx+"&"
 						+ "fail_url=http://localhost:8080/flight/fail&"
 						+ "cancel_url=http://localhost:8080/flight/cancel";
 				// 주는애
@@ -207,22 +207,41 @@ public class K_FlightController {
 		}
 	}
 	
-	@GetMapping("book")
+	// 결제 성공
+	@GetMapping("success")
 	public String test1() {
 		log.info("페이지 이동 : 결제 성공 success...");
 		return "flight/flightBooking";
 	}
-
+	
+	// 결제 취소
 	@GetMapping("cancel")
 	public String test2() {
 		log.info("페이지 이동 : 결제 취소 cancel...");
 		return "flight/cancel";
 	}
 	
+	// 결제 실패
 	@GetMapping("fail")
 	public String test3() {
 		log.info("페이지 이동 : 결제 실패 fail...");
 		return "flight/fail";
+	}
+	
+	// 항공권 예약내역 
+	@GetMapping("bookList")
+	public String bookList(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			log.info(loginvo);
+			model.addAttribute("loginPublicInfo", loginvo);
+			model.addAttribute("airBookList", service.getBookingList_(loginvo.getM_idx()));
+		}
+		log.info("페이지 이동 : 항공권 예약 내역 페이지 이동...");
+		return "flight/bookList";
 	}
 	
 }

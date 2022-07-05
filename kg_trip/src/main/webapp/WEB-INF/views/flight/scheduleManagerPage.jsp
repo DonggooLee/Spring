@@ -87,7 +87,6 @@
 		
 		// 항공편 조회 (관리자 계정의 항공사 코드와 일치하는 항공편만 출력)
 		listFlight(c_aircode, function(listFlight) {
-			console.log(listFlight)
 			var str = '';
 			if(listFlight.length != 0){
 				for(var i=0; i<listFlight.length; i++){
@@ -138,7 +137,9 @@
 				alert("도착시각을 입력해 주세요")
 			}else if (ap_idx_d.val() == ap_idx_a.val()) {
 				alert("출발공항과 도착공항을 다르게 입력해 주세요")
-			}else {
+			}else if(depart_time.val() >= arrive_time.val()){
+				alert("출발시각이 도착시각과 같거나 늦게 설정 되었습니다.")	
+			}else{
 				// 항공편 일정 추가
 				insertSchedule({flight_name:flight_name.val(), start_date:start_date.val(), boarding_time:boarding_time.val(),
 					depart_time:depart_time.val(), arrive_time:arrive_time.val(), ap_idx_d:ap_idx_d.val(), ap_idx_a:ap_idx_a.val()}, 

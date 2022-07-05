@@ -4,19 +4,15 @@ import java.util.List;
 
 import org.kg.domain.K_getScheduleDTO;
 import org.kg.domain.K_getSeatVO;
-import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airportVO;
 import org.kg.domain.K_bookInfo;
-import org.kg.domain.K_checkSeatDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_flightVO;
 import org.kg.domain.K_getInfoDTO;
 import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
-import org.kg.domain.K_insertReservationDTO;
 import org.kg.domain.K_insertScheduleDTO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 public interface K_FlightMapper {
 	
@@ -61,5 +57,11 @@ public interface K_FlightMapper {
 	
 	// 예약번호 조회
 	public K_getReservationIdxDTO getReservationIdx(K_bookInfo info);
+	
+	// 항공권 환불
+	public int refundReservation(String reservation_idx);
+	
+	// 항공권 예약 내역 (회원별)
+	public List<K_getResrvationInfoVO> getBookingList(int m_idx);
 	
 }

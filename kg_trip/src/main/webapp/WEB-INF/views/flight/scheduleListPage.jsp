@@ -47,6 +47,8 @@
 			<br>
 			<div>
 				<button id="getScheduleBtn">일정조회</button>
+				<button id="lowPriceleBtn">낮은가격순</button>
+				<button id="highPriceBtn">높은가격순</button>
 			</div>
 		</div>
 		
@@ -198,6 +200,16 @@
 			} // end : 예외처리 else
 			
 		}) // end : 일정 조회 버튼 클릭 이벤트 종료
+		
+		// 낮은가격순 버튼 클릭 이벤트
+		$("#lowPriceleBtn").on("click", function() {
+			alert("낮은가격순")
+		}) // end : 낮은가격순 버튼 클릭 이벤트
+		
+		// 높은가격순 버튼 클릭 이벤트
+		$("#highPriceBtn").on("click", function() {
+			alert("높은가격순")
+		}) // end : 높은가격순 버튼 클릭 이벤트
 		
 	}) // end : onload
 	

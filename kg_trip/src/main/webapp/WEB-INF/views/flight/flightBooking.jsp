@@ -18,6 +18,8 @@
 		<br>
 		<div>
 			<button id="mainBtn">메인페이지</button>
+			&nbsp;
+			<button id="refundBtn">항공권 환불</button>
 		</div>
 		
 	</section>
@@ -52,31 +54,53 @@
 			url : '/flightManager/myReservation/' + reservation_idx,
 			success : function(info) {
 				var str = '';
-				str += "<tr><th colspan='2'>예약 정보</th></tr>";
-				str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
-				str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
-				str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
-				str += "<tr><th>비행일자</th><td>" + displayTime(info.start_date) + "</td></tr>";
-				str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
-				str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
-				str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
-				str += "<tr><th>출발공항</th><td>" + info.ap_name_d + "</td></tr>";
-				str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
-				str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
-				str += "<tr><th>예매일자</th><td>" + info.ticket_date + "</td></tr>";
-				$(".bookInfo").html(str)
+				// 정보가 있을 경루
+				if(info != ""){
+					str += "<tr><th colspan='2'>예약 정보</th></tr>";
+					str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
+					str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
+					str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
+					str += "<tr><th>비행일자</th><td>" + displayTime(info.start_date) + "</td></tr>";
+					str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
+					str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
+					str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
+					str += "<tr><th>출발공항</th><td>" + info.ap_name_d + "</td></tr>";
+					str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
+					str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
+					$(".bookInfo").html(str)
+					
+				}else{
+					$(".bookInfo").html("<h2>정보가 존재하지 않습니다.</h2>")
+				}
 			}
 		}) // end : ajax()
 		
 		// 예약 번호 붙이기
 		$("#bookIdx").html("예약번호 : " + reservation_idx)
 		
-		//메인페이지 버튼 클릭 이벤트
+		// 메인페이지 버튼 클릭 이벤트
 		$("#mainBtn").on("click", function() {
-			
 			location.href = "/KingTrip/main";
-			
 		}) // end : 메인페이지 버튼 클릭 이벤트
+		
+		// 환불하기 버튼 클릭 이벤트
+		$("#refundBtn").on("click", function() {
+			if(confirm("정말 환불하시겠습니까?")){
+				// 확인 클릭 시 : 항공권 환불
+				refundReservation(reservation_idx, function(result) {
+					if(result == "success"){
+						alert("환불이 정상적으로 완료됐습니다.")
+						location.href = "/KingTrip/main";
+					}else{
+						alert("삭제에 실패 하였습니다.")
+						return;
+					}
+				})
+			}else{
+				// 취소 클릭 시
+				return;
+			}
+		}) // end : 환불하기 버튼 클릭 이벤트
 		
 	}) // end : onload
 	

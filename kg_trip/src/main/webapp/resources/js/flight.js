@@ -209,3 +209,21 @@ function kakaoPay(param, callback, error) {
 		}
 	})
 } // end : 카카오 결제(예약하기) API
+
+// 항공권 환불
+function refundReservation(reservation_idx, callback, error) {
+	$.ajax({
+		type : 'delete',
+		url : '/flightManager/' + reservation_idx,
+		success : function(result, status, xhr) {
+			if(callback){
+				callback(result)
+			}
+		},
+		error : function(xhr, status, er) {
+			if(error){
+				error(er)
+			}
+		}
+	})
+} // end : 항공권 환불
