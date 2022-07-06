@@ -1,14 +1,5 @@
 package org.kg.controller;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
@@ -17,11 +8,13 @@ import javax.servlet.http.HttpSession;
 
 import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
-import org.kg.domain.K_getSeatVO;
 import org.kg.domain.K_bookInfo;
+import org.kg.domain.K_getSeatVO;
+import org.kg.domain.KakaoPayDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_getInfoDTO;
 import org.kg.service.K_FlightService;
+import org.kg.service.KakaopayPay;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -43,6 +35,7 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class K_FlightController {
 	
+	private KakaopayPay kakaopay;
 	private K_FlightService service;
 
 	// 기업회원 : 비행기 스케줄 관리 페이지 이동
@@ -133,101 +126,6 @@ public class K_FlightController {
 		return new ResponseEntity<>(service.getReservationSeatList_(info), HttpStatus.OK);
 	}
 	
-	// 카카오 페이 결제 API => 예약완료
-	@PostMapping(value = "/kakaopay", consumes = "application/json")
-	@ResponseBody
-	public String kakaopay(@RequestBody K_bookInfo bookInfo) {
-		log.info("카카오페이 결제 API...");
-		log.info("예약정보..." + bookInfo);
-		Random ran = new Random();
-		String ridx = "";
-		for(int i=0; i<5; i++) {
-			String num = String.valueOf(ran.nextInt(10));
-			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
-			ridx += (str+num);
-		}
-		bookInfo.setReservation_idx("2022"+ridx);
-		int result_ = service.insertReservation_(bookInfo);
-		if(result_==1) {
-			log.info("예약정보 입력 결과(성공) : " + result_);
-			log.info("예약번호 : " + bookInfo.getReservation_idx());
-			String bookIdx = bookInfo.getReservation_idx();
-			try {
-				// 주소
-				URL addr = new URL("https://kapi.kakao.com/v1/payment/ready");
-				// 서버 연결
-				HttpURLConnection serverConn = (HttpURLConnection)addr.openConnection();
-				serverConn.setRequestMethod("POST");
-				serverConn.setRequestProperty("Authorization", "KakaoAK 7f0d70eee3a169f9c0b2267692ce2ac9");
-				serverConn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-				// 연결을 통해서 넣어줄게 있는지 없는지 판단 : output은 기본적으로 false이기 때문에
-				serverConn.setDoOutput(true);
-				String parameter = "cid=TC0ONETIME&"
-						+ "partner_order_id=partner_order_id&"
-						+ "partner_user_id=KingTrip&"
-						+ "item_name="+bookInfo.getFlight_name()+"_"+bookInfo.getSeat_name()+"&quantity=1&total_amount="+bookInfo.getTicket_price()+"&"
-						+ "vat_amount=200&tax_free_amount=0&"
-						+ "approval_url=http://localhost:8080/flight/success?reservation_idx="+bookIdx+"&"
-						+ "fail_url=http://localhost:8080/flight/fail&"
-						+ "cancel_url=http://localhost:8080/flight/cancel";
-				// 주는애
-				OutputStream output = serverConn.getOutputStream();
-				// 데이터 주는애
-				DataOutputStream dataOutput = new DataOutputStream(output);
-				dataOutput.writeBytes(parameter);
-				// close()만 해도 dataOutput.flush()가 선행되어진다  flush하면 데이터를 보내고(?)비운다는 의미이기 때문에 전송함
-				dataOutput.close();
-				int result = serverConn.getResponseCode();
-				// 받는애
-				InputStream input;
-				if(result == 200) {
-					// 통신성공
-					input = serverConn.getInputStream();
-				}else {
-					// 통신실패
-					input = serverConn.getErrorStream();
-				}
-				// 읽는애
-				InputStreamReader reader = new InputStreamReader(input);
-				// 형변환(?)느낌  => 바이트로 통신했기 때문에!
-				BufferedReader casReader = new BufferedReader(reader);
-				// 문자열로 형변환하고 찍어준다 
-				return casReader.readLine();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			// 그곳에 도달한경우는 try문 내에서 예외가 발생해 try문 밖으로 빠져나온 경우에 서버작업이 실패했다는 의미로 주는 값
-			// 올바르게 작업이 처리된경우는 트라이문 안에있는 return에 도달하고 함수가 끝나게됩니다
-			return "{\"result\":\"NO\"}";
-		}else {
-			log.info("예약정보 입력 결과(실패) : " + result_);
-			return "flight/fail";
-		}
-	}
-	
-	// 결제 성공
-	@GetMapping("success")
-	public String test1() {
-		log.info("페이지 이동 : 결제 성공 success...");
-		return "flight/flightBooking";
-	}
-	
-	// 결제 취소
-	@GetMapping("cancel")
-	public String test2() {
-		log.info("페이지 이동 : 결제 취소 cancel...");
-		return "flight/cancel";
-	}
-	
-	// 결제 실패
-	@GetMapping("fail")
-	public String test3() {
-		log.info("페이지 이동 : 결제 실패 fail...");
-		return "flight/fail";
-	}
-	
 	// 항공권 예약내역 
 	@GetMapping("bookList")
 	public String bookList(HttpServletRequest request, Model model) {
@@ -243,5 +141,55 @@ public class K_FlightController {
 		log.info("페이지 이동 : 항공권 예약 내역 페이지 이동...");
 		return "flight/bookList";
 	}
+    
+	// 해당 메소드 탈 경우 카카오페이 결제정보 요청 값
+    @PostMapping(value = "/kakaoPay")
+    public String kakaoPay(K_bookInfo bookInfo) {
+        log.info("카카오페이 결제하기 ...");
+        log.info("예약정보..." + bookInfo);
+    	// 통신에 성공하면 결제 정보를 가지고 있는 QR 코드 생성하는 URL로 redirect 한다
+    	return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
+    }
+    
+    // 결제승인 요청 성공시
+    @GetMapping(value = "/kakaoPaySuccess")
+    public String kakaoPaySuccess(
+    		@RequestParam("pg_token") String pg_token, @RequestParam("ticket_price") String ticket_price, 
+    		@RequestParam("seat_name") String seat_name, @RequestParam("flight_name") String flight_name, 
+    		@RequestParam("date_idx") String date_idx, @RequestParam("m_idx") String m_idx, Model model) {
+        log.info("kakaoPaySuccess get............................................");
+        log.info("kakaoPaySuccess pg_token : " + pg_token);
+        log.info("kakaoPaySuccess ticket_price : " + ticket_price);
+        log.info("kakaoPaySuccess seat_name : " + seat_name);
+        log.info("kakaoPaySuccess flight_name : " + flight_name);
+        log.info("kakaoPaySuccess date_idx : " + date_idx);
+        log.info("kakaoPaySuccess m_idx : " + m_idx);
+        // 결제 승인 요청 정보를 담기 위한 임시 객체 생성 및 변수 초기화
+        KakaoPayDTO dto = new KakaoPayDTO();
+        dto.setPg_token(pg_token);
+        dto.setTicket_price(ticket_price);
+        dto.setSeat_name(seat_name);
+        dto.setFlight_name(flight_name);
+        dto.setDate_idx(date_idx);
+        dto.setM_idx(m_idx);
+        Random ran = new Random();
+		String ridx = "";
+		for(int i=0; i<5; i++) {
+			String num = String.valueOf(ran.nextInt(10));
+			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
+			ridx += (str+num);
+		}
+		dto.setReservation_idx("2022"+ridx);
+		// if 예약이 완료 되냐 안되냐에 따라서 값을 다르게 처리하기
+        int result = service.insertReservation_(dto);
+        if(result==1) {
+        	model.addAttribute("reservation_idx", dto.getReservation_idx());
+        	model.addAttribute("info", kakaopay.kakaopayInfo(dto));
+        }else {
+        	model.addAttribute("reservation_idx", "예약실패!");
+        	model.addAttribute("info", kakaopay.kakaopayInfo(dto));
+        }
+        return "flight/kakaoPaySuccess";
+    }
 	
 }

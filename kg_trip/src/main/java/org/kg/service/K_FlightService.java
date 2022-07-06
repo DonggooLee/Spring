@@ -14,6 +14,7 @@ import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
+import org.kg.domain.KakaoPayDTO;
 
 public interface K_FlightService {
 	
@@ -48,7 +49,7 @@ public interface K_FlightService {
 	public K_getScheduleDTO getSchedule_(@Param("date_idx") int date_idx);
 	
 	// 예약하기
-	public int insertReservation_(K_bookInfo info);
+	public int insertReservation_(KakaoPayDTO info);
 	
 	// 예약 좌석 조회
 	public List<K_checkSeatVO> getReservationSeatList_(K_getInfoDTO info);

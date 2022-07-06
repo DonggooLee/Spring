@@ -70,12 +70,6 @@
 						<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}" readonly="readonly">
 					</td>
 				</tr>			
-				<tr>
-					<th>여권번호</th>
-					<td>
-						<input type="text" name="passport_num">
-					</td>
-				</tr>
 			</table>
 		</div>
 		<br><hr><br>
@@ -100,6 +94,9 @@
 			<input type="hidden" name="flight_name" value="${getSchedule.flight_name}">
 			<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx}">
 		</form>
+		
+		<!-- 항공권 예약-->				
+		<form action="kakaoPay" method="post" id="reservationForm"></form>
 	
 	</section>
 	
@@ -134,7 +131,6 @@
 		var bookInfo_ = '';
 		var m_idx = $("#myForm").find("input[name='m_idx']")
 		var flight_name = $("#myForm").find("input[name='flight_name']")
-		var passport_num = $(".memberInfo").find("input[name='passport_num']")
 		
 		// 티켓 가격에 천단위 구분을 위한 함수
 		function AmountCommas(val){
@@ -173,18 +169,18 @@
 						var seat_es = $(this).data("idx")
 						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
+							var rstr = '';
 							alert("선택한 좌석 번호 : " + seat_es)
+							// 예약을 위한 정보 생성
+							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
+							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
+							rstr += "<input type='hidden' name='flight_name' value=" + flight_name.val() + ">";
+							rstr += "<input type='hidden' name='seat_name' value=" + seat_es + ">";
+							rstr += "<input type='hidden' name='ticket_price' value=" + price + ">";
+							$("#reservationForm").html(rstr)
 							// 결제하기 버튼 클릭 이벤트
 							$("#payBtn").on("click", function() {
-								// 예매를 위한 객체 생성
-								var param = {m_idx:m_idx.val(), seat_name:seat_es, date_idx:date_idx.val(), 
-									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
-								// 카카오 결제 API
-								kakaoPay(param, function(data) {
-									var box = data.next_redirect_pc_url
-									window.open(box)
-									console.log(data)
-								})
+								$("#reservationForm").submit();
 							}) // end : 결제하기 버튼 클릭 이벤트
 						}else {
 							alert("로그인이 필요한 서비스 입니다.")
@@ -223,18 +219,18 @@
 						var seat_bs = $(this).data("idx")
 						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
+							var rstr = '';
 							alert("선택한 좌석 번호 : " + seat_bs)
+							// 예약을 위한 정보 생성
+							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
+							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
+							rstr += "<input type='hidden' name='flight_name' value=" + flight_name.val() + ">";
+							rstr += "<input type='hidden' name='seat_name' value=" + seat_bs + ">";
+							rstr += "<input type='hidden' name='ticket_price' value=" + price + ">";
+							$("#reservationForm").html(rstr)
 							// 결제하기 버튼 클릭 이벤트
 							$("#payBtn").on("click", function() {
-								// 예매를 위한 객체 생성
-								var param = {m_idx:m_idx.val(), seat_name:seat_bs, date_idx:date_idx.val(), 
-									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
-								// 카카오 결제 API
-								kakaoPay(param, function(data) {
-									var box = data.next_redirect_pc_url
-									window.open(box)
-									console.log(data)
-								})
+								$("#reservationForm").submit();
 							}) // end : 결제하기 버튼 클릭 이벤트
 						}else {
 							alert("로그인이 필요한 서비스 입니다.")
@@ -274,17 +270,16 @@
 						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							alert("선택한 좌석 번호 : " + seat_fs)
+							// 예약을 위한 정보 생성
+							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
+							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
+							rstr += "<input type='hidden' name='flight_name' value=" + flight_name.val() + ">";
+							rstr += "<input type='hidden' name='seat_name' value=" + seat_fs + ">";
+							rstr += "<input type='hidden' name='ticket_price' value=" + price + ">";
+							$("#reservationForm").html(rstr)
 							// 결제하기 버튼 클릭 이벤트
 							$("#payBtn").on("click", function() {
-								// 예매를 위한 객체 생성
-								var param = {m_idx:m_idx.val(), seat_name:seat_fs, date_idx:date_idx.val(), 
-									flight_name:flight_name.val(), ticket_price:price, passport_num:passport_num.val()};
-								// 카카오 결제 API
-								kakaoPay(param, function(data) {
-									var box = data.next_redirect_pc_url
-									window.open(box)
-									console.log(data)
-								})
+								$("#reservationForm").submit();
 							}) // end : 결제하기 버튼 클릭 이벤트
 						}else {
 							alert("로그인이 필요한 서비스 입니다.")

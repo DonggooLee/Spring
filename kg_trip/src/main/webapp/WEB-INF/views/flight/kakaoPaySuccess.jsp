@@ -7,20 +7,35 @@
 	<section class="cont">
 	
 		<h1>카카오페이 결제성공 페이지! (예약완료)</h1>
+		
 		<br>
+		
 		<div>
-			<h2 id="bookIdx"></h2>
+		
+			<h2 id="bookIdx">예약번호 : ${reservation_idx}</h2>
+			
 			<br>
+			
 			<table class="bookInfo" style="padding: 20px; border: 1px solid black;">
 			
 			</table>
+			
 		</div>
+		
 		<br>
+		
 		<div>
 			<button id="mainBtn">메인페이지</button>
 			&nbsp;
 			<button id="refundBtn">항공권 환불</button>
 		</div>
+		
+		<br><hr><br>
+		
+		<form id="Info">
+			<!-- 페이지 로드되면 예약번호를 통한 예약내역 조회를 위함 -->
+			<input type="hidden" name="reservation_idx" value="${reservation_idx}">
+		</form>
 		
 	</section>
 
@@ -31,30 +46,18 @@
 </style>
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
-
-	// URL 로 부터 Parameter 뽑기
-	var getParam = function(key){        
-		var _parammap = {};        
-		document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
-			function decode(s) {                
-					return decodeURIComponent(s.split("+").join(" "));
-			}             
-			_parammap[decode(arguments[1])] = decode(arguments[2]);
-		});         
-		return _parammap[key];   
-	}; // end : getParam
-	
-	var reservation_idx = getParam("reservation_idx")
-	console.log("예약번호 : " + reservation_idx)
 	
 	$(function() {
+		
+		var reservation_idx = $("#Info").find("input[name='reservation_idx']").val();
+		console.log("예약번호 : " + reservation_idx)
 		
 		$.ajax({
 			type : 'get',
 			url : '/flightManager/myReservation/' + reservation_idx,
 			success : function(info) {
 				var str = '';
-				// 정보가 있을 경루
+				// 정보가 있을 경우
 				if(info != ""){
 					str += "<tr><th colspan='2'>예약 정보</th></tr>";
 					str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
@@ -67,16 +70,12 @@
 					str += "<tr><th>출발공항</th><td>" + info.ap_name_d + "</td></tr>";
 					str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
 					str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
-					str += "<tr><th>예매가격</th><td>" + info.ticket_price + "</td></tr>";
 					$(".bookInfo").html(str)
 				}else{
 					$(".bookInfo").html("<h2>정보가 존재하지 않습니다.</h2>")
 				}
 			}
 		}) // end : ajax()
-		
-		// 예약 번호 붙이기
-		$("#bookIdx").html("예약번호 : " + reservation_idx)
 		
 		// 메인페이지 버튼 클릭 이벤트
 		$("#mainBtn").on("click", function() {
