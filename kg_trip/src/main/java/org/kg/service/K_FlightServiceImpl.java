@@ -64,6 +64,12 @@ public class K_FlightServiceImpl implements K_FlightService{
 		return mapper.searchScheduleFir(inputSch);
 	}
 
+	// 항공편 일정선택
+	@Override
+	public K_getScheduleDTO getSchedule_(int date_idx) {
+		return mapper.getSchedule(date_idx);
+	}
+	
 	// 좌석출력 : 이코노미
 	@Override
 	public K_getSeatVO getSeatEco_(int date_idx) {
@@ -80,12 +86,6 @@ public class K_FlightServiceImpl implements K_FlightService{
 	@Override
 	public K_getSeatVO getSeatFir_(int date_idx) {
 		return mapper.getSeatFir(date_idx);
-	}
-	
-	// 일반회원 : 일정선택
-	@Override
-	public K_getScheduleDTO getSchedule_(int date_idx) {
-		return mapper.getSchedule(date_idx);
 	}
 
 	// 예약하기

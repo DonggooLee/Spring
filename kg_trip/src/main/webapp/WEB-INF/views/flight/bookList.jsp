@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false"%>
 <jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -12,7 +12,7 @@
 		<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
 			<div class="content" style="margin: 10px; background-color: white;">
 				<h2>${loginPublicInfo.m_name}님의 항공권 목록</h2>
-				<div style="border: 1px solid black; padding: 10px; width: 60%;">
+				<div style="border: 1px solid black; padding: 10px; width: 70%;">
 					<table style="background-color: white">
 						<tr>
 							<th>예약번호</th>
@@ -32,7 +32,7 @@
 								<c:forEach var="alist" items="${airBookList}">
 									<tr>
 										<td>${alist.reservation_idx}</td>
-										<td>${alist.start_date}</td>
+										<td><fmt:formatDate value="${alist.start_date}" pattern="yyyy-MM-dd"/></td>
 										<td>${alist.flight_name}</td>
 										<td>${alist.ap_name_d}</td>
 										<td>${alist.ap_name_a}</td>
@@ -80,7 +80,7 @@
 					type : 'get',
 					url : '/flightManager/myReservation/' + reservation_idx,
 					success : function(info) {
-						console.log( "비동기 통신 결과 : "  + info)
+						console.log("비동기 통신 결과 : " + info)
 						var str = '';
 						str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
 						str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";

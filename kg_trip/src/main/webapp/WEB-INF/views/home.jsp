@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bb3cb6b25b4f8327f491d5c78447c63c&libraries=services,clusterer,drawing"></script>
 		
 		<script type="text/javascript">
+		
 			var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 			
 			var options = { //지도를 생성할 때 필요한 기본 옵션
@@ -36,6 +37,7 @@
 			};
 		
 			var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+			
 		</script>
 		
 	</section>

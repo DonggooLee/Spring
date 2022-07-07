@@ -35,8 +35,8 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class K_FlightController {
 	
-	private k_KakaopayPay kakaopay;
 	private K_FlightService service;
+	private k_KakaopayPay kakaopay;
 
 	// 기업회원 : 비행기 스케줄 관리 페이지 이동
 	@GetMapping("scheduleManagerPage")
@@ -54,9 +54,9 @@ public class K_FlightController {
 	}
 	
 	// 일반회원 : 항공권 조회 페이지 이동
-	@GetMapping("scheduleListPage")
+	@GetMapping("scheduleList")
 	public String scheduleList(HttpServletRequest request, Model model) {
-		log.info("페이지 이동 : scheduleListPage...");
+		log.info("페이지 이동 : scheduleList...");
 		HttpSession session = request.getSession(false);
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
 		if (loginvo == null) {
@@ -65,8 +65,80 @@ public class K_FlightController {
 			model.addAttribute("loginPublicInfo", loginvo);
 			log.info(loginvo);
 		}
-		return "flight/scheduleListPage";
+		return "flight/scheduleList";
 	}
+	
+	// 일반회원 : 일정선택 후 상세 정보 입력 페이지 이동
+	@GetMapping("scheduleConfirm")
+	public String scheduleConfirm(HttpServletRequest request, Model model,
+			@RequestParam("date_idx") int date_idx, 
+			@RequestParam("seat_grade") String seat_grade) {
+		log.info("페이지 이동 : scheduleConfirm...");
+		log.info("scheduleConfirm 넘어온 정보 : " + date_idx + " / " + seat_grade);
+		HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		model.addAttribute("getSchedule", service.getSchedule_(date_idx));
+		model.addAttribute("seat_grade", seat_grade);
+		return "flight/scheduleConfirm";
+	}
+	
+	// 일반회원 : 일정 확인 후 결제버튼 클릭 시 결제 페이지 이동
+	@PostMapping("/kakaoPay")
+	public String kakaoPay(K_bookInfo bookInfo) {
+		log.info("페이지이동 : 카카오페이 결제하기...");
+		log.info("결제 및 예약 정보..." + bookInfo);
+		// 통신에 성공하면 결제 정보를 가지고 있는 QR코드 생성하는 URL로 redirect!
+		return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
+	}
+	
+	// 일반회원 : QR 결제 성공 시 
+	@GetMapping(value = "/kakaoPaySuccess")
+	public String kakaoPaySuccess(HttpServletRequest request, Model model,
+			@RequestParam("pg_token") String pg_token, @RequestParam("m_idx") String m_idx, 
+			@RequestParam("seat_name") String seat_name, @RequestParam("flight_name") String flight_name, 
+			@RequestParam("date_idx") String date_idx, @RequestParam("ticket_price") String ticket_price) {
+		log.info("페이지이동 : 카카오페이 결제성공...");
+		HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		log.info("kakaoPaySuccess get............................................");
+		log.info("kakaoPaySuccess pg_token : " + pg_token);
+		log.info("kakaoPaySuccess ticket_price : " + ticket_price);
+		log.info("kakaoPaySuccess seat_name : " + seat_name);
+		log.info("kakaoPaySuccess flight_name : " + flight_name);
+		log.info("kakaoPaySuccess date_idx : " + date_idx);
+		log.info("kakaoPaySuccess m_idx : " + m_idx);
+		// 결제 승인 요청 정보를 담기 위한 임시 객체 생성 및 변수 초기화
+		Random ran = new Random();
+		String ridx = "";
+		for(int i=0; i<5; i++) {
+			String num = String.valueOf(ran.nextInt(10));
+			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
+			ridx += (str+num);
+		}
+		KakaoPayDTO dto = new KakaoPayDTO();
+		dto.setReservation_idx("2022"+ridx);
+		dto.setTicket_price(ticket_price);
+		dto.setFlight_name(flight_name);
+		dto.setSeat_name(seat_name);
+		dto.setDate_idx(date_idx);
+		dto.setPg_token(pg_token);
+		dto.setM_idx(m_idx);
+		model.addAttribute("info", kakaopay.kakaoPayInfo(dto));
+		return "flight/kakaoPaySuccess";
+	}
+	
 	
 	// 일반회원 : 항공권 예약 조회 페이지 이동
 	@GetMapping("scheduleBookPage")
@@ -83,24 +155,6 @@ public class K_FlightController {
 		return "flight/scheduleBookPage";
 	}
 	
-	// 일반회원 : 일정 선택 후 확인 페이지 이동
-	@GetMapping("scheduleConfirm")
-	public String scheduleConfirm(@RequestParam("date_idx") int date_idx, 
-			@RequestParam("seat_grade") String seat_grade, HttpServletRequest request, Model model) {
-		HttpSession session = request.getSession(false);
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
-		}
-		log.info("페이지 이동 : scheduleConfirm...");
-		log.info("date_idx 값 : " + date_idx + " / seat_grade 값 : " + seat_grade);
-		model.addAttribute("getSchedule", service.getSchedule_(date_idx));
-		model.addAttribute("seat_grade", seat_grade);
-		return "flight/scheduleConfirm";
-	}
 	
 	// 일반회원 : 좌석 출력
 	@PostMapping(value = "getSeatList", 
@@ -142,47 +196,7 @@ public class K_FlightController {
 		return "flight/bookList";
 	}
     
-	// 해당 메소드 탈 경우 카카오페이 결제정보 요청 값
-    @PostMapping(value = "/kakaoPay")
-    public String kakaoPay(K_bookInfo bookInfo) {
-        log.info("카카오페이 결제하기 ...");
-        log.info("결제정보..." + bookInfo);
-    	// 통신에 성공하면 결제 정보를 가지고 있는 QR 코드 생성하는 URL로 redirect !
-    	return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
-    }
     
-    // 결제승인 요청 성공시
-    @GetMapping(value = "/kakaoPaySuccess")
-    public String kakaoPaySuccess(
-    		@RequestParam("pg_token") String pg_token, @RequestParam("ticket_price") String ticket_price, 
-    		@RequestParam("seat_name") String seat_name, @RequestParam("flight_name") String flight_name, 
-    		@RequestParam("date_idx") String date_idx, @RequestParam("m_idx") String m_idx, Model model) {
-        log.info("kakaoPaySuccess get............................................");
-        log.info("kakaoPaySuccess pg_token : " + pg_token);
-        log.info("kakaoPaySuccess ticket_price : " + ticket_price);
-        log.info("kakaoPaySuccess seat_name : " + seat_name);
-        log.info("kakaoPaySuccess flight_name : " + flight_name);
-        log.info("kakaoPaySuccess date_idx : " + date_idx);
-        log.info("kakaoPaySuccess m_idx : " + m_idx);
-        // 결제 승인 요청 정보를 담기 위한 임시 객체 생성 및 변수 초기화
-        Random ran = new Random();
-        String ridx = "";
-        for(int i=0; i<5; i++) {
-        	String num = String.valueOf(ran.nextInt(10));
-        	String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
-        	ridx += (str+num);
-        }
-        KakaoPayDTO dto = new KakaoPayDTO();
-        dto.setReservation_idx("2022"+ridx);
-        dto.setTicket_price(ticket_price);
-        dto.setFlight_name(flight_name);
-        dto.setSeat_name(seat_name);
-        dto.setDate_idx(date_idx);
-        dto.setPg_token(pg_token);
-        dto.setM_idx(m_idx);
-        model.addAttribute("info", kakaopay.kakaoPayInfo(dto));
-        return "flight/kakaoPaySuccess";
-    }
     
     // 항공권 예약 확정
     @PostMapping(value = "/insertReservation", 

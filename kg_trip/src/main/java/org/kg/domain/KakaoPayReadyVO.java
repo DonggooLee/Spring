@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class KakaoPayReadyVO {
 
 	private String tid, next_redirect_pc_url; 
-	private Date created_at;;
+	private Date created_at;
 	
 }

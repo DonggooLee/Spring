@@ -35,6 +35,9 @@ public interface K_FlightMapper {
 	// 일정조회 : 퍼스트 좌석
 	public List<K_getScheduleDTO> searchScheduleFir(K_inputScheduleDTO inputSch);
 	
+	// 항공편 일정선택
+	public K_getScheduleDTO getSchedule(int date_idx);
+	
 	// 좌석출력 : 이코노미
 	public K_getSeatVO getSeatEco(int date_idx);
 	
@@ -43,9 +46,6 @@ public interface K_FlightMapper {
 	
 	// 좌석출력 : 퍼스트
 	public K_getSeatVO getSeatFir(int date_idx);
-	
-	// 일반회원 일정선택
-	public K_getScheduleDTO getSchedule(int date_idx);
 	
 	// 예약하기
 	public int insertReservation(KakaoPayDTO info);

@@ -52,7 +52,7 @@
 				<div class="bottomHead">
 					<nav>
 						<ul class="main_menubar">
-							<li class="menu1"><a href='/flight/scheduleListPage'>항공권</a></li>
+							<li class="menu1"><a href='/flight/scheduleList'>항공권</a></li>
 							<li class="menu2"><a href='/flight/scheduleBookPage'>예약조회</a></li>
 							<li class="menu3"><a href='/flight/scheduleManagerPage'>항공권 관리</a></li>
 							<li class="menu4"><a href='/pakage/P_pakageMain'>패키지</a></li>

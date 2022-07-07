@@ -26,6 +26,9 @@ import lombok.extern.log4j.Log4j;
 @Service
 public class k_KakaopayPay {
 
+	@Setter(onMethod_ = @Autowired)
+	K_FlightMapper mapper;
+
 	private static final String HOST = "https://kapi.kakao.com";
 	
 	// 결제 정보 요청을 위한 객체
@@ -36,9 +39,6 @@ public class k_KakaopayPay {
 	
 	// 결제 취소를 위한 객체
 	private KakaoPayCancelVO kakaoPayCancelVO;
-	
-	@Setter(onMethod_ = @Autowired)
-	K_FlightMapper mapper;
 	
 	// 결제 정보 요청
 	public String kakaoPayReady(K_bookInfo bookInfo) {
@@ -69,8 +69,9 @@ public class k_KakaopayPay {
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
         
         try {
+        	// 통신에 성공하면 각 종 Response 값 들이 kakaoPayReadyVO 라는 객체에 담긴다 => 내가 필요한 값  : tid, getNext_redirect_pc_url, created_at
         	kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReadyVO.class);
-            log.info("kakaoPayReadyVO..." + kakaoPayReadyVO);
+        	log.info("kakaoPayReadyVO..." + kakaoPayReadyVO);
             return kakaoPayReadyVO.getNext_redirect_pc_url();
         } catch (RestClientException e) {
             e.printStackTrace();
