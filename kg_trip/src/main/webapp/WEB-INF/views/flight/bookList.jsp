@@ -6,10 +6,10 @@
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
 <section class="cont2">
+
 	<div class="all" style="display: flex;">
 		<jsp:include page="/WEB-INF/views/include/publicMenuBar.jsp"></jsp:include>
-		<div class="content_section"
-			style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
+		<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
 			<div class="content" style="margin: 10px; background-color: white;">
 				<h2>${loginPublicInfo.m_name}님의 항공권 목록</h2>
 				<div style="border: 1px solid black; padding: 10px; width: 60%;">
@@ -24,7 +24,8 @@
 							<th>출발시각</th>
 							<th>도착시각</th>
 							<th>좌석번호</th>
-							<th>일정변경 / 환불</th>
+							<th>예약상태</th>
+							<th>환불</th>
 						</tr>
 						<c:choose>
 							<c:when test="${not empty airBookList}">
@@ -39,11 +40,8 @@
 										<td>${alist.depart_time}</td>
 										<td>${alist.arrive_time}</td>
 										<td>${alist.seat_name}</td>
-										<td>
-											<a class="changeBtn" data-role="${alist.reservation_idx}">일정변경</a>
-											/
-											<a class="refundBtn" data-role="${alist.reservation_idx}">환불</a>
-										</td>
+										<td>${alist.completion}</td>
+										<td><a class="refundBtn" data-role="${alist.reservation_idx}">환불</a></td>
 									</tr>
 								</c:forEach>
 							</c:when>
@@ -53,40 +51,45 @@
 						</c:choose>
 					</table>
 				</div>
+				<!-- 항공권 환불을 위한 임시 저장소 -->
+				<form action="kakaoPayCancel" method="post" id="refundForm"></form>
+				<!-- 시간 값 수정을 위한 임시 저장소 -->
+				<form action="#" id="tempForm">
+					<input type="hidden" name="start_date" value="${alist.start_date}">
+				</form>
 			</div>
 		</div>
 	</div>
+	
 </section>
 
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
 
-	console.log("예약리스트 페이지 로그 테스트...")
-
 	$(function() {
-		 
-		// 일정변경 버튼 클릭 이벤트
-		$(".changeBtn").on("click", function() {
-			var reservation_idx = $(this).attr('data-role')
-			alert("일정변경 버튼 클릭 이벤트 : " + reservation_idx)
-		}) // end : 일정변경 버튼 클릭 이벤트
 		
+		// 시간값 변경을 위한 객체 생성
+		var start_date = $("#tempForm").find("input[name='start_date']").val();
+		console.log(start_date)
+		 
 		// 환불 버튼 클릭 이벤트
 		$(".refundBtn").on("click", function() {
 			var reservation_idx = $(this).attr('data-role')
 			if(confirm("정말 환불하시겠습니까?")){
-				// 확인 클릭 시 : 항공권 환불
-				refundReservation(reservation_idx, function(result) {
-					if(result == "success"){
-						alert("환불이 정상적으로 처리되었습니다.")
-						location.href = "${pageContext.request.contextPath}/flight/bookList"
-					}else{
-						alert("환불에 실패했습니다.")
-						return;
+				$.ajax({
+					type : 'get',
+					url : '/flightManager/myReservation/' + reservation_idx,
+					success : function(info) {
+						console.log( "비동기 통신 결과 : "  + info)
+						var str = '';
+						str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
+						str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";
+						str += "<input type='hidden' name='tid' value=" + info.tid + ">";
+ 						$("#refundForm").html(str);		
+						$("#refundForm").submit();
 					}
-				}) // end : 항공권 환불
+				})
 			}else{
-				// 취소 클릭 시
 				return;
 			}
 		}) // end : 환불 버튼 클릭 이벤트

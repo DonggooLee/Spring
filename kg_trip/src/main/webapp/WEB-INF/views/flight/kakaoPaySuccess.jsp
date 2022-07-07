@@ -6,13 +6,13 @@
 	
 	<section class="cont">
 	
-		<h1>카카오페이 결제성공 페이지! (예약완료)</h1>
+		<h1>예약이 완료되었습니다</h1>
 		
 		<br>
 		
 		<div>
 		
-			<h2 id="bookIdx">예약번호 : ${reservation_idx}</h2>
+			<h2 id="bookIdx"></h2>
 			
 			<br>
 			
@@ -30,11 +30,24 @@
 			<button id="refundBtn">항공권 환불</button>
 		</div>
 		
-		<br><hr><br>
+		<br>
 		
+		<!-- 카카오 페이 결제 성공 시 예약확정을 위한 객체 -->
 		<form id="Info">
-			<!-- 페이지 로드되면 예약번호를 통한 예약내역 조회를 위함 -->
-			<input type="hidden" name="reservation_idx" value="${reservation_idx}">
+			<input type="hidden" name="reservation_idx" value="${info.reservation_idx}">
+			<input type="hidden" name="ticket_price" value="${info.ticket_price}">
+			<input type="hidden" name="seat_name" value="${info.seat_name}">
+			<input type="hidden" name="flight_name" value="${info.flight_name}">
+			<input type="hidden" name="date_idx" value="${info.date_idx}">
+			<input type="hidden" name="m_idx" value="${info.m_idx}">
+			<input type="hidden" name="tid" value="${info.tid}">
+		</form>
+		
+		<!-- 결제취소(환불)를 위한 객체 -->
+		<form action="kakaoPayCancel" method="post" id="reservationCancelForm">
+			<input type="hidden" name="reservation_idx" value="${info.reservation_idx}">
+			<input type="hidden" name="ticket_price" value="${info.ticket_price}">
+			<input type="hidden" name="tid" value="${info.tid}">
 		</form>
 		
 	</section>
@@ -49,33 +62,57 @@
 	
 	$(function() {
 		
-		var reservation_idx = $("#Info").find("input[name='reservation_idx']").val();
-		console.log("예약번호 : " + reservation_idx)
+		// 예약을 위한 정보 저장
+		var reservation_idx= $("#Info").find("input[name='reservation_idx']").val();
+		var ticket_price= $("#Info").find("input[name='ticket_price']").val();
+		var seat_name= $("#Info").find("input[name='seat_name']").val();
+		var flight_name= $("#Info").find("input[name='flight_name']").val();
+		var date_idx= $("#Info").find("input[name='date_idx']").val();
+		var m_idx= $("#Info").find("input[name='m_idx']").val();
+		var tid= $("#Info").find("input[name='tid']").val();
 		
+		console.log(ticket_price+"/"+seat_name+"/"+flight_name+"/"+date_idx+"/"+m_idx+"/"+tid+"/"+reservation_idx)
+		
+		var param = {ticket_price:ticket_price, seat_name:seat_name, flight_name:flight_name,
+			date_idx:date_idx, m_idx:m_idx, tid:tid, reservation_idx:reservation_idx}
+		
+		// 항공권 예약확정
 		$.ajax({
-			type : 'get',
-			url : '/flightManager/myReservation/' + reservation_idx,
-			success : function(info) {
-				var str = '';
-				// 정보가 있을 경우
-				if(info != ""){
-					str += "<tr><th colspan='2'>예약 정보</th></tr>";
-					str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
-					str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
-					str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
-					str += "<tr><th>비행일자</th><td>" + displayTime(info.start_date) + "</td></tr>";
-					str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
-					str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
-					str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
-					str += "<tr><th>출발공항</th><td>" + info.ap_name_d + "</td></tr>";
-					str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
-					str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
-					$(".bookInfo").html(str)
-				}else{
-					$(".bookInfo").html("<h2>정보가 존재하지 않습니다.</h2>")
-				}
+			type : 'post',
+			url : '/flight/insertReservation',
+			data : JSON.stringify(param), 
+			contentType : 'application/json; charset=utf-8',
+			success : function(result) {
+				console.log("예약결과 : " + result);
+				alert("항공권 예약에 성공했습니다!")
+				// 항공권 예약확정 시 예약번호를 통한 예약정보 출력
+				$.ajax({
+					type : 'get',
+					url : '/flightManager/myReservation/' + reservation_idx,
+					success : function(info) {
+						var str = '';
+						if(info != ""){
+							str += "<tr><th colspan='2'>예약 정보</th></tr>";
+							str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
+							str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
+							str += "<tr><th>결제고유번호</th><td>" + tid + "</td></tr>";
+							str += "<tr><th>결제가격</th><td>" + ticket_price + "</td></tr>";
+							str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
+							str += "<tr><th>비행일자</th><td>" + displayTime(info.start_date) + "</td></tr>";
+							str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
+							str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
+							str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
+							str += "<tr><th>출발공항</th><td>" + info.ap_name_d + "</td></tr>";
+							str += "<tr><th>도착공항</th><td>" + info.ap_name_a + "</td></tr>";
+							str += "<tr><th>좌석번호</th><td>" + info.seat_name + "</td></tr>";
+							$(".bookInfo").html(str)
+						}else{
+							$(".bookInfo").html("<h2>정보가 존재하지 않습니다.</h2>")
+						}
+					}
+				}) // end : 항공권 예약확정 시 예약번호를 통한 예약정보 출력
 			}
-		}) // end : ajax()
+		}) // end : 항공권 예약확정
 		
 		// 메인페이지 버튼 클릭 이벤트
 		$("#mainBtn").on("click", function() {
@@ -85,20 +122,8 @@
 		// 환불하기 버튼 클릭 이벤트
 		$("#refundBtn").on("click", function() {
 			if(confirm("정말 환불하시겠습니까?")){
-				// 확인 클릭 시 : 항공권 환불
-				/* refundReservation(reservation_idx, function(result) {
-					if(result == "success"){
-						alert("환불이 정상적으로 완료됐습니다.")
-						location.href = "/KingTrip/main";
-					}else{
-						alert("삭제에 실패 하였습니다.")
-						return;
-					}
-					${pageContext.request.contextPath}/flight
-				}) */
-				alert("환불 버튼 클릭 이벤트")
+				$("#reservationCancelForm").submit();				
 			}else{
-				// 취소 클릭 시
 				return;
 			}
 		}) // end : 환불하기 버튼 클릭 이벤트

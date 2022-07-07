@@ -101,9 +101,9 @@
 	<!-- 예약하기 -->
 	<insert id="insertReservation">
 		INSERT INTO 
-			k_reservation_tbl(reservation_idx, date_idx, flight_name, m_idx, ticket_date, ticket_price, seat_name)
+			k_reservation_tbl(reservation_idx, date_idx, flight_name, m_idx, ticket_date, ticket_price, seat_name, tid, completion)
 		VALUES
-			(#{reservation_idx}, #{date_idx}, #{flight_name}, #{m_idx}, sysdate, #{ticket_price}, #{seat_name})
+			(#{reservation_idx}, #{date_idx}, #{flight_name}, #{m_idx}, sysdate, #{ticket_price}, #{seat_name}, #{tid}, '예약완료')
 	</insert>
 	
 	<!-- 예약 좌석 리스트 -->
@@ -117,7 +117,7 @@
 	<select id="getResrvationInfo" resultType="org.kg.domain.K_getResrvationInfoVO">
 		SELECT 
 			p.m_name, p.m_gender, f.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a,
-			r.reservation_idx, r.seat_name
+			r.reservation_idx, r.seat_name, r.tid, r.ticket_price, r.completion
 		FROM k_reservation_tbl r
 			INNER JOIN b_publicmember_tbl p ON r.m_idx = p.m_idx
 			INNER JOIN k_flight_tbl f ON r.flight_name = f.flight_name
@@ -133,15 +133,15 @@
 	</select>
 	
 	<!-- 항공권 환불 -->
-	<delete id="refundReservation">
-		DELETE FROM k_reservation_tbl WHERE reservation_idx = #{reservation_idx}
-	</delete>
+	<update id="refundReservation">
+		UPDATE k_reservation_tbl SET completion = '환불완료' where reservation_idx = #{reservation_idx}
+	</update>
 	
 	<!-- 회원별 항공권 조회 -->
 	<select id="getBookingList" resultType="org.kg.domain.K_getResrvationInfoVO">
 		SELECT 
 			p.m_name, p.m_gender, f.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a,
-			r.reservation_idx, r.seat_name
+			r.reservation_idx, r.seat_name, r.completion
 		FROM k_reservation_tbl r
 			INNER JOIN b_publicmember_tbl p ON r.m_idx = p.m_idx
 			INNER JOIN k_flight_tbl f ON r.flight_name = f.flight_name

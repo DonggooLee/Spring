@@ -78,18 +78,9 @@ public class K_FlightRestController {
 	// 일반회원 : 항공권 예약 조회
 	@GetMapping(value = "myReservation/{reservation_idx}", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<K_getResrvationInfoVO> myReservation(@PathVariable("reservation_idx") String reservation_idx) {
-		log.info("항공권 예약조회 테스트 !.....");
+		log.info("항공권 예약조회...");
 		log.info("reservation_idx..." + reservation_idx);
 		return new ResponseEntity<>(service.getResrvationInfo_(reservation_idx), HttpStatus.OK);
-	}
-	
-	// 일반회원 : 항공권 환불
-	@DeleteMapping(value = "{reservation_idx}", produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> refundReservation(@PathVariable("reservation_idx") String reservation_idx){
-		log.info("환불할 항공권 예약 번호: " + reservation_idx);
-		return service.refundReservation_(reservation_idx) == 1
-				? new ResponseEntity<>("success", HttpStatus.OK)
-						: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 }

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoPayDTO {
+public class KakaoPayCancelVO {
+
+	private String aid, cid, tid, status, partner_order_id, partner_user_id, payment_method_type;
 	
-	private String pg_token, ticket_price, seat_name, flight_name, date_idx, m_idx, reservation_idx, tid;
- 
 }

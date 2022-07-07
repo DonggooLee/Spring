@@ -14,7 +14,7 @@ import org.kg.domain.KakaoPayDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_getInfoDTO;
 import org.kg.service.K_FlightService;
-import org.kg.service.KakaopayPay;
+import org.kg.service.k_KakaopayPay;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class K_FlightController {
 	
-	private KakaopayPay kakaopay;
+	private k_KakaopayPay kakaopay;
 	private K_FlightService service;
 
 	// 기업회원 : 비행기 스케줄 관리 페이지 이동
@@ -146,8 +146,8 @@ public class K_FlightController {
     @PostMapping(value = "/kakaoPay")
     public String kakaoPay(K_bookInfo bookInfo) {
         log.info("카카오페이 결제하기 ...");
-        log.info("예약정보..." + bookInfo);
-    	// 통신에 성공하면 결제 정보를 가지고 있는 QR 코드 생성하는 URL로 redirect 한다
+        log.info("결제정보..." + bookInfo);
+    	// 통신에 성공하면 결제 정보를 가지고 있는 QR 코드 생성하는 URL로 redirect !
     	return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
     }
     
@@ -165,31 +165,52 @@ public class K_FlightController {
         log.info("kakaoPaySuccess date_idx : " + date_idx);
         log.info("kakaoPaySuccess m_idx : " + m_idx);
         // 결제 승인 요청 정보를 담기 위한 임시 객체 생성 및 변수 초기화
-        KakaoPayDTO dto = new KakaoPayDTO();
-        dto.setPg_token(pg_token);
-        dto.setTicket_price(ticket_price);
-        dto.setSeat_name(seat_name);
-        dto.setFlight_name(flight_name);
-        dto.setDate_idx(date_idx);
-        dto.setM_idx(m_idx);
         Random ran = new Random();
-		String ridx = "";
-		for(int i=0; i<5; i++) {
-			String num = String.valueOf(ran.nextInt(10));
-			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
-			ridx += (str+num);
-		}
-		dto.setReservation_idx("2022"+ridx);
-		// if 예약이 완료 되냐 안되냐에 따라서 값을 다르게 처리하기
-        int result = service.insertReservation_(dto);
-        if(result==1) {
-        	model.addAttribute("reservation_idx", dto.getReservation_idx());
-        	model.addAttribute("info", kakaopay.kakaopayInfo(dto));
-        }else {
-        	model.addAttribute("reservation_idx", "예약실패!");
-        	model.addAttribute("info", kakaopay.kakaopayInfo(dto));
+        String ridx = "";
+        for(int i=0; i<5; i++) {
+        	String num = String.valueOf(ran.nextInt(10));
+        	String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
+        	ridx += (str+num);
         }
+        KakaoPayDTO dto = new KakaoPayDTO();
+        dto.setReservation_idx("2022"+ridx);
+        dto.setTicket_price(ticket_price);
+        dto.setFlight_name(flight_name);
+        dto.setSeat_name(seat_name);
+        dto.setDate_idx(date_idx);
+        dto.setPg_token(pg_token);
+        dto.setM_idx(m_idx);
+        model.addAttribute("info", kakaopay.kakaoPayInfo(dto));
         return "flight/kakaoPaySuccess";
     }
-	
+    
+    // 항공권 예약 확정
+    @PostMapping(value = "/insertReservation", 
+    		consumes = "application/json", 
+    		produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> insertReservation(@RequestBody KakaoPayDTO bookInfo) {
+        log.info("항공권 예약 확정하기...");
+        log.info("예약정보..." + bookInfo);
+        int result = service.insertReservation_(bookInfo);
+        return result == 1?
+        		new ResponseEntity<>("success", HttpStatus.OK) :
+ 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @PostMapping(value = "/kakaoPayCancel")
+    public String kakaoPayCancel(K_bookInfo bookInfo, HttpServletRequest request, Model model) {
+    	HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+        log.info("결제취소(환불)...");
+        log.info("환불정보..." + bookInfo);
+        model.addAttribute("refundInfo", kakaopay.kakaoPayCancel(bookInfo));
+        return "flight/bookList"; 
+    }
+    
 }
