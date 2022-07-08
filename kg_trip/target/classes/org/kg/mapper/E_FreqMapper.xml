@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.kg.mapper.E_FreqMapper">
+
+	<select id="getFreqList" resultType="org.kg.domain.E_FreqVO">
+		select * from e_freq_tbl
+	</select>
+   
+   <!-- 공지글 전체 보기 -->
+   <select id="getFreqListWithPaging" resultType="org.kg.domain.E_FreqVO">
+     <![CDATA[
+		select * from (
+      		select /*+index_desc(tbl_board pk_board) */
+          	rownum rn, fq_num, m_idx, fq_cat, fq_title, fq_content, fq_regDate, fq_updDate, fq_file, fq_uuid, fq_uploadPath 
+      		from ( select * from e_freq_tbl
+      			where
+	  ]]>
+	      		<if test="searchType == 'title'">fq_title like '%'||#{searchName}||'%'</if>
+	      		<if test="searchType == 'content'">fq_content like '%'||#{searchName}||'%'</if>
+	      		<if test="searchType == 'ticont'">
+	      			fq_title like '%'||#{searchName}||'%' or fq_content like '%'||#{searchName}||'%'
+	      		</if>
+	      		<if test="searchType == null or searchType == '' ">1=1</if>
+	  <![CDATA[
+	     		order by fq_num desc)
+		     	where rownum <= #{nowPage} * #{cntPerPage}  )
+					 where rn > (#{nowPage}-1) * #{cntPerPage} 
+      ]]>
+   </select>
+   
+   <!-- count_전체 개수 갖고오기 -->
+   <select id="getFreqTotalCount" resultType="int">
+      select count(*) as total from e_freq_tbl where
+      	<if test="searchType == 'title'">fq_title like '%'||#{searchName}||'%'</if>
+   		<if test="searchType == 'content'">fq_content like '%'||#{searchName}||'%'</if>
+   		<if test="searchType == 'ticont'">
+   			fq_title like '%'||#{searchName}||'%' or fq_content like '%'||#{searchName}||'%'
+   		</if>
+   		<if test="searchType == null or searchType == '' ">1=1</if>
+   </select>
+
+   <!-- 자주 찾는 질문글 view -->
+   <select id="view" resultType="org.kg.domain.E_FreqVO">
+      <![CDATA[   
+      select * from e_freq_tbl where fq_num = #{fq_num}
+      ]]>
+   </select>
+   <!-- select는 결과타입이 여러 종류일 수 있어서.. resultType 명시해줘야  -->
+
+   <!-- 자주 찾는 질문글 추가 -->
+   <insert id="insert">
+      insert into e_freq_tbl (fq_num, m_idx, fq_cat, fq_title, fq_content, fq_file, fq_regDate) 
+      values (seq_e_freq_tbl.nextval, #{m_idx}, #{fq_cat}, #{fq_title}, #{fq_content}, #{fq_file,jdbcType=VARCHAR}, sysdate)
+   </insert>
+   
+   <!-- 자주 찾는 질문글 삭제 -->
+   <delete id="remove">
+      DELETE FROM e_freq_tbl WHERE fq_num = #{fq_num}
+   </delete>
+
+   <!-- 자주 찾는 질문글 수정 -->   
+   <update id="update">
+      update e_freq_tbl set fq_title = #{fq_title}, m_idx = #{m_idx}, fq_cat = #{fq_cat}, 
+      fq_content = #{fq_content}, fq_file = #{fq_file,jdbcType=VARCHAR}, fq_updDate = sysdate
+         where fq_num = #{fq_num}
+   </update>   
+
+	<!-- 파일 삭제 업데이트 -->
+   <update id="makeFileNullUpdate">
+   	update e_freq_tbl set fq_file = '' , fq_updDate = sysdate where fq_num = #{fq_num}
+   </update>
+
+</mapper>  

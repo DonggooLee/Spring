@@ -76,7 +76,8 @@
 		<br><hr><br>
 		
 		<h1>좌석 배정</h1><br>
-		<div class="choiceSeat" style="border: 1px solid black; width: 730px; height: 420px; padding: 10px; text-align: center;"></div>
+		<div class="choiceSeat"></div>
+		
 		
 		<br>
 		
@@ -104,7 +105,7 @@
 <style>
 
 	#BookSeat{
-		background-color: yellow;
+		background-color: lightgray;
 		/* 포인터 클릭 이벤트 막기 */
 		pointer-events: none;
 	}
@@ -166,15 +167,21 @@
 					var es = seat.economyseat;
 					var split_es = es.split(',');
 					var str = '';
+					str += "<div style='border: 1px solid black; padding: 10px; text-align: center; width: 680px;'>"
 					for(var i=0; i<split_es.length; i++){
 						for(var j=0; j<seatList.length; j++) {
-							if(split_es[i] == seatList[j].seat_name ) {
-								str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_es[i] + "</button>"
-								i++;
+							if(split_es[i] == seatList[j].seat_name) {
+								if(seatList[j].completion != "환불완료"){
+									str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_es[i] + "</button>"
+									i++;
+								}
 							}
 						}
-						str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx="+split_es[i]+">" + split_es[i] + "</button>"
+						if(split_es[i] != undefined){
+							str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx=" + split_es[i] + ">" + split_es[i] + "</button>"
+						}
 					}
+					str += "</div>"
 					div.html(str);
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
@@ -214,15 +221,21 @@
 					var bs = seat.businessseat;
 					var split_bs = bs.split(',');
 					var str = '';
+					str += "<div style='border: 1px solid black; padding: 10px; text-align: center; width: 680px;'>"
            			for(var i=0; i<split_bs.length; i++){
 						for(var j=0; j<seatList.length; j++) {
-							if(split_bs[i] == seatList[j].seat_name ) {
-								str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_bs[i] + "</button>"
-								i++;
+							if(split_bs[i] == seatList[j].seat_name) {
+								if(seatList[j].completion != "환불완료"){
+									str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_bs[i] + "</button>"
+									i++;
+								}
 							}
 						}
-						str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx="+split_bs[i]+">" + split_bs[i] + "</button>"
+						if(split_bs[i] != undefined){
+							str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx=" + split_bs[i] + ">" + split_bs[i] + "</button>"
+						}
 					}
+					str += "</div>"
 					div.html(str);
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
@@ -262,21 +275,28 @@
 					var fs = seat.firstseat;
 					var split_fs = fs.split(',');
 					var str = '';
+					str += "<div style='border: 1px solid black; padding: 10px; text-align: center; width: 680px;'>"
            			for(var i=0; i<split_fs.length; i++){
 						for(var j=0; j<seatList.length; j++) {
-							if(split_fs[i] == seatList[j].seat_name ) {
-								str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_fs[i] + "</button>"
-								i++;
+							if(split_fs[i] == seatList[j].seat_name) {
+								if(seatList[j].completion != "환불완료"){
+									str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_fs[i] + "</button>"
+									i++;
+								}
 							}
 						}
-						str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx="+split_fs[i]+">" + split_fs[i] + "</button>"
+						if(split_fs[i] != undefined){
+							str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx=" + split_fs[i] + ">" + split_fs[i] + "</button>"
+						}
 					}
+					str += "</div>"
 					div.html(str);
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
 						var seat_fs = $(this).data("idx");
 						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
+							var rstr = '';
 							alert("선택한 좌석 번호 : " + seat_fs);
 							// 예약을 위한 정보 생성
 							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";

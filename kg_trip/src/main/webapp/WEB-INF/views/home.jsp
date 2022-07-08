@@ -12,7 +12,7 @@
 		</div>
 		
 		<div style="height: 500px; ">
-			<img src="/resources/images/main2.jpg" style="width: 100%; height: 100%;">
+			<img src="/img/main.jpg" style="width: 100%;">
 		</div>
 		
 		<br><br>

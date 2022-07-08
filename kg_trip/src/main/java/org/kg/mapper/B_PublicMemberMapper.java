@@ -13,5 +13,7 @@ public interface B_PublicMemberMapper {
 	public int checkEmailPublic(String m_email);
 	public int checkPhonePublic(String m_phone);
 	public B_PublicMemberVO getPmember(@Param("m_id") String m_id, @Param("m_pw") String m_pw);
+	public int deletePublic(String m_idx);
+	public int updatePublic(String m_idx);
 	
 }

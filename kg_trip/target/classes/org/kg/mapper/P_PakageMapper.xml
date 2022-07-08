@@ -55,16 +55,19 @@
 
 	<!-- Read -->
 	<select id="read" resultType="org.kg.domain.P_Pakage_info_VO">
-		select * from p_pakage_info_tbl a inner join p_pakage_list_tbl b
-		on a.p_num = b.p_num where a.p_num = #{p_num}
+		select * from p_pakage_info_tbl a 
+		inner join p_pakage_list_tbl b on a.p_num = b.p_num
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on b.p_num = c.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
+		 where a.p_num = #{p_num}
 	</select>
   	
   	<!-- 예약 -->
   	<insert id="insert">
   		insert into p_pakage_reser_tbl(p_rnum, p_num, m_idx, p_rdate, p_name, p_period,
-  		m_id, m_name, m_phone, p_rpeople, p_totalfee)
+  		m_id, m_name, m_phone, p_rpeople, p_totalfee, p_tid, p_completion)
   		values(#{p_rnum}, #{p_num}, #{m_idx}, sysdate, #{p_name}, #{p_period},
-  		#{m_id}, #{m_name}, #{m_phone}, #{p_rpeople}, #{p_totalfee})
+  		#{m_id}, #{m_name}, #{m_phone}, #{p_rpeople}, #{p_totalfee}, 'p_tid','예약완료')
   	</insert>
   	
   	<!-- 예약용 read -->
@@ -213,8 +216,30 @@
   	<!-- 위시리스트 추가 -->
   	<insert id="wishinsert">
   		insert into p_wish_tbl(w_num, m_idx, p_num)
-  		values(p_wish_tbl_seq.NEXTVAL, #{m_idx}, #{p_num})
+  		values(#{w_num}, #{m_idx}, #{p_num})
   	</insert>
+  	
+  	<!-- 위시리스트 삭제 -->
+  	<delete id="wishdelete">
+  		delete from p_wish_tbl
+  		where p_num = #{p_num} and m_idx = #{m_idx}
+  	</delete>
+	
+	<!-- 위시리스트 조회 -->
+	<select id="getheart" resultType="org.kg.domain.P_Pakage_info_VO">
+		select * from p_wish_tbl
+		where m_idx = #{m_idx} and p_num = #{p_num}
+	</select>
+	
+	<!-- 위시리스트 메인 조회 -->
+	<select id="getheartMain" resultType="org.kg.domain.P_Pakage_info_VO">
+		select * from p_wish_tbl
+		where m_idx = #{m_idx}
+	</select>
+	
+	
+	
+	
 	
 	
 	
@@ -246,21 +271,35 @@
 	</select>
 	
 	<!-- 개인 예약 취소 -->
- 	<delete id="mdeletea">
-      delete from p_pakage_reser_tbl where p_rnum = #{p_rnum}
-   	</delete>
+ 	<update id="mdeletea">
+      update p_pakage_reser_tbl
+	  set p_completion = '환불완료' where p_rnum = #{p_rnum}
+   	</update>
 	
 	<!-- 개인 예약 취소 update -->
   	<update id="mupdatea">
 		update p_pakage_list_tbl set p_people = #{p_people}, p_available = #{p_available} where p_num = #{p_num}  	
   	</update>
 	
-	
 	<!-- 후기 등록 -->
   	<insert id="rinsert">
   		insert into p_review_tbl(p_renum, p_rnum, p_num, m_idx, m_id, p_reviewdate, p_reviewcontent, p_reviewimg, p_star)
   		values(p_review_tbl_seq.NEXTVAL, #{p_rnum}, #{p_num}, #{m_idx}, #{m_id}, sysdate, #{p_reviewcontent}, #{p_reviewimg},#{p_star})
   	</insert>
+	
+	<!-- 개인 위시리스트 조회 -->
+	<select id="getwishlist" resultType="org.kg.domain.P_Pakage_info_VO">
+		select * from p_wish_tbl a
+		inner join p_pakage_info_tbl b on a.p_num = b.p_num 	
+		inner join p_pakage_list_tbl c on b.p_num = c.p_num
+		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) d on c.p_num = d.p_num
+		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)e on d.p_num = e.p_num
+		where a.m_idx = #{m_idx} order by b.p_period asc
+	</select>
+	
+	
+	
+	
 	
 	
 	

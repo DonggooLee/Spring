@@ -7,18 +7,31 @@
 	<section class="cont">
 	
 		<div class="searchBox">
+		
 			<h1>예약 조회</h1><br>
-			<input type="text" name="checkBook" value="20220703P456789"><br><br>
+			
+			<input type="text" name="checkBook">
+			
+			<br><br>
+			
 			<button id="mainBtn">메인페이지</button>
 			&nbsp;
 			<button id="bookBtn">예약조회</button>
+			
 		</div>
 		
 		<br><br>
 		
 		<div><table class="bookInfo"></table></div>
+		
 		<br>
+		
 		<div class="refund"></div>
+		
+		<br>
+		
+		<!-- 항공권 환불을 위한 임시 저장소 -->
+		<form action="kakaoPayCancel" method="post" id="refundForm"></form>
 			
 	</section>
 	
@@ -61,22 +74,24 @@
 							// 환불하기 버튼 클릭 이벤트
 							$("#refundBtn").on("click", function() {
 								if(confirm("정말 환불하시겠습니까?")){
-									// 확인 클릭 시 : 항공권 환불
-									refundReservation(reservation_idx, function(result) {
-										if(result == "success"){
-											alert("환불이 정상적으로 완료됐습니다.")
-											location.href = "/KingTrip/main";
-										}else{
-											alert("삭제에 실패 하였습니다.")
-											return;
+									$.ajax({
+										type : 'get',
+										url : '/flightManager/myReservation/' + reservation_idx,
+										success : function(info) {
+											console.log("비동기 통신 결과 : " + info)
+											var str = '';
+											str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
+											str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";
+											str += "<input type='hidden' name='tid' value=" + info.tid + ">";
+					 						$("#refundForm").html(str);		
+											$("#refundForm").submit();
 										}
 									})
 								}else{
-									// 취소 클릭 시
 									return;
 								}
 							}) // end : 환불하기 버튼 클릭 이벤트
-						}
+						} // end : else 예외처리
 					}
 				}) // end : ajax()
 			}

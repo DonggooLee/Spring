@@ -23,4 +23,5 @@ public class E_NoticeVO {
 	private boolean image;
 	
 	
+	
 }

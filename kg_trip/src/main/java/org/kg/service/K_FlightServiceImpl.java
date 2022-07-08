@@ -13,7 +13,6 @@ import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
-import org.kg.domain.KakaoPayDTO;
 import org.kg.mapper.K_FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,18 +87,18 @@ public class K_FlightServiceImpl implements K_FlightService{
 		return mapper.getSeatFir(date_idx);
 	}
 
-	// 예약하기
-	@Override
-	public int insertReservation_(KakaoPayDTO info) {
-		return mapper.insertReservation(info);
-	}
-
 	// 예약 좌석 조회
 	@Override
 	public List<K_checkSeatVO> getReservationSeatList_(K_getInfoDTO info) {
 		return mapper.getReservationSeatList(info);
 	}
-
+	
+	// 예약하기
+	@Override
+	public int insertReservation_(K_bookInfo info) {
+		return mapper.insertReservation(info);
+	}
+	
 	// 예약조회
 	@Override
 	public K_getResrvationInfoVO getResrvationInfo_(String reservation_idx) {

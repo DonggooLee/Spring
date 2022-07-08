@@ -53,14 +53,13 @@
 					<nav>
 						<ul class="main_menubar">
 							<li class="menu1"><a href='/flight/scheduleList'>항공권</a></li>
-							<li class="menu2"><a href='/flight/scheduleBookPage'>예약조회</a></li>
-							<li class="menu3"><a href='/flight/scheduleManagerPage'>항공권 관리</a></li>
+							<li class="menu2"><a href='/flight/scheduleBook'>예약조회</a></li>
 							<li class="menu4"><a href='/pakage/P_pakageMain'>패키지</a></li>
-							<li class="menu5"><a href="/notice/list">고객센터</a>
+							<li class="menu5"><a href="/notice/ntList">고객센터</a>
 								<ul class="menu5_submenu">
-									<li>공지사항</li>
-									<li>자주찾는질문</li>
-									<li>1:1문의</li>
+									<li><a href='/notice/ntList'>공지사항</a></li>
+									<li><a href='/freq/list'>자주찾는질문</a></li>
+									<li><a href='/obo/list'>일대일문의</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -68,8 +67,7 @@
 				</div>
 			</div>
 		</header>
-		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				$("#loginBtn").click(function() {

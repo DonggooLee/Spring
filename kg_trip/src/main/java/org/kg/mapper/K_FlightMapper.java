@@ -13,7 +13,6 @@ import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
-import org.kg.domain.KakaoPayDTO;
 
 public interface K_FlightMapper {
 	
@@ -47,11 +46,11 @@ public interface K_FlightMapper {
 	// 좌석출력 : 퍼스트
 	public K_getSeatVO getSeatFir(int date_idx);
 	
-	// 예약하기
-	public int insertReservation(KakaoPayDTO info);
-	
 	// 예약 좌석 조회
 	public List<K_checkSeatVO> getReservationSeatList(K_getInfoDTO info);
+	
+	// 예약하기
+	public int insertReservation(K_bookInfo info);
 	
 	// 예약조회
 	public K_getResrvationInfoVO getResrvationInfo(String reservation_idx);

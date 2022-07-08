@@ -98,14 +98,6 @@
 		WHERE s.date_idx = #{date_idx}
 	</select>
 	
-	<!-- 예약하기 -->
-	<insert id="insertReservation">
-		INSERT INTO 
-			k_reservation_tbl(reservation_idx, date_idx, flight_name, m_idx, ticket_date, ticket_price, seat_name, tid, completion)
-		VALUES
-			(#{reservation_idx}, #{date_idx}, #{flight_name}, #{m_idx}, sysdate, #{ticket_price}, #{seat_name}, #{tid}, '예약완료')
-	</insert>
-	
 	<!-- 예약 좌석 리스트 -->
 	<select id="getReservationSeatList" resultType="org.kg.domain.K_checkSeatVO">
 		SELECT * FROM k_reservation_tbl r 
@@ -126,6 +118,14 @@
 			INNER JOIN k_airport_tbl a ON s.ap_idx_a = a.ap_idx
 		WHERE r.reservation_idx = #{reservation_idx}
 	</select>
+	
+	<!-- 예약하기 -->
+	<insert id="insertReservation">
+		INSERT INTO 
+			k_reservation_tbl(reservation_idx, date_idx, flight_name, m_idx, ticket_date, ticket_price, seat_name, tid, completion)
+		VALUES
+			(#{reservation_idx}, #{date_idx}, #{flight_name}, #{m_idx}, sysdate, #{ticket_price}, #{seat_name}, #{tid}, '예약완료')
+	</insert>
 	
 	<!-- 예약번호 조회 -->
 	<select id="getReservationIdx" resultType="org.kg.domain.K_getReservationIdxDTO">

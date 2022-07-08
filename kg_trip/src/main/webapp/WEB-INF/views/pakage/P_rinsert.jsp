@@ -51,7 +51,7 @@
 								후기 내용
 							</td>
 							<td>
-								<input type="text" name="p_reviewcontent">
+								<input type="text" name="p_reviewcontent" style="width:500px; height:200px;">
 							</td>
 						</tr>
 						<tr>

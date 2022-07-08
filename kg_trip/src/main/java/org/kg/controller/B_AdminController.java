@@ -1,5 +1,9 @@
 package org.kg.controller;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,7 +14,10 @@ import org.kg.service.B_publicMemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -90,23 +97,104 @@ public class B_AdminController {
 	}
 	
 	// 계정관리
-		@GetMapping("/adminaccount")
-		public String trew(HttpServletRequest request, Model model) {
+	@GetMapping("/adminaccount")
+	public String trew(HttpServletRequest request, Model model) {
 
-			HttpSession session = request.getSession(false);
-			if (session == null) {
-				return "home";
-			}
-
-			B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
-			if (loginvo == null) {
-				model.addAttribute("loginPublicInfo", null);
-			} else {
-				model.addAttribute("loginPublicInfo", loginvo);
-				log.info(loginvo);
-			}
-			log.info("마이페이지로 갑니다");
-			return "admin/adminAccountPage";
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
 		}
+
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		} else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		log.info("마이페이지로 갑니다");
+		return "admin/adminAccountPage";
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/pmemberDelete")
+	public Object rjdaf(HttpSession session, HttpServletRequest req) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+
+		String[] arr = req.getParameterValues("m_idx");
+		
+		try {
+			if(arr != null && arr.length > 0) {
+				for(int i=0; i<arr.length; i++) {
+					System.out.println(i + ":" + arr[i]);
+					System.out.println(arr[i]);
+					pm_service.publicDelete(arr[i]);
+				}
+				resultMap.put("result", "success");
+			}else {
+				resultMap.put("result", "false");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultMap;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/pmemberUpdate")
+	public Object sldfk(HttpSession session, HttpServletRequest req) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+
+		String[] arr = req.getParameterValues("m_idx");
+		
+		try {
+			if(arr != null && arr.length > 0) {
+				for(int i=0; i<arr.length; i++) {
+					System.out.println(i + ":" + arr[i]);
+					System.out.println(arr[i]);
+					pm_service.publicUpdate(arr[i]);
+				}
+				resultMap.put("result", "success");
+			}else {
+				resultMap.put("result", "false");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultMap;
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/corpDelete")
+	public Object awed(HttpSession session, HttpServletRequest req) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+
+		String[] arr = req.getParameterValues("c_idx");
+		
+		try {
+			if(arr != null && arr.length > 0) {
+				for(int i=0; i<arr.length; i++) {
+					System.out.println(i + ":" + arr[i]);
+					System.out.println(arr[i]);
+					cm_service.corpDelete(arr[i]);
+				}
+				resultMap.put("result", "success");
+			}else {
+				resultMap.put("result", "false");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultMap;
+	}
+	
+	@GetMapping("/cal")
+	public String asdf() {
+			
+		return "join/cal";
+	}
 }

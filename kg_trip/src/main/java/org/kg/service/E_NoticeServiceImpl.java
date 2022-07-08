@@ -25,21 +25,12 @@ public class E_NoticeServiceImpl implements E_NoticeService {
 	// 0627 페이징 처리한 E_list.jsp 뽑기
 	@Override
 	public List<E_NoticeVO> getListWithPaging(E_PageDTO vo) {
-		return mapper.getListWithPaging(vo);
+		return mapper.getNtListWithPaging(vo);
 	}
-
-	/* 주석처리 0627
-	@Override
-	public List<E_NoticeVO> getListWithPaging(Criteria cri) {
-		log.info("getListWithPaging..." + cri);
-		return mapper.getListWithPaging(cri);
-	}
-	*/
 
 	@Override
 	public int getTotal(E_PageDTO dto) {
-
-		return mapper.getTotalCount();
+		return mapper.getTotalCount(dto);
 	}
 
 	@Override

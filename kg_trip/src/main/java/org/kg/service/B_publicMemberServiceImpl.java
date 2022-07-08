@@ -53,6 +53,18 @@ public class B_publicMemberServiceImpl implements B_publicMemberService{
 		log.info("회원조회 나가신다");
 		return mapper.getPmemberList();
 	}
+
+	@Override
+	public int publicDelete(String m_idx) {
+		log.info("회원 탈퇴 나가신다");
+		return mapper.deletePublic(m_idx);
+	}
+
+	@Override
+	public int publicUpdate(String m_idx) {
+		log.info("회원을 관리자로 변경합니다");
+		return mapper.updatePublic(m_idx);
+	}
 	
 	
 	

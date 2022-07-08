@@ -17,7 +17,7 @@
 				<form action="/pakage/P_preservation" method="post" role="form">
 					<h1>결제하기</h1>
 					<div class="center-middle">
-						<img alt="이미지" src="/resources/images/${board.p_mainimg }" width="250px"><br>
+						<img alt="이미지" src="/img/${board.p_mainimg }" width="250px"><br>
 						<c:out value="${board.p_name}"></c:out><br>
 						<input type="hidden" name="p_name" value="${board.p_name}" >
 						<input type="hidden" name="p_num" value="${board.p_num}" >

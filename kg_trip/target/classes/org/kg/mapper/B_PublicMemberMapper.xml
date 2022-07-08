@@ -9,9 +9,8 @@
 	</select>
 	
 	<insert id="insertPublic">
-		insert into b_publicMember_tbl(m_idx, m_id, m_pw, m_name,m_gender,m_email,m_phone,m_birth,
-										m_regdate,m_auth,m_connect)
-		values (b_publicMember_SEQ.nextval, #{m_id},#{m_pw},#{m_name},#{m_gender},#{m_email},#{m_phone},#{m_birth}
+		insert into b_publicMember_tbl(m_idx, m_id, m_pw, m_nickname, m_name, m_gender,m_email,m_phone,m_birth,m_regdate,m_auth,m_connect)
+		values (b_publicMember_SEQ.nextval, #{m_id},#{m_pw},#{m_nickname}, #{m_name},#{m_gender},#{m_email},#{m_phone},#{m_birth}
 				,sysdate,'public',0)
 	</insert>
   
@@ -30,6 +29,13 @@
 		select * from b_publicMember_tbl where m_id= #{m_id} and m_pw=#{m_pw}
 	</select>
 	
+	<delete id="deletePublic">
+		delete b_publicMember_tbl where m_idx = #{m_idx}
+	</delete>
+	
+	<update id="updatePublic">
+		update b_publicmember_tbl SET m_auth = 'admin' where m_idx = #{m_idx}
+	</update>
   
 
   

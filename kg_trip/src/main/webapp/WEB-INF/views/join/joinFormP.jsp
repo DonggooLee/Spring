@@ -36,6 +36,13 @@
 					</td>
 				</tr>
 				<tr>
+					<td>닉네임</td>
+					<td><input type="text" name="m_nickname" id="m_nickname"></td>
+					<td> 
+						<div class="check_font" id="nickname_check"></div>
+					</td>
+				</tr>
+				<tr>
 					<td>이름</td>
 					<td><input type="text" name="m_name" id="m_name"></td>
 					<td> 
@@ -45,7 +52,29 @@
 				<tr>
 					<td>생년월일</td>
 					<td>
-						<input type="number" name="m_birth" placeholder="YYYYDDMM" id="m_birth">
+						<input type="number" name="m_birthyear" placeholder="년(예 2022)" id="m_birthyear">
+					</td>
+					<td>
+						<select name="m_birthMonth" id="m_birthMonth">
+							<option value="">월
+							<option value="01">01
+							<option value="02">02
+							<option value="03">03
+							<option value="04">04
+							<option value="05">05
+							<option value="06">06
+							<option value="07">07
+							<option value="08">08
+							<option value="09">09
+							<option value="10">10
+							<option value="11">11
+							<option value="12">12
+						</select>
+					</td>
+					<td>
+						<select name="m_birthDate" id="m_birthDate">
+							<option value="">일
+						</select>
 					</td>
 					<td>
 						<div class="check_font" id="birth_check"></div>

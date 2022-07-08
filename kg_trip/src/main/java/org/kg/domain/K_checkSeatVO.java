@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class K_checkSeatVO {
 
-	private String seat_name;
+	private String seat_name, completion;
 	
 }

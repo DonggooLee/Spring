@@ -1,7 +1,6 @@
 package org.kg.controller;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,7 +9,6 @@ import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_getSeatVO;
-import org.kg.domain.KakaoPayDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_getInfoDTO;
 import org.kg.service.K_FlightService;
@@ -88,79 +86,11 @@ public class K_FlightController {
 		return "flight/scheduleConfirm";
 	}
 	
-	// 일반회원 : 일정 확인 후 결제버튼 클릭 시 결제 페이지 이동
-	@PostMapping("/kakaoPay")
-	public String kakaoPay(K_bookInfo bookInfo) {
-		log.info("페이지이동 : 카카오페이 결제하기...");
-		log.info("결제 및 예약 정보..." + bookInfo);
-		// 통신에 성공하면 결제 정보를 가지고 있는 QR코드 생성하는 URL로 redirect!
-		return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
-	}
-	
-	// 일반회원 : QR 결제 성공 시 
-	@GetMapping(value = "/kakaoPaySuccess")
-	public String kakaoPaySuccess(HttpServletRequest request, Model model,
-			@RequestParam("pg_token") String pg_token, @RequestParam("m_idx") String m_idx, 
-			@RequestParam("seat_name") String seat_name, @RequestParam("flight_name") String flight_name, 
-			@RequestParam("date_idx") String date_idx, @RequestParam("ticket_price") String ticket_price) {
-		log.info("페이지이동 : 카카오페이 결제성공...");
-		HttpSession session = request.getSession(false);
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
-		}
-		log.info("kakaoPaySuccess get............................................");
-		log.info("kakaoPaySuccess pg_token : " + pg_token);
-		log.info("kakaoPaySuccess ticket_price : " + ticket_price);
-		log.info("kakaoPaySuccess seat_name : " + seat_name);
-		log.info("kakaoPaySuccess flight_name : " + flight_name);
-		log.info("kakaoPaySuccess date_idx : " + date_idx);
-		log.info("kakaoPaySuccess m_idx : " + m_idx);
-		// 결제 승인 요청 정보를 담기 위한 임시 객체 생성 및 변수 초기화
-		Random ran = new Random();
-		String ridx = "";
-		for(int i=0; i<5; i++) {
-			String num = String.valueOf(ran.nextInt(10));
-			String str = String.valueOf((char)((int)(ran.nextInt(26))+65));
-			ridx += (str+num);
-		}
-		KakaoPayDTO dto = new KakaoPayDTO();
-		dto.setReservation_idx("2022"+ridx);
-		dto.setTicket_price(ticket_price);
-		dto.setFlight_name(flight_name);
-		dto.setSeat_name(seat_name);
-		dto.setDate_idx(date_idx);
-		dto.setPg_token(pg_token);
-		dto.setM_idx(m_idx);
-		model.addAttribute("info", kakaopay.kakaoPayInfo(dto));
-		return "flight/kakaoPaySuccess";
-	}
-	
-	
-	// 일반회원 : 항공권 예약 조회 페이지 이동
-	@GetMapping("scheduleBookPage")
-	public String reservationConfirmPage(HttpServletRequest request, Model model) {
-		log.info("페이지 이동 : scheduleBookPage...");
-		HttpSession session = request.getSession(false);
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
-		}
-		return "flight/scheduleBookPage";
-	}
-	
-	
-	// 일반회원 : 좌석 출력
-	@PostMapping(value = "getSeatList", 
-			consumes = "application/json", 
+	// 일반회원 : 선택 좌석 출력
+	@PostMapping(value = "getSeatList", consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<K_getSeatVO> getSeatList(@RequestBody K_getInfoDTO info){
+		log.info("선택 좌석 출력 넘어오는 정보 확인 : " + info.getDate_idx());
 		int date_idx =  info.getDate_idx();
 		if(info.getSeat_grade().equals("FIRST")) {
 			return new ResponseEntity<>(service.getSeatFir_(date_idx), HttpStatus.OK);
@@ -172,37 +102,44 @@ public class K_FlightController {
 	}  
 	
 	// 일반회원 : 예약 좌석 조회
-	@PostMapping(value = "getReservationSeatList", 
-			consumes = "application/json", 
+	@PostMapping(value = "getReservationSeatList", consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<K_checkSeatVO>> getReservationSeatList(@RequestBody K_getInfoDTO info){
-		log.info("넘어오는 정보 확인 : " + info.getDate_idx() + " / " + info.getFlight_name());
+		log.info("예약 좌석 조회 넘어오는 정보 확인 : " + info.getDate_idx() + " / " + info.getFlight_name());
 		return new ResponseEntity<>(service.getReservationSeatList_(info), HttpStatus.OK);
 	}
 	
-	// 항공권 예약내역 
-	@GetMapping("bookList")
-	public String bookList(HttpServletRequest request, Model model) {
+	// 일반회원 : 일정 확인 후 결제버튼 클릭 시 결제 페이지 이동
+	@PostMapping("/kakaoPay")
+	public String kakaoPay(K_bookInfo bookInfo) {
+		log.info("페이지이동 : 카카오페이 결제하기...");
+		log.info("결제 및 예약 정보..." + bookInfo);
+		// 통신에 성공하면 결제 정보를 가지고 있는 QR코드 생성하는 URL로 redirect!
+		return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
+	}
+	
+	// 일반회원 : QR 결제 성공 후 정상적으로 결제 요청이 완료된 경우 ! => 결제 승인 요청 API 호출 (pg_token 필수!)
+	@GetMapping(value = "/kakaoPaySuccess")
+	public String kakaoPaySuccess(K_bookInfo bookInfo, HttpServletRequest request, Model model) {
+		log.info("페이지이동 : 카카오페이 결제성공...");
+		log.info("결제 및 예약 정보..." + bookInfo);
 		HttpSession session = request.getSession(false);
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
 		}else {
-			log.info(loginvo);
 			model.addAttribute("loginPublicInfo", loginvo);
-			model.addAttribute("airBookList", service.getBookingList_(loginvo.getM_idx()));
+			log.info(loginvo);
 		}
-		log.info("페이지 이동 : 항공권 예약 내역 페이지 이동...");
-		return "flight/bookList";
+		model.addAttribute("info", kakaopay.kakaoPayInfo(bookInfo));
+		return "flight/scheduleReservationComplete";
 	}
-    
-    
-    
-    // 항공권 예약 확정
+	
+	// 일반회원 : 결제가 완료된 페이지에서 비동기 방식으로 항공권 예약 DB에 Insert !
     @PostMapping(value = "/insertReservation", 
     		consumes = "application/json", 
     		produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> insertReservation(@RequestBody KakaoPayDTO bookInfo) {
+    public ResponseEntity<String> insertReservation(@RequestBody K_bookInfo bookInfo) {
         log.info("항공권 예약 확정하기...");
         log.info("예약정보..." + bookInfo);
         int result = service.insertReservation_(bookInfo);
@@ -210,10 +147,29 @@ public class K_FlightController {
         		new ResponseEntity<>("success", HttpStatus.OK) :
  					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    @PostMapping(value = "/kakaoPayCancel")
+	
+	// 일반회원 : 환불버튼 클릭 시 결제취소 요청 후 응답정보를 담아 마이페이지 > 항공권 예약내역 페이지로 이동 (!페이지 이동 시 리스트 출력 문제!)
+    @PostMapping("/kakaoPayCancel")
     public String kakaoPayCancel(K_bookInfo bookInfo, HttpServletRequest request, Model model) {
+    	log.info("항공권 예약 환불하기...");
+    	log.info("환불정보..." + bookInfo);
     	HttpSession session = request.getSession(false);
+    	B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+    	if (loginvo == null) {
+    		model.addAttribute("loginPublicInfo", null);
+    	}else {
+    		model.addAttribute("loginPublicInfo", loginvo);
+    		log.info(loginvo);
+    	}
+    	model.addAttribute("refundInfo", kakaopay.kakaoPayCancel(bookInfo));
+    	return "flight/myBookList"; 
+    }
+	
+	// 일반회원 : 항공권 예약 조회 페이지 이동
+	@GetMapping("scheduleBook")
+	public String reservationConfirmPage(HttpServletRequest request, Model model) {
+		log.info("페이지 이동 : scheduleBook...");
+		HttpSession session = request.getSession(false);
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
@@ -221,10 +177,23 @@ public class K_FlightController {
 			model.addAttribute("loginPublicInfo", loginvo);
 			log.info(loginvo);
 		}
-        log.info("결제취소(환불)...");
-        log.info("환불정보..." + bookInfo);
-        model.addAttribute("refundInfo", kakaopay.kakaoPayCancel(bookInfo));
-        return "flight/bookList"; 
-    }
+		return "flight/scheduleBook";
+	}
+	
+	// 일반회원 : 마이페이지에서 항공권 예약내역 페이지 이동
+	@GetMapping("myBookList")
+	public String bookList(HttpServletRequest request, Model model) {
+		log.info("페이지 이동 : myBookList...");
+		HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			log.info(loginvo);
+			model.addAttribute("loginPublicInfo", loginvo);
+		}
+		model.addAttribute("airBookList", service.getBookingList_(loginvo.getM_idx()));
+		return "flight/myBookList";
+	}
     
 }

@@ -13,15 +13,15 @@
 						<c:if test="${loginCorpInfo.c_type == 100 }">
 							<li>상품 관리</li>
 								<ul>
-									<li><a href="${pageContext.request.contextPath}/flight/scheduleManagerPage">상품 등록</a></li>
-									<li> 일정 관리  </li>
+									<li><a href="${pageContext.request.contextPath}/flight/scheduleManagerPage">일정등록</a></li>
+									<li>일정관리</li>
 								</ul>
 						</c:if>
 						<c:if test="${loginCorpInfo.c_type == 200 }">
 							<li>상품 관리</li>
 								<ul>
-									<li> 상품 등록 </li>
-									<li> 상품 목록  </li>
+									<li><a href="${pageContext.request.contextPath}/pakage/P_cinsert">상품 등록</a></li>
+									<li><a href="${pageContext.request.contextPath}/pakage/P_clist">상품 목록</a></li>
 								</ul>
 						</c:if>
 							<li>공지사항</li>

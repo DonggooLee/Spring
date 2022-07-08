@@ -4,7 +4,7 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 	
-	<section class="cont">
+	<section class="conted">
 
 		<div class="getSchedule" style="border: 1px solid black; width: 300px; padding: 25px;">
 			<h1 style="text-align: center;">일정 조회</h1>
@@ -60,6 +60,20 @@
 	
 	</section>
 	
+<style>
+
+	.conted{
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		height: 1200px;
+		background-color: #F0FFFF;
+		height: 3000px;
+		border: 2px solid pink;
+		padding: 20px;
+	}
+
+</style>
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
 
@@ -110,10 +124,10 @@
 									str += "<ul>";
 									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 티켓가격 : " + listSch[i].firstseatprice + "</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
@@ -141,11 +155,11 @@
 									str += "<ul>";
 									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 좌석가격 : " + listSch[i].businessseatprice + "</li>";
+										str += "<li> 티켓가격 : " + listSch[i].businessseatprice + "</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
@@ -172,11 +186,11 @@
 									str += "<ul>";
 									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 좌석가격 : " + listSch[i].economyseatprice + "</li>";
+										str += "<li> 티켓가격 : " + listSch[i].economyseatprice + "</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";

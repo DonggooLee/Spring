@@ -12,7 +12,6 @@ import org.kg.service.K_FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,11 +46,11 @@ public class K_FlightRestController {
 	}
 	
 	// 항공일정 추가
-	@PostMapping(value = "/insertSchedule",
-			consumes = "application/json", 
+	@PostMapping(value = "/insertSchedule", consumes = "application/json", 
 			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> scheduleInsert(@RequestBody K_insertScheduleDTO insertSch){
-		log.info("K_insertScheduleDTO..." + insertSch);
+		log.info("항공 일정 추가...");
+		log.info("K_insertScheduleDTO : " + insertSch);
 		int insertCount = service.insertSchedule_(insertSch);
 		log.info("Reply Insert Count..." + insertCount);
 		return insertCount == 1 ?
@@ -60,12 +59,11 @@ public class K_FlightRestController {
 	}
 	
 	// 항공편 일정 조회 (조건 : 좌석 등급 )
-	@PostMapping(value = "/getSchedule", 
-			consumes = "application/json", 
+	@PostMapping(value = "/getSchedule", consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<K_getScheduleDTO>> getSchedule(@RequestBody K_inputScheduleDTO inputSch){
 		log.info("일정 조회...");
-		log.info("inputSch : " + inputSch);
+		log.info("K_inputScheduleDTO : " + inputSch);
 		if(inputSch.getSeat_grade().equals("FIRST") ) {
 			return new ResponseEntity<>(service.searchScheduleFir_(inputSch), HttpStatus.OK);
 		}else if (inputSch.getSeat_grade().equals("BUSINESS") ) {
@@ -75,11 +73,11 @@ public class K_FlightRestController {
 		}
 	}
 	
-	// 일반회원 : 항공권 예약 조회
+	// 항공권 예약 조회
 	@GetMapping(value = "myReservation/{reservation_idx}", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<K_getResrvationInfoVO> myReservation(@PathVariable("reservation_idx") String reservation_idx) {
 		log.info("항공권 예약조회...");
-		log.info("reservation_idx..." + reservation_idx);
+		log.info("reservation_idx : " + reservation_idx);
 		return new ResponseEntity<>(service.getResrvationInfo_(reservation_idx), HttpStatus.OK);
 	}
 	

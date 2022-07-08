@@ -8,6 +8,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.domain.P_Pakage_info_VO;
 import org.kg.domain.P_Pakage_list_VO;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,15 +50,25 @@ public class P_Controller {
 			return "home";
 		}
 
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_PublicMemberVO loginPublicvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_CorpMemberVO loginCorpvo = (B_CorpMemberVO) session.getAttribute("corp");
 
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
+		if (loginPublicvo != null) {
+			model.addAttribute("loginPublicInfo", loginPublicvo);
+			log.info(loginPublicvo);
+			int m_idx = loginPublicvo.getM_idx();
+			model.addAttribute("heart", service.getheartMain(m_idx));	// 위시리스트 read
+			log.info("-------------"+service.getheartMain(m_idx));
+		} else if (loginPublicvo == null) {
+			if (loginCorpvo != null) {
+				model.addAttribute("loginCorpInfo", loginCorpvo);
+				log.info(loginCorpvo);
+			} else {
+				model.addAttribute("loginPublicInfo", null);
+				model.addAttribute("loginCorpInfo", null);
+			}
 		}
-
+		
 		model.addAttribute("listWeu", service.getListWeu()); // 서유럽 리스트 목록
 		model.addAttribute("listSai", service.getListSai()); // 사이판 리스트 목록
 		model.addAttribute("listkos", service.getListKos()); // 국내섬 리스트 목록
@@ -68,18 +80,34 @@ public class P_Controller {
 	// 위시리스트 insert
 	@PostMapping(value = "/P_wishinsert", 
 			consumes = "application/json", 
-			produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> winsert(@RequestParam("p_num") String p_num,
-			@RequestParam("m_idx") int m_idx) {
+			produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> winsert(@RequestBody P_Pakage_info_VO board) {
 		
-		int insertCount = service.wishinsert(p_num, m_idx);
+		log.info("-----------------"+board);
+		
+		board.setW_num(board.getM_idx()+board.getP_num());
+		
+		int insertCount = service.wishinsert(board);
 		
 		return insertCount == 1?
 				new ResponseEntity<>("success", HttpStatus.OK) :
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	
+	// 위시리스트 delete
+	@PostMapping(value = "/P_wishdelete", 
+			consumes = "application/json", 
+			produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> wdelete(@RequestBody P_Pakage_info_VO board) {
+		
+		log.info("-----------------"+board);
+		
+		int insertCount = service.wishdelete(board);
+		
+		return insertCount == 1?
+				new ResponseEntity<>("success", HttpStatus.OK) :
+					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 	// P_get 상세페이지 이동, 후기
 	@GetMapping("/P_get")
@@ -90,21 +118,29 @@ public class P_Controller {
 			return "home";
 		}
 
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_PublicMemberVO loginPublicvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_CorpMemberVO loginCorpvo = (B_CorpMemberVO) session.getAttribute("corp");
 
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
+		if (loginPublicvo != null) {
+			model.addAttribute("loginPublicInfo", loginPublicvo);
+			log.info(loginPublicvo);
+			int m_idx = loginPublicvo.getM_idx();
+			P_Pakage_info_VO vo = new P_Pakage_info_VO();
+			vo.setM_idx(m_idx);
+			vo.setP_num(p_num);
+			model.addAttribute("heart", service.getheart(vo));	// 위시리스트 read
+		} else if (loginPublicvo == null) {
+			model.addAttribute("heart", null);	// 위시리스트
+			if (loginCorpvo != null) {
+				model.addAttribute("loginCorpInfo", loginCorpvo);
+				log.info(loginCorpvo);
+			} else {
+				model.addAttribute("loginPublicInfo", null);
+				model.addAttribute("loginCorpInfo", null);
+			}
 		}
 		
-		
 		model.addAttribute("board", service.get(p_num));		// 상세 내용
-		
-		
-		
-		
 		model.addAttribute("review", service.getReview(p_num));	// 후기 리스트 목록
 		model.addAttribute("star", service.star(p_num));		// 평균 별점
 		
@@ -181,18 +217,42 @@ public class P_Controller {
 			return "home";
 		}
 
-		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_PublicMemberVO loginPublicvo = (B_PublicMemberVO) session.getAttribute("public");
+		B_CorpMemberVO loginCorpvo = (B_CorpMemberVO) session.getAttribute("corp");
 
-		if (loginvo == null) {
-			model.addAttribute("loginPublicInfo", null);
-		}else {
-			model.addAttribute("loginPublicInfo", loginvo);
-			log.info(loginvo);
+		if (loginPublicvo != null) {
+			model.addAttribute("loginPublicInfo", loginPublicvo);
+			log.info(loginPublicvo);
+			int m_idx = loginPublicvo.getM_idx();
+			model.addAttribute("heart", service.getheartMain(m_idx));	// 위시리스트 read
+		} else if (loginPublicvo == null) {
+			if (loginCorpvo != null) {
+				model.addAttribute("loginCorpInfo", loginCorpvo);
+				log.info(loginCorpvo);
+			} else {
+				model.addAttribute("loginPublicInfo", null);
+				model.addAttribute("loginCorpInfo", null);
+			}
 		}
+		
+		
 		
 		model.addAttribute("list", service.getList()); // 전체 리스트 목록
 
 		return "pakage/P_allList";
+	}
+	
+	
+	
+	// P_wishget
+	@PostMapping(value = "/P_wish", 
+			consumes = "application/json", 
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<P_Pakage_info_VO>> wish(@RequestParam("m_idx") int m_idx) {
+		
+		log.info("m_idx........." + m_idx);
+		
+		return new ResponseEntity<>(service.getheartMain(m_idx), HttpStatus.OK);
 	}
 	
 	// P_allList 검색 결과
@@ -304,6 +364,34 @@ public class P_Controller {
 	
 	
 	/////////////////////////////////////////////////////////////
+	
+	// P_wishlist
+	@GetMapping("/P_wishlist")
+	public String wishlist(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+		
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+			int m_idx = loginvo.getM_idx();
+			model.addAttribute("heart", service.getheartMain(m_idx));	// 위시리스트 read
+		}
+		
+		int m_idx = loginvo.getM_idx();
+		
+		model.addAttribute("wishlist", service.getwishlist(m_idx));
+		
+		return "pakage/P_wishlist";
+	}
+	
 	
 	// P_mlist 개인 구매 패키지 리스트 페이지 이동
 	@GetMapping("/P_mlist")
@@ -420,7 +508,7 @@ public class P_Controller {
 			log.info(loginvo);
 		}
 		
-		String uploadFolder = "C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images";
+		String uploadFolder = "C:\\upload";
 		
 		for(MultipartFile multipartFile : uploadFile) {
 		
@@ -461,12 +549,26 @@ public class P_Controller {
 	
 	// P_clist 기업 패키지 리스트 페이지 이동
 	@GetMapping("/P_clist")
-	public String clist(Model model) {
-		int c_idx = 4; // 로그인 연동 예정 임시 숫자
+	public String clist(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		int c_idx = loginvo.getC_idx();
 		
 		model.addAttribute("clist", service.getcList(c_idx));
 		
-		log.info(service.getcList(c_idx));
 		
 		return "pakage/P_clist";
 	}
@@ -474,21 +576,48 @@ public class P_Controller {
 	
 	// P_cinsert 기업 패키지 등록 페이지 이동
 	@GetMapping("/P_cinsert")
-	public String cinsert(Model model) {
+	public String cinsert(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
 
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		
 		return "pakage/P_cinsert";
 	}
 	
 	// 패키지 등록
 	@PostMapping("/uploadFormGo") 
-	public String uploadFormGo(MultipartFile[] uploadFilea, MultipartFile[] uploadFileb,
+	public String uploadFormGo(HttpServletRequest request, MultipartFile[] uploadFilea, MultipartFile[] uploadFileb,
 			 MultipartFile[] uploadFilec, MultipartFile[] uploadFiled, MultipartFile[] uploadFilee,
 			 P_Pakage_list_VO liboard, P_Pakage_info_VO board, Model model) {
 		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
 
 		log.info("--------------------" + liboard);
 		
-		String uploadFolder = "C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images";
+		String uploadFolder = "C:\\upload";
 		
 		for(MultipartFile multipartFile1 : uploadFilea) {
 		
@@ -568,6 +697,10 @@ public class P_Controller {
 			}
 			board.setP_img4(multipartFile5.getOriginalFilename());
 		}
+		
+		int c_idx = loginvo.getC_idx();
+		
+		board.setC_idx(c_idx); 
 		
 		service.cinserta(board);
 		
@@ -576,7 +709,6 @@ public class P_Controller {
 		
 		service.cinsertb(liboard);
 		
-		int c_idx = board.getC_idx();
 		model.addAttribute("clist", service.getcList(c_idx));
 	
 		return "/pakage/P_clist";
@@ -584,8 +716,22 @@ public class P_Controller {
 
 	// 패키지 수정 페이지 이동
 	@GetMapping("/P_cmodify")
-	public String cmodify(@RequestParam("p_num") String p_num, Model model) {
+	public String cmodify(HttpServletRequest request, @RequestParam("p_num") String p_num, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
 
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		
 		model.addAttribute("board", service.get(p_num));
 
 		return "/pakage/P_cmodify";
@@ -593,14 +739,27 @@ public class P_Controller {
 	
 	// 패키지 수정
 	@PostMapping("/uploadFormMo") 
-	public String uploadFormMo(MultipartFile[] uploadFilea, MultipartFile[] uploadFileb,
+	public String uploadFormMo(HttpServletRequest request, MultipartFile[] uploadFilea, MultipartFile[] uploadFileb,
 			 MultipartFile[] uploadFilec, MultipartFile[] uploadFiled, MultipartFile[] uploadFilee,
 			 P_Pakage_list_VO liboard, P_Pakage_info_VO board, Model model) {
 		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
 
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		
 		log.info("--------------------" + liboard);
 		
-		String uploadFolder = "C:\\dev\\workspace\\workspace_spring\\kg_trip\\src\\main\\webapp\\resources\\images";
+		String uploadFolder = "C:\\upload";
 		
 		for(MultipartFile multipartFile1 : uploadFilea) {
 		
@@ -681,14 +840,17 @@ public class P_Controller {
 			board.setP_img4(multipartFile5.getOriginalFilename());
 		}
 		
+		int c_idx = loginvo.getC_idx();
+		
+		board.setC_idx(c_idx); 
+		
+		
 		service.cupdatea(board);
 		
 		liboard.setP_people(0);
 		liboard.setP_available(0);
 		
 		service.cupdateb(liboard);
-		
-		int c_idx = board.getC_idx();
 		
 		model.addAttribute("clist", service.getcList(c_idx));
 	
@@ -697,11 +859,27 @@ public class P_Controller {
 	
 	// 패키지 삭제
 	@GetMapping("/P_cdelete")
-	public String cdelete(@RequestParam("p_num") String p_num, Model model) {
+	public String cdelete(HttpServletRequest request, @RequestParam("p_num") String p_num, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
 
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		} else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		int c_idx = loginvo.getC_idx();
 		service.cdeletea(p_num);
 		service.cdeleteb(p_num);
 		
+		model.addAttribute("clist", service.getcList(c_idx));
 		
 		return "/pakage/P_clist";
 	}

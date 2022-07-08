@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class KakaoPayCancelVO {
 
+	// 응답정보
 	private String aid, cid, tid, status, partner_order_id, partner_user_id, payment_method_type;
 	
 }

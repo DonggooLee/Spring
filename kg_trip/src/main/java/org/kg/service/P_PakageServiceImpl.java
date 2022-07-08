@@ -158,10 +158,28 @@ public class P_PakageServiceImpl implements P_PakageService {
 	
 	// 위시리스트 추가
 	@Override
-	public int wishinsert(String p_num, int m_idx) {
-		return mapper.wishinsert(p_num, m_idx);
+	public int wishinsert(P_Pakage_info_VO board) {
+		return mapper.wishinsert(board);
+	}
+	
+	// 위시리스트 삭제
+	@Override
+	public int wishdelete(P_Pakage_info_VO board) {
+		return mapper.wishdelete(board);
 	}
 
+	
+	// 위시리스트 조회
+	@Override
+	public P_Pakage_info_VO getheart(P_Pakage_info_VO vo) {
+		return mapper.getheart(vo);
+	}
+	
+	// 위시리스트 메인 조회
+	@Override
+	public List<P_Pakage_info_VO> getheartMain(int m_idx) {
+		return mapper.getheartMain(m_idx);
+	}
 	
 	////////////////////////////////////////////////////////
 	
@@ -206,6 +224,12 @@ public class P_PakageServiceImpl implements P_PakageService {
 	@Override
 	public List<P_Review_VO> allreview() {
 		return mapper.allreview();
+	}
+	
+	// 위시리스트 개인 조회
+	@Override
+	public List<P_Pakage_info_VO> getwishlist(int m_idx) {
+		return mapper.getwishlist(m_idx);
 	}
 
 	
@@ -280,6 +304,8 @@ public class P_PakageServiceImpl implements P_PakageService {
 			return false;
 		}
 	}
+
+
 
 
 

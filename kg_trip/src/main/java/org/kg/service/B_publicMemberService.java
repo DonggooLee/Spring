@@ -12,5 +12,7 @@ public interface B_publicMemberService {
 	public int publicPhoneCheck(String m_phone);
 	public B_PublicMemberVO loginPublic(String m_id, String m_pw);
 	public List<B_PublicMemberVO> publicList();
+	public int publicDelete(String m_idx);
+	public int publicUpdate(String m_idx);
 	
 }

@@ -1,17 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false" %>
 
-<style type="text/css">
+<jsp:include page="/WEB-INF/views/include/corpHeader.jsp"/>
 
-</style>
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+<!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
-		<section class="cont">
-			<div>
-				<h1>관리자 패키지 등록 페이지</h1>
-				<form action="uploadFormMo" method="post" enctype="multipart/form-data" class="mb-3">
+		<section class="cont2">
+			<div class="all" style="display: flex;">
+				<jsp:include page="/WEB-INF/views/include/corpMenuBar.jsp"></jsp:include>
+				
+				<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
+					<div class="content" style=" margin : 10px; background-color: white;">
+				<div>
+				<h1>패키지 수정</h1>
+				<form action="uploadFormMo" method="post" enctype="multipart/form-data" class="mb-3" id="frm">
 					<table style="background-color: white;">
 						<tr>
 							<td>
@@ -107,7 +111,7 @@
 								상품 정보
 							</td>
 							<td>
-								<input type="text" name="p_information" value="${board.p_information }">
+								<input type="text" name="p_information" value="${board.p_information }" style="width:500px ;height:200px">
 							</td>
 						</tr>
 						<tr>
@@ -115,7 +119,7 @@
 								이용 안내
 							</td>
 							<td>
-								<input type="text" name="p_guide" value="${board.p_guide }">
+								<input type="text" name="p_guide" value="${board.p_guide }" style="width:500px ;height:200px">
 							</td>
 						</tr>
 						<tr>
@@ -141,10 +145,63 @@
 					</table>
 				</form>
 			</div>
+					</div>
+					</div>
+				</div>
 		</section>
-		
+<!-- 이 부분 내용만 수정 (바디 작성 부분)-->
+
 <script type="text/javascript">
+$(function(){
+	
+	var pmodify = $("#pmodify")
+   	
+    $(pmodify).click(function(e){
+    	e.preventDefault();
+    	
+    	if($('input[name=p_num]').val() == ''){
+    		alert("패키지 번호 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_period]').val() == ''){
+    		alert("패키지 여행기간 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_country]').val() == ''){
+    		alert("나라 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_region1]').val() == ''){
+    		alert("지역1 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_region2]').val() == ''){
+    		alert("지역2 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_name]').val() == ''){
+    		alert("패키지명 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=uploadFilea]').val() == ''){
+    		alert("패키지 메인이미지 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_information]').val() == ''){
+    		alert("상품정보 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_guide]').val() == ''){
+    		alert("이용안내 부탁드립니다.");
+            return;
+    	}if($('input[name=p_max]').val() == ''){
+    		alert("패키지 인원 입력 부탁드립니다.");
+            return;
+    	}if($('input[name=p_fee]').val() == ''){
+    		alert("패키지 금액 입력 부탁드립니다.");
+            return;
+    	}else{
+    		frm.submit();
+    	}
+        	
+   	});
+	
+});
 
-</script>		
-
+</script>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
+
+		
+	

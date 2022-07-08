@@ -10,19 +10,30 @@
 	
 	<insert id="insertCorp">
 		insert into b_corpMember_tbl(c_idx, c_id, c_pw, c_dname,c_dphone,c_demail,c_name,c_zipcode,c_address,
-										c_intro,c_type,c_code,c_regdate,c_auth,c_connect)
+										c_intro,c_type,c_code,c_regdate,c_auth,c_connect,c_aircode)
 		values (B_CORPMEMBER_SEQ.nextval, #{c_id},#{c_pw},#{c_dname},#{c_dphone},#{c_demail},#{c_name},#{c_zipcode}
-				,#{c_address},#{c_intro},#{c_type},#{c_code},sysdate,'corp',0)
+				,#{c_address},#{c_intro},#{c_type},#{c_code},sysdate,'corp',0,#{c_aircode})
 	</insert>
 	
 	<select id="checkIdCorp" parameterType="String" resultType="int">
 		select count(*) from b_corpMember_tbl where c_id = #{c_id}
 	</select>
 	
+	<select id="checkEmailCorp" parameterType="String" resultType="int">
+		select count(*) from b_corpMember_tbl where c_demail = #{c_demail}
+	</select>
+	
+	<select id="checkPhoneCorp" parameterType="String" resultType="int">
+		select count(*) from b_corpMember_tbl where c_dphone = #{c_dphone}
+	</select>
+	
 	<select id="getCmember" resultType="org.kg.domain.B_CorpMemberVO">
 		select * from b_corpMember_tbl where c_id= #{c_id} and c_pw=#{c_pw}
 	</select>
 	
+	<delete id="deleteCorp">
+		delete b_corpMember_tbl where c_idx = #{c_idx}
+	</delete>
   
   
   

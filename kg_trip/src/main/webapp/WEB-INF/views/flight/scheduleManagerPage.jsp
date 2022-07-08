@@ -1,77 +1,95 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false" %>
 
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+<jsp:include page="/WEB-INF/views/include/corpHeader.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
-	
-	<section class="cont">
-	
-		<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
-			<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 관리</h1>
-			<br>
-			<div>
+
+		<section class="cont2">
+			<div class="all" style="display: flex;">
+				<jsp:include page="/WEB-INF/views/include/corpMenuBar.jsp"></jsp:include>
+				
+				<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
+					<div class="content" style=" margin : 10px; background-color: white;">
 				<div>
-					<b>항공편명</b>&nbsp;&nbsp;
-					<select name="flight_name" class="selectFlight">
-						<option>없음</option>
-					</select>
+				
+				<div class="Profile">
+					<img alt="이미지" src="/img/cat.png" style="width: 70px; height: 70px;
+					border-radius: 70%; overflow: hidden; border: 1px solid black;">
 				</div>
+			
 			</div>
-			<br>
-			<div>
-				<div>
-					<b>비행일자</b>&nbsp;&nbsp;
-					<input type="date" name="start_date">
+			
+					<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
+						<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 등록</h1>
+						<br>
+						<div>
+							<div>
+								<b>항공편명</b>&nbsp;&nbsp;
+								<select name="flight_name" class="selectFlight">
+									<option>없음</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>비행일자</b>&nbsp;&nbsp;
+								<input type="date" name="start_date">
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>탑승시각</b>&nbsp;&nbsp;
+								<input type="time" name="boarding_time">
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>출발시각</b>&nbsp;&nbsp;
+								<input type="time" name="depart_time">
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>도착시각</b>&nbsp;&nbsp;
+								<input type="time" name="arrive_time">
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>출발공항</b>&nbsp;&nbsp;
+								<select name="ap_idx_d" class="selectAirport_d">
+									<option>없음</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div>
+							<div>
+								<b>도착공항</b>&nbsp;&nbsp;
+								<select name="ap_idx_a" class="selectAirport_a">
+									<option>없음</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div>
+							<button id="scheduleInsertBtn" type="button">일정 추가</button>
+						</div>
+						<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
+					</div>
+			
+					</div>
+					</div>
 				</div>
-			</div>
-			<br>
-			<div>
-				<div>
-					<b>탑승시각</b>&nbsp;&nbsp;
-					<input type="time" name="boarding_time">
-				</div>
-			</div>
-			<br>
-			<div>
-				<div>
-					<b>출발시각</b>&nbsp;&nbsp;
-					<input type="time" name="depart_time">
-				</div>
-			</div>
-			<br>
-			<div>
-				<div>
-					<b>도착시각</b>&nbsp;&nbsp;
-					<input type="time" name="arrive_time">
-				</div>
-			</div>
-			<br>
-			<div>
-				<div>
-					<b>출발공항</b>&nbsp;&nbsp;
-					<select name="ap_idx_d" class="selectAirport_d">
-						<option>없음</option>
-					</select>
-				</div>
-			</div>
-			<br>
-			<div>
-				<div>
-					<b>도착공항</b>&nbsp;&nbsp;
-					<select name="ap_idx_a" class="selectAirport_a">
-						<option>없음</option>
-					</select>
-				</div>
-			</div>
-			<br>
-			<div>
-				<button id="scheduleInsertBtn" type="button">일정 추가</button>
-			</div>
-			<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
-		</div>
-		
-	</section>
-	
+		</section>
+
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
 

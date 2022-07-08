@@ -41,6 +41,24 @@ public class B_corpMemberServiceImpl implements B_corpMemberService {
 		return mapper.getCmemberList();
 	}
 
+	@Override
+	public int corpEmailCheck(String c_demail) {
+		log.info("중복체크");
+		return mapper.checkEmailCorp(c_demail);
+	}
+
+	@Override
+	public int corpPhoneCheck(String c_dphone) {
+		log.info("중복체크");
+		return mapper.checkPhoneCorp(c_dphone);
+	}
+
+	@Override
+	public int corpDelete(String c_idx) {
+		log.info("회원 탈퇴 나가신다");
+		return mapper.deleteCorp(c_idx);
+	}
+
 	
 	
 	
