@@ -1,7 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false" %>
+<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="/WEB-INF/views/include/corpHeader.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
@@ -13,11 +13,6 @@
 				<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
 					<div class="content" style=" margin : 10px; background-color: white;">
 				<div>
-				
-				<div class="Profile">
-					<img alt="이미지" src="/img/cat.png" style="width: 70px; height: 70px;
-					border-radius: 70%; overflow: hidden; border: 1px solid black;">
-				</div>
 			
 			</div>
 			

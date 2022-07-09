@@ -87,14 +87,13 @@
 			contentType : 'application/json; charset=utf-8',
 			success : function(result) {
 				console.log("예약결과 : " + result);
-				alert("결제가 정상적으로 완료되었습니다 :)")
+				alert("예약이 정상적으로 완료되었습니다 :)")
 				$.ajax({
 					type : 'get',
 					url : '/flightManager/myReservation/' + reservation_idx,
 					success : function(info) {
-						console.log("비행일자 : " + info.start_date)
 						var str = '';
-						if(info != ""){
+						if(info != ""){ 	
 							str += "<table style='padding: 20px; border: 1px solid black;'>";
 							str += "<tr><th colspan='2'>예약 정보</th></tr>";
 							str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";

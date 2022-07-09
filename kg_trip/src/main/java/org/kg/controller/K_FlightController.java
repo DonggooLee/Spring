@@ -189,8 +189,8 @@ public class K_FlightController {
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
 		}else {
-			log.info(loginvo);
 			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
 		}
 		model.addAttribute("airBookList", service.getBookingList_(loginvo.getM_idx()));
 		return "flight/myBookList";
