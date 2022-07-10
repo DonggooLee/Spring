@@ -78,7 +78,7 @@
 										type : 'get',
 										url : '/flightManager/myReservation/' + reservation_idx,
 										success : function(info) {
-											console.log("비동기 통신 결과 : " + info)
+											console.log("통신 결과 : " + info)
 											var str = '';
 											str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
 											str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";

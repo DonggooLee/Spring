@@ -46,9 +46,9 @@
 										<c:if test="${alist.completion eq '예약완료'}">
 											<td><button class="refundBtn" data-role="${alist.reservation_idx}">환불</button></td>
 										</c:if>
-										<c:if test="${alist.completion eq '환불완료'}">
+										<%-- <c:if test="${alist.completion eq '환불완료'}">
 											<td><button class="refundBtn" data-role="환불완료">환불</button></td>
-										</c:if>
+										</c:if> --%>
 									</tr>
 								</c:forEach>
 							</c:when>
