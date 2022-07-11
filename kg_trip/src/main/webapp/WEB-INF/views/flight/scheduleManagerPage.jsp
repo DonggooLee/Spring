@@ -1,167 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
 <%@ page session="false" %>
-<%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="/WEB-INF/views/include/corpHeader.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
-		<section class="cont2">
-			<div class="all" style="display: flex;">
-				<jsp:include page="/WEB-INF/views/include/corpMenuBar.jsp"></jsp:include>
+<section class="cont2">
+
+	<div class="all" style="display: flex;">
+		<jsp:include page="/WEB-INF/views/include/corpMenuBar.jsp"></jsp:include>
+		<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
+			<div class="content" style=" margin : 10px; background-color: white;">
+							
+				<div class="scheduleManager" style="border: 1px solid black; width: 680px; padding: 30px">
 				
-				<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
-					<div class="content" style=" margin : 10px; background-color: white;">
-				<div>
-			
-			</div>
-			
-					<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
-						<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 등록</h1>
-						<br>
-						<div>
-							<div>
-								<b>항공편명</b>&nbsp;&nbsp;
-								<select name="flight_name" class="selectFlight">
-									<option>없음</option>
-								</select>
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>비행일자</b>&nbsp;&nbsp;
-								<input type="date" name="start_date">
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>탑승시각</b>&nbsp;&nbsp;
-								<input type="time" name="boarding_time">
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>출발시각</b>&nbsp;&nbsp;
-								<input type="time" name="depart_time">
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>도착시각</b>&nbsp;&nbsp;
-								<input type="time" name="arrive_time">
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>출발공항</b>&nbsp;&nbsp;
-								<select name="ap_idx_d" class="selectAirport_d">
-									<option>없음</option>
-								</select>
-							</div>
-						</div>
-						<br>
-						<div>
-							<div>
-								<b>도착공항</b>&nbsp;&nbsp;
-								<select name="ap_idx_a" class="selectAirport_a">
-									<option>없음</option>
-								</select>
-							</div>
-						</div>
-						<br>
-						<div>
-							<button id="scheduleInsertBtn" type="button">일정 추가</button>
-						</div>
-						<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
+					<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 관리</h1>
+					
+					<br>
+					
+					<div class="listSchedule">
+						
 					</div>
-			
-					</div>
-					</div>
-				</div>
-		</section>
+					
+					<!-- 항공편 일정을 가져오기 위한 데이터 객체 -->
+					<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
+					
+				</div> <!-- end : scheduleInsert -->
+							
+			</div> <!-- end : content -->
+		</div> <!-- end : content_section -->
+	</div> <!-- end : all -->
+	
+</section>
 
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
 
 	$(function() {
 		
-		// 항공편 조회에 필요한 객체
-		var c_aircode = $(".scheduleInsert").find("input[name='c_aircode']").val();
-		var selectFlight = $(".selectFlight");
+		// 일정 수정 팝업
+		function updatePopup(date_idx) {
+		    var popUrl = "scheduleUpdatePage?date_idx=" + date_idx;
+		    var popOption = "top=50, left=50, width=800, height=800";
+		    window.open(popUrl, "", popOption);
+		}
 		
-		// 공항 조회에 필요한 객체
-		var selectAirport_d = $(".selectAirport_d");
-		var selectAirport_a = $(".selectAirport_a");
+		// 일정 조회를 위한 항공사 코드
+		var c_aircode = $(".scheduleManager").find("input[name='c_aircode']").val();
 		
-		// 항공편 조회 (관리자 계정의 항공사 코드와 일치하는 항공편만 출력)
-		listFlight(c_aircode, function(listFlight) {
-			var str = '';
-			if(listFlight.length != 0){
-				for(var i=0; i<listFlight.length; i++){
-					str += "<option value=" + listFlight[i].flight_name + ">" + listFlight[i].flight_name + "</option>";
+		// 일정 조회 (관리자 계정의 항공사 코드와 일치하는 일정만 출력)
+		listSchedule(c_aircode, function(listSchedule) {
+			if(listSchedule.length != 0){
+				var str = '';
+				str += "<table>"
+				str += "<tr>"
+				str += "<th>일정번호</th>"
+				str += "<th>항공편명</th>"
+				str += "<th>비행일자</th>"
+				str += "<th>탑승시각</th>"
+				str += "<th>출발시각</th>"
+				str += "<th>도착시각</th>"
+				str += "<th>출발공항</th>"
+				str += "<th>도착공항</th>"
+				str += "<th>수정</th>"
+				str += "<th>삭제</th>"
+				str += "</tr>"
+				for(var i=0; i<listSchedule.length; i++){
+					str += "<tr>"
+					str += "<td>" + listSchedule[i].date_idx + "</td>";
+					str += "<td>" + listSchedule[i].flight_name + "</td>";
+					str += "<td>" + displayTime(listSchedule[i].start_date) + "</td>";
+					str += "<td>" + listSchedule[i].boarding_time + "</td>";
+					str += "<td>" + listSchedule[i].depart_time + "</td>";
+					str += "<td>" + listSchedule[i].arrive_time + "</td>";
+					str += "<td>" + listSchedule[i].ap_name_d + "</td>";
+					str += "<td>" + listSchedule[i].ap_name_a + "</td>";
+					str += "<td><button id='updateBtn' data-idx='"+listSchedule[i].date_idx+"'>수정</button></td>";
+					str += "<td><button id='deleteBtn' data-idx='"+listSchedule[i].date_idx+"'>삭제</button></td>";
+					str += "</tr>"
 				}
-				selectFlight.html(str)
+				$(".listSchedule").html(str)
+				
+				// 수정 버튼 클릭 이벤트
+				$(".listSchedule #updateBtn").on("click", function() {
+					var date_idx = $(this).data("idx");
+					updatePopup(date_idx);
+				}) // end : 수정 버튼 클릭 이벤트
+				
+				// 삭제 버튼 클릭 이벤트
+				$(".listSchedule #deleteBtn").on("click", function() {
+					var date_idx = $(this).data("idx");
+					$.ajax({
+						type : 'delete',
+						url : '/flightManager/deleteSchedule/' + date_idx,
+						success : function(result) {
+							alert("삭제에 성공했습니다!")
+							location.href = "${pageContext.request.contextPath}/flight/scheduleManagerPage";
+						},
+						error : function(error) {
+							console.log(error)
+						}
+					})
+				}) // end : 삭제 버튼 클릭 이벤트
+				
 			}else{
-				selectFlight.html("<option>없음</option>")
-			}
-		})
-		
-		// 공항 조회
-		listAirport(function(listAp) {
-			var str = '';
-			for(var i=0; i<listAp.length; i++){
-				str += "<option value=" + listAp[i].ap_idx + ">" + listAp[i].ap_name_d + "</option>";
-			}
-			// 출발 공항
-			selectAirport_d.html(str)
-			// 도착 공항
-			selectAirport_a.html(str)
-		})
-		
-		// 일정 추가 버튼 객체
-		var scheduleInsertBtn = $("#scheduleInsertBtn")
-		
-		// 일정 추가에 필요한 객체
-		var schedule = $(".scheduleInsert")
-		var flight_name = schedule.find("select[name='flight_name']");
-		var start_date = schedule.find("input[name='start_date']"); 
-		var depart_time = schedule.find("input[name='depart_time']"); 
-		var arrive_time = schedule.find("input[name='arrive_time']"); 
-		var boarding_time = schedule.find("input[name='boarding_time']"); 
-		var ap_idx_d = schedule.find("select[name='ap_idx_d']");
-		var ap_idx_a = schedule.find("select[name='ap_idx_a']");
-
-		// 일정 추가 버튼 클릭 이벤트
-		scheduleInsertBtn.on("click", function() {
-			if(flight_name.val() == "없음"){
-				alert("잘못된 접근 입니다. (기업회원 전용)")
-			}else if (start_date.val() == "") {
-				alert("비행일자를 입력해 주세요")
-			}else if(boarding_time.val() == ""){
-				alert("탑승시각을 입력해 주세요")
-			}else if(depart_time.val() == ""){
-				alert("출발시각을 입력해 주세요")
-			}else if(arrive_time.val() == ""){
-				alert("도착시각을 입력해 주세요")
-			}else if (ap_idx_d.val() == ap_idx_a.val()) {
-				alert("출발공항과 도착공항을 다르게 입력해 주세요")
-			}else if(depart_time.val() >= arrive_time.val()){
-				alert("출발시각이 도착시각과 같거나 늦게 설정 되었습니다.")	
-			}else{
-				// 항공편 일정 추가
-				insertSchedule({flight_name:flight_name.val(), start_date:start_date.val(), boarding_time:boarding_time.val(),
-					depart_time:depart_time.val(), arrive_time:arrive_time.val(), ap_idx_d:ap_idx_d.val(), ap_idx_a:ap_idx_a.val()}, 
-					function(result) {
-						alert("일정이 정상적으로 추가되었습니다!")
-						console.log(result)
-				}) // end : 항공편 일정 추가
-			}
-		}) // end : 일정 추가 버튼 클릭 이벤트 종료
+				$(".listSchedule").html("<h1>일정이 존재 하지 않습니다!</h1>")
+			} // end : else
+		}) // end : 일정 조회
 		
 	}) // end : onload
 

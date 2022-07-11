@@ -69,4 +69,10 @@ public class K_FlightMapperTests {
 //		log.info("테스트 결과 : " + mapper.getBookingList(m_idx));
 //	}
 	
+	// 스케쥴 조회
+//	@Test
+//	public void test() {
+//		log.info("테스트 결과 : " + mapper.scheduleList("KAL"));
+//	}
+	
 }

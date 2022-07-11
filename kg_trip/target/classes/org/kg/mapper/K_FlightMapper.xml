@@ -14,14 +14,40 @@
 		SELECT * FROM k_flight_tbl WHERE c_aircode = #{c_aircode}
 	</select>
 	
+	<!-- 항공편 일정 조회 -->
+	<select id="scheduleList" resultType="org.kg.domain.K_scheduleDTO">
+		SELECT 
+			s.date_idx, s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a
+		FROM k_schedule_tbl s 
+			INNER JOIN K_AIRPORT_TBl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN K_AIRPORT_TBl a on s.ap_idx_a = a.ap_idx 
+		WHERE c_aircode = #{c_aircode}
+		ORDER BY s.start_date ASC
+	</select>
+	
 	<!-- 항공편 일정 추가 -->
 	<insert id="insertSchedule">
 		INSERT INTO 
-			k_schedule_tbl(date_idx, flight_name, start_date, boarding_time, depart_time, arrive_time, ap_idx_d, ap_idx_a) 
+			k_schedule_tbl(date_idx, flight_name, start_date, boarding_time, depart_time, arrive_time, ap_idx_d, ap_idx_a, c_aircode) 
 		VALUES 
-			(k_schedule_tbl_seq.nextval, #{flight_name}, #{start_date}, #{boarding_time}, #{depart_time}, #{arrive_time}, #{ap_idx_d}, #{ap_idx_a})
+			(k_schedule_tbl_seq.nextval, #{flight_name}, #{start_date}, #{boarding_time}, #{depart_time}, #{arrive_time}, #{ap_idx_d}, #{ap_idx_a}, #{c_aircode})
 	</insert>
 	
+	<!-- 항공편 일정 삭제 -->
+	<delete id="deleteSchedule">
+		DELETE FROM k_schedule_tbl WHERE date_idx = #{date_idx}
+	</delete>
+	
+	<!-- 항공편 수정을 위한 조회 -->
+	<select id="getFlight" resultType="org.kg.domain.K_scheduleDTO">
+		SELECT 
+			s.date_idx, s.flight_name, s.start_date, s.boarding_time, s.depart_time, s.arrive_time, d.ap_name_d, a.ap_name_a
+		FROM k_schedule_tbl s 
+			INNER JOIN K_AIRPORT_TBl d on s.ap_idx_d = d.ap_idx
+			INNER JOIN K_AIRPORT_TBl a on s.ap_idx_a = a.ap_idx 
+		WHERE s.date_idx = #{date_idx}
+	</select>
+
 	<!-- 항공권 일정 조회 : 이코노미 좌석 선택 -->
 	<select id="searchScheduleEco" resultType="org.kg.domain.K_getScheduleDTO">
 		SELECT 

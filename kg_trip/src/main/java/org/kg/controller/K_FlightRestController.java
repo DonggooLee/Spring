@@ -8,10 +8,12 @@ import org.kg.domain.K_flightVO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
+import org.kg.domain.K_scheduleDTO;
 import org.kg.service.K_FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,23 +40,43 @@ public class K_FlightRestController {
 		return new ResponseEntity<>(service.airportList_(), HttpStatus.OK);
 	}
 	
-	// 항공편 조회
+	// 항공사 조회
 	@GetMapping(value = "/flightList/{c_aircode}", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<List<K_flightVO>> flightList(@PathVariable("c_aircode") String c_aircode){
-		log.info("항공편 조회...");
+		log.info("항공사 조회...");
+		log.info("c_aircode..." + c_aircode);
 		return new ResponseEntity<>(service.flightList_(c_aircode), HttpStatus.OK);
 	}
 	
-	// 항공일정 추가
+	// 항공편 일정 조회
+	@GetMapping(value = "/scheduleList/{c_aircode}", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<K_scheduleDTO>> scheduleList(@PathVariable("c_aircode") String c_aircode){
+		log.info("항공편 일정 조회...");
+		log.info("c_aircode..." + c_aircode);
+		return new ResponseEntity<>(service.scheduleList_(c_aircode), HttpStatus.OK);
+	}
+	
+	// 항공편 일정 추가
 	@PostMapping(value = "/insertSchedule", consumes = "application/json", 
 			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> scheduleInsert(@RequestBody K_insertScheduleDTO insertSch){
-		log.info("항공 일정 추가...");
+		log.info("항공편 일정 추가...");
 		log.info("K_insertScheduleDTO : " + insertSch);
 		int insertCount = service.insertSchedule_(insertSch);
 		log.info("Reply Insert Count..." + insertCount);
 		return insertCount == 1 ?
 				new ResponseEntity<>("success", HttpStatus.OK) :
+					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	// 항공편 일정 삭제
+	@DeleteMapping(value = "/deleteSchedule/{date_idx}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> deleteSchedule(@PathVariable("date_idx") String date_idx){
+		log.info("항공편 일정 삭제...");
+		log.info("date_idx..." + date_idx);
+		int result = service.deleteSchedule_(date_idx);
+		return result == 1 ?
+				new ResponseEntity<>("일정이 정상적으로 삭제 되었습니다 !", HttpStatus.OK) :
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

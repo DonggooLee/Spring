@@ -9,6 +9,7 @@ import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
 import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_getSeatVO;
+import org.kg.domain.K_insertScheduleDTO;
 import org.kg.domain.K_checkSeatVO;
 import org.kg.domain.K_getInfoDTO;
 import org.kg.service.K_FlightService;
@@ -36,9 +37,24 @@ public class K_FlightController {
 	private K_FlightService service;
 	private k_KakaopayPay kakaopay;
 
-	// 기업회원 : 비행기 스케줄 관리 페이지 이동
-	@GetMapping("scheduleManagerPage")
+	// 기업회원 : 비행기 스케줄 등록 페이지 이동 (일정 등록)
+	@GetMapping("scheduleInsertPage")
 	public String scheduleManager(HttpServletRequest request, Model model) {
+		log.info("페이지 이동 : scheduleInsertPage...");
+		HttpSession session = request.getSession(false);
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		}else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		return "flight/scheduleInsertPage";
+	}
+	
+	// 기업회원 : 비행기 스케줄 관리 페이지 이동 (일정 수정/삭제)
+	@GetMapping("scheduleManagerPage")
+	public String scheduleManagerPage(HttpServletRequest request, Model model) {
 		log.info("페이지 이동 : scheduleManagerPage...");
 		HttpSession session = request.getSession(false);
 		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
@@ -49,6 +65,40 @@ public class K_FlightController {
 			log.info(loginvo);
 		}
 		return "flight/scheduleManagerPage";
+	}
+	
+	// 기업회원 : 비행기 스케줄 관리 페이지에서 수정 버튼 클릭 시 
+	@GetMapping("scheduleUpdatePage")
+	public String scheduleUpdatePage(HttpServletRequest request, Model model, 
+			@RequestParam("date_idx") String date_idx) {
+		log.info("페이지 이동 : scheduleUpdatePage...");
+		log.info("date_idx : " + date_idx);
+		HttpSession session = request.getSession(false);
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		}else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		model.addAttribute("updateInfo", service.getFlight_(date_idx));
+		return "flight/scheduleUpdatePage";
+	}
+	
+	// 기업회원 : 항공편 일정 변경 페이지에서 최종 수정 버튼 클릭 시
+	@PostMapping("scheduleUpdate")
+	public String scheduleUpdate(HttpServletRequest request, Model model, K_insertScheduleDTO input) {
+		log.info("페이지 이동 : scheduleUpdate...");
+		log.info("수정정보..." + input);
+		HttpSession session = request.getSession(false);
+		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
+		if (loginvo == null) {
+			model.addAttribute("loginCorpInfo", null);
+		}else {
+			model.addAttribute("loginCorpInfo", loginvo);
+			log.info(loginvo);
+		}
+		return "flight/test";
 	}
 	
 	// 일반회원 : 항공권 조회 페이지 이동

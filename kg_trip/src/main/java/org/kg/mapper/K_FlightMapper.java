@@ -13,6 +13,7 @@ import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
+import org.kg.domain.K_scheduleDTO;
 
 public interface K_FlightMapper {
 	
@@ -63,5 +64,14 @@ public interface K_FlightMapper {
 	
 	// 항공권 예약 내역 (회원별)
 	public List<K_getResrvationInfoVO> getBookingList(int m_idx);
+	
+	// 항공권 일정 조회
+	public List<K_scheduleDTO> scheduleList(String c_aircode);
+	
+	// 항공편 일정 삭제
+	public int deleteSchedule(String date_idx);
+	
+	// 항공편 수정을 위한 조회
+	public K_scheduleDTO getFlight(String date_idx);
 	
 }

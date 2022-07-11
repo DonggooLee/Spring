@@ -22,8 +22,6 @@
 		
 		<div>
 			<button id="mainBtn">메인페이지</button>
-			&nbsp;
-			<button id="refundBtn">항공권 환불</button>
 		</div>
 		
 		<br>
@@ -121,15 +119,6 @@
 		$("#mainBtn").on("click", function() {
 			location.href = "/KingTrip/main";
 		}) // end : 메인페이지 버튼 클릭 이벤트
-		
-		// 환불하기 버튼 클릭 이벤트
-		$("#refundBtn").on("click", function() {
-			if(confirm("정말 환불하시겠습니까?")){
-				$("#reservationCancelForm").submit();				
-			}else{
-				return;
-			}
-		}) // end : 환불하기 버튼 클릭 이벤트
 		
 	}) // end : onload
 	

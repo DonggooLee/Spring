@@ -13,6 +13,7 @@ import org.kg.domain.K_getReservationIdxDTO;
 import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.K_inputScheduleDTO;
 import org.kg.domain.K_insertScheduleDTO;
+import org.kg.domain.K_scheduleDTO;
 import org.kg.mapper.K_FlightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,24 @@ public class K_FlightServiceImpl implements K_FlightService{
 	@Override
 	public List<K_getResrvationInfoVO> getBookingList_(int m_idx) {
 		return mapper.getBookingList(m_idx);
+	}
+
+	// 항공권 일정 조회
+	@Override
+	public List<K_scheduleDTO> scheduleList_(String c_aircode) {
+		return mapper.scheduleList(c_aircode);
+	}
+
+	// 항공편 일정 삭제
+	@Override
+	public int deleteSchedule_(String date_idx) {
+		return mapper.deleteSchedule(date_idx);
+	}
+
+	// 항공편 수정을 위한 조회
+	@Override
+	public K_scheduleDTO getFlight_(String date_idx) {
+		return mapper.getFlight(date_idx);
 	}
 	
 }
