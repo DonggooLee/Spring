@@ -86,9 +86,9 @@ public class K_FlightController {
 	}
 	
 	// 기업회원 : 항공편 일정 변경 페이지에서 최종 수정 버튼 클릭 시
-	@PostMapping("scheduleUpdate")
-	public String scheduleUpdate(HttpServletRequest request, Model model, K_insertScheduleDTO input) {
-		log.info("페이지 이동 : scheduleUpdate...");
+	@PostMapping(value = "scheduleUpdate", consumes = "application/json")
+	public ResponseEntity<String> scheduleUpdate(HttpServletRequest request, Model model, 
+			@RequestBody K_insertScheduleDTO input) {
 		log.info("수정정보..." + input);
 		HttpSession session = request.getSession(false);
 		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
@@ -98,7 +98,9 @@ public class K_FlightController {
 			model.addAttribute("loginCorpInfo", loginvo);
 			log.info(loginvo);
 		}
-		return "flight/test";
+		return service.updateSchdule_(input) == 1 ?
+				new ResponseEntity<String>("success",HttpStatus.OK) : 
+					new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// 일반회원 : 항공권 조회 페이지 이동
@@ -140,7 +142,8 @@ public class K_FlightController {
 	@PostMapping(value = "getSeatList", consumes = "application/json", 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<K_getSeatVO> getSeatList(@RequestBody K_getInfoDTO info){
-		log.info("선택 좌석 출력 넘어오는 정보 확인 : " + info.getDate_idx());
+		log.info("Date_idx : " + info.getDate_idx());
+		log.info("Seat_grade : " + info.getSeat_grade());
 		int date_idx =  info.getDate_idx();
 		if(info.getSeat_grade().equals("FIRST")) {
 			return new ResponseEntity<>(service.getSeatFir_(date_idx), HttpStatus.OK);
@@ -199,8 +202,9 @@ public class K_FlightController {
     }
 	
 	// 일반회원 : 환불버튼 클릭 시 결제취소 요청 후 응답정보를 담아 마이페이지 > 항공권 예약내역 페이지로 이동 (!페이지 이동 시 리스트 출력 문제!)
-    @PostMapping("/kakaoPayCancel")
-    public String kakaoPayCancel(K_bookInfo bookInfo, HttpServletRequest request, Model model) {
+    @PostMapping(value = "/kakaoPayCancel", consumes = "application/json")
+    public ResponseEntity<String> kakaoPayCancel(@RequestBody K_bookInfo bookInfo, 
+    		HttpServletRequest request, Model model) {
     	log.info("항공권 예약 환불하기...");
     	log.info("환불정보..." + bookInfo);
     	HttpSession session = request.getSession(false);
@@ -212,7 +216,7 @@ public class K_FlightController {
     		log.info(loginvo);
     	}
     	model.addAttribute("refundInfo", kakaopay.kakaoPayCancel(bookInfo));
-    	return "flight/myBookList"; 
+    	return new ResponseEntity<>("success", HttpStatus.OK);
     }
 	
 	// 일반회원 : 항공권 예약 조회 페이지 이동

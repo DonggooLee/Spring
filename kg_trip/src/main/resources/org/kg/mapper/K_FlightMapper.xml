@@ -48,6 +48,12 @@
 		WHERE s.date_idx = #{date_idx}
 	</select>
 
+	<!-- 항공편 수정 -->
+	<update id="updateSchdule">
+		UPDATE k_schedule_tbl SET start_date = #{start_date}, boarding_time = #{boarding_time}, depart_time = #{depart_time}, arrive_time = #{arrive_time}, 
+		ap_idx_d = #{ap_idx_d}, ap_idx_a = #{ap_idx_a} where date_idx = #{date_idx}
+	</update>
+
 	<!-- 항공권 일정 조회 : 이코노미 좌석 선택 -->
 	<select id="searchScheduleEco" resultType="org.kg.domain.K_getScheduleDTO">
 		SELECT 

@@ -141,5 +141,11 @@ public class K_FlightServiceImpl implements K_FlightService{
 	public K_scheduleDTO getFlight_(String date_idx) {
 		return mapper.getFlight(date_idx);
 	}
+
+	// 항공편 수정
+	@Override
+	public int updateSchdule_(K_insertScheduleDTO input) {
+		return mapper.updateSchdule(input);
+	}
 	
 }

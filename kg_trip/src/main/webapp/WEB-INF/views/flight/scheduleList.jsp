@@ -47,10 +47,10 @@
 			<br>
 			<div>
 				<button id="getScheduleBtn">일정조회</button>
-				<!-- 
+				&nbsp;
 				<button id="lowPriceleBtn">낮은가격순</button>
+				&nbsp;
 				<button id="highPriceBtn">높은가격순</button>
-				 -->
 			</div>
 		</div>
 		
@@ -107,6 +107,11 @@
 			selectAirport_a.html(str_2)
 		})
 		
+		// 티켓 가격에 천단위 구분을 위한 함수
+		function AmountCommas(val){
+		    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+		}
+		
 		// 일정 조회 버튼 클릭 이벤트
 		getScheduleBtn.on("click", function() {
 			var str = '';
@@ -128,7 +133,7 @@
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 티켓가격 : " + listSch[i].firstseatprice + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].firstseatprice) + "원 </li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
@@ -159,7 +164,7 @@
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 티켓가격 : " + listSch[i].businessseatprice + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].businessseatprice) + "원</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
@@ -190,7 +195,7 @@
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
 										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
 										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
-										str += "<li> 티켓가격 : " + listSch[i].economyseatprice + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].economyseatprice) + "원</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
 										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";

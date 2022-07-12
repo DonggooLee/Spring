@@ -46,9 +46,6 @@
 										<c:if test="${alist.completion eq '예약완료'}">
 											<td><button class="refundBtn" data-role="${alist.reservation_idx}">환불</button></td>
 										</c:if>
-										<%-- <c:if test="${alist.completion eq '환불완료'}">
-											<td><button class="refundBtn" data-role="환불완료">환불</button></td>
-										</c:if> --%>
 									</tr>
 								</c:forEach>
 							</c:when>
@@ -60,10 +57,6 @@
 				</div>
 				<!-- 항공권 환불을 위한 임시 저장소 -->
 				<form action="kakaoPayCancel" method="post" id="refundForm"></form>
-				<!-- 시간 값 수정을 위한 임시 저장소 -->
-				<form action="#" id="tempForm">
-					<input type="hidden" name="start_date" value="${alist.start_date}">
-				</form>
 			</div>
 		</div>
 	</div>
@@ -75,32 +68,41 @@
 
 	$(function() {
 		
-		// 시간값 변경을 위한 객체 생성
-		var start_date = $("#tempForm").find("input[name='start_date']").val();
-		 
 		// 환불 버튼 클릭 이벤트
 		$(".refundBtn").on("click", function() {
 			var reservation_idx = $(this).attr('data-role');
 			// 예약상태가 환불완료 시 환불버튼 비활성화(pointer-events: none;) 또는 알림창으로 알려주기 선택 !
-			if (reservation_idx == "환불완료"){
-				alert("이미 환불이 완료된 항공권 입니다!");
+			if(confirm("정말 환불하시겠습니까?")){
+				$.ajax({
+					type : 'get',
+					url : '/flightManager/myReservation/' + reservation_idx,
+					success : function(info) {
+						var str = '';
+						str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
+						str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";
+						str += "<input type='hidden' name='tid' value=" + info.tid + ">";
+ 						$("#refundForm").html(str);
+ 						var ticket_price = $("#refundForm").find("input[name='ticket_price']").val();
+ 						var tid = $("#refundForm").find("input[name='tid']").val();
+ 						var param = {ticket_price:ticket_price, tid:tid, reservation_idx:reservation_idx}
+ 						if(info != undefined){
+	 						$.ajax({
+	 							type : 'post',
+	 							url : 'kakaoPayCancel',
+	 							data : JSON.stringify(param),
+	 							contentType : 'application/json; charset=utf-8',
+	 							success : function() {
+	 								alert("환불이 정상적으로 완료되었습니다!")
+									location.href = "myBookList";
+								}
+	 						})
+ 						}else{
+ 							return;
+ 						}
+					}
+				})
 			}else{
-				if(confirm("정말 환불하시겠습니까?")){
-					$.ajax({
-						type : 'get',
-						url : '/flightManager/myReservation/' + reservation_idx,
-						success : function(info) {
-							var str = '';
-							str += "<input type='hidden' name='reservation_idx' value=" + reservation_idx + ">";
-							str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";
-							str += "<input type='hidden' name='tid' value=" + info.tid + ">";
-	 						$("#refundForm").html(str);		
-							$("#refundForm").submit();
-						}
-					})
-				}else{
-					return;
-				}
+				return;
 			}
 		}) // end : 환불 버튼 클릭 이벤트
 		

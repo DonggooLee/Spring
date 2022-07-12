@@ -13,7 +13,7 @@
 		<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
 			<div class="content" style=" margin : 10px; background-color: white;">
 							
-				<div class="scheduleManager" style="border: 1px solid black; width: 680px; padding: 30px">
+				<div class="scheduleManager" style="border: 1px solid black; width: 700px; padding: 30px">
 				
 					<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 관리</h1>
 					
@@ -42,7 +42,7 @@
 		// 일정 수정 팝업
 		function updatePopup(date_idx) {
 		    var popUrl = "scheduleUpdatePage?date_idx=" + date_idx;
-		    var popOption = "top=50, left=50, width=800, height=800";
+		    var popOption = "top=100, left=100, width=500, height=500";
 		    window.open(popUrl, "", popOption);
 		}
 		
@@ -53,21 +53,21 @@
 		listSchedule(c_aircode, function(listSchedule) {
 			if(listSchedule.length != 0){
 				var str = '';
-				str += "<table>"
-				str += "<tr>"
-				str += "<th>일정번호</th>"
-				str += "<th>항공편명</th>"
-				str += "<th>비행일자</th>"
-				str += "<th>탑승시각</th>"
-				str += "<th>출발시각</th>"
-				str += "<th>도착시각</th>"
-				str += "<th>출발공항</th>"
-				str += "<th>도착공항</th>"
-				str += "<th>수정</th>"
-				str += "<th>삭제</th>"
-				str += "</tr>"
+				str += "<table>";
+				str += "<tr>";
+				str += "<th>일정번호</th>";
+				str += "<th>항공편명</th>";
+				str += "<th>비행일자</th>";
+				str += "<th>탑승시각</th>";
+				str += "<th>출발시각</th>";
+				str += "<th>도착시각</th>";
+				str += "<th>출발공항</th>";
+				str += "<th>도착공항</th>";
+				str += "<th>수정</th>";
+				str += "<th>삭제</th>";
+				str += "</tr>";
 				for(var i=0; i<listSchedule.length; i++){
-					str += "<tr>"
+					str += "<tr>";
 					str += "<td>" + listSchedule[i].date_idx + "</td>";
 					str += "<td>" + listSchedule[i].flight_name + "</td>";
 					str += "<td>" + displayTime(listSchedule[i].start_date) + "</td>";
@@ -78,32 +78,30 @@
 					str += "<td>" + listSchedule[i].ap_name_a + "</td>";
 					str += "<td><button id='updateBtn' data-idx='"+listSchedule[i].date_idx+"'>수정</button></td>";
 					str += "<td><button id='deleteBtn' data-idx='"+listSchedule[i].date_idx+"'>삭제</button></td>";
-					str += "</tr>"
+					str += "</tr>";
 				}
-				$(".listSchedule").html(str)
-				
+				$(".listSchedule").html(str);
 				// 수정 버튼 클릭 이벤트
 				$(".listSchedule #updateBtn").on("click", function() {
 					var date_idx = $(this).data("idx");
 					updatePopup(date_idx);
 				}) // end : 수정 버튼 클릭 이벤트
-				
 				// 삭제 버튼 클릭 이벤트
 				$(".listSchedule #deleteBtn").on("click", function() {
 					var date_idx = $(this).data("idx");
-					$.ajax({
-						type : 'delete',
-						url : '/flightManager/deleteSchedule/' + date_idx,
-						success : function(result) {
-							alert("삭제에 성공했습니다!")
-							location.href = "${pageContext.request.contextPath}/flight/scheduleManagerPage";
-						},
-						error : function(error) {
-							console.log(error)
-						}
-					})
+					if(confirm("일정을 삭제하시겠습니까?")){
+						$.ajax({
+							type : 'delete',
+							url : '/flightManager/deleteSchedule/' + date_idx,
+							success : function(result) {
+								alert("정상적으로 삭제 되었습니다!")
+								location.href = "${pageContext.request.contextPath}/flight/scheduleManagerPage";
+							}
+						})
+					}else{
+						return;
+					}
 				}) // end : 삭제 버튼 클릭 이벤트
-				
 			}else{
 				$(".listSchedule").html("<h1>일정이 존재 하지 않습니다!</h1>")
 			} // end : else

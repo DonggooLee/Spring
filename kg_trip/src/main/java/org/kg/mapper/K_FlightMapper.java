@@ -74,4 +74,7 @@ public interface K_FlightMapper {
 	// 항공편 수정을 위한 조회
 	public K_scheduleDTO getFlight(String date_idx);
 	
+	// 항공편 수정
+	public int updateSchdule(K_insertScheduleDTO input);
+	
 }

@@ -12,78 +12,74 @@
 		<jsp:include page="/WEB-INF/views/include/corpMenuBar.jsp"></jsp:include>
 		<div class="content_section" style="border: 1px solid black; width: 85%; background-color: #E8EFFF;">
 			<div class="content" style=" margin : 10px; background-color: white;">
-							
-				<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
-				
-					<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 등록</h1>
-					
-					<br>
-					
-					<div>
+				<form action="#">
+					<div class="scheduleInsert" style="border: 1px solid black; width: 300px; padding: 15px">
+						<h1 style="text-align: center;">${loginCorpInfo.c_name} 항공편 일정 등록</h1>
+						<br>
 						<div>
-							<b>항공편명</b>&nbsp;&nbsp;
-							<select name="flight_name" class="selectFlight">
-								<option>없음</option>
-							</select>
+							<div>
+								<b>항공편명</b>&nbsp;&nbsp;
+								<select name="flight_name" class="selectFlight">
+									<option>없음</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>비행일자</b>&nbsp;&nbsp;
-							<input type="date" name="start_date">
+							<div>
+								<b>비행일자</b>&nbsp;&nbsp;
+								<input type="date" name="start_date">
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>탑승시각</b>&nbsp;&nbsp;
-							<input type="time" name="boarding_time">
+							<div>
+								<b>탑승시각</b>&nbsp;&nbsp;
+								<input type="time" name="boarding_time">
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>출발시각</b>&nbsp;&nbsp;
-							<input type="time" name="depart_time">
+							<div>
+								<b>출발시각</b>&nbsp;&nbsp;
+								<input type="time" name="depart_time">
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>도착시각</b>&nbsp;&nbsp;
-							<input type="time" name="arrive_time">
+							<div>
+								<b>도착시각</b>&nbsp;&nbsp;
+								<input type="time" name="arrive_time">
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>출발공항</b>&nbsp;&nbsp;
-							<select name="ap_idx_d" class="selectAirport_d">
-								<option>없음</option>
-							</select>
+							<div>
+								<b>출발공항</b>&nbsp;&nbsp;
+								<select name="ap_idx_d" class="selectAirport_d">
+									<option>없음</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<br>
-					<div>
+						<br>
 						<div>
-							<b>도착공항</b>&nbsp;&nbsp;
-							<select name="ap_idx_a" class="selectAirport_a">
-								<option>없음</option>
-							</select>
+							<div>
+								<b>도착공항</b>&nbsp;&nbsp;
+								<select name="ap_idx_a" class="selectAirport_a">
+									<option>없음</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					
-					<br>
-					
-					<div>
-						<button id="scheduleInsertBtn" type="button">일정 추가</button>
-					</div>
-					
-					<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
-					
-				</div> <!-- end : scheduleInsert -->
-							
+						<br>
+						<div>
+							<button id="cancelBtn">취소</button>
+							&nbsp;
+							<button id="scheduleInsertBtn">일정 추가</button>
+						</div>
+						<!-- 항공편 조회를 위한 데이터 -->
+						<input type="hidden" name="c_aircode" value="${loginCorpInfo.c_aircode}">
+					</div> <!-- end : scheduleInsert -->
+				</form>
 			</div> <!-- end : content -->
 		</div> <!-- end : content_section -->
 	</div> <!-- end : all -->
@@ -167,6 +163,12 @@
 				}) // end : 항공편 일정 추가
 			}
 		}) // end : 일정 추가 버튼 클릭 이벤트 종료
+
+		// 취소 버튼 클릭 이벤트
+		$("#cancelBtn").on("click", function(e) {
+			e.preventDefault();
+			location.href = "${pageContext.request.contextPath}/Partner/corpPage";
+		}) // end : 취소 버튼 클릭 이벤트
 		
 	}) // end : onload
 

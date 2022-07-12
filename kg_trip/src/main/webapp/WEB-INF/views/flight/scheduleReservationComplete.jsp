@@ -90,15 +90,21 @@
 					type : 'get',
 					url : '/flightManager/myReservation/' + reservation_idx,
 					success : function(info) {
+						var start_date = new Date(info.start_date);
+						const formatDate = (start_date)=>{
+							let formatted_date = start_date.getFullYear() + "-0" + (start_date.getMonth() + 1) + "-" + start_date.getDate();
+							return formatted_date;
+						}
 						var str = '';
 						if(info != ""){ 	
 							str += "<table style='padding: 20px; border: 1px solid black;'>";
 							str += "<tr><th colspan='2'>예약 정보</th></tr>";
 							str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
 							str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
-							str += "<tr><th>결제가격</th><td>" + AmountCommas(ticket_price) + "원</td></tr>";
+							str += "<tr><th>예약정보</th><td>" + info.reservation_idx + "</td></tr>";
 							str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
-							str += "<tr><th>비행일자</th><td>" + info.start_date + "</td></tr>";
+							str += "<tr><th>결제가격</th><td>" + AmountCommas(ticket_price) + "원</td></tr>";
+							str += "<tr><th>비행일자</th><td>" + formatDate(start_date) + "</td></tr>";
 							str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
 							str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
 							str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
@@ -117,7 +123,7 @@
 		
 		// 메인페이지 버튼 클릭 이벤트
 		$("#mainBtn").on("click", function() {
-			location.href = "/KingTrip/main";
+			location.href = "${pageContext.request.contextPath}/KingTrip/main";
 		}) // end : 메인페이지 버튼 클릭 이벤트
 		
 	}) // end : onload

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page session="false" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
@@ -34,11 +35,23 @@
 		<form action="kakaoPayCancel" method="post" id="refundForm"></form>
 			
 	</section>
+
+<style>
+
+	tr, th, td{ 
+		padding: 10px;
+	}
 	
+</style>
 <script type="text/javascript" src="/resources/js/flight.js"></script>
 <script type="text/javascript">
 
 	$(function() {
+		
+		// 티켓 가격에 천단위 구분을 위한 함수
+		function AmountCommas(val){
+		    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+		}
 		
 		var bookInfo = $(".bookInfo");
 		
@@ -54,15 +67,22 @@
 					url : '/flightManager/myReservation/' + reservation_idx,
 					success : function(info) {
 						var str = '';
-						if (info.reservation_idx == undefined && info.flight_name == undefined) {
+						if (info.reservation_idx == undefined && info.flight_name == undefined || info.completion == "환불완료") {
 							alert("존재하지 않는 예약번호 입니다")
 							$(".searchBox").find("input[name='checkBook']").val("");
 						}else{
+							// 비행시간 형변환 후 formatting
+							var start_date = new Date(info.start_date);
+							const formatDate = (start_date)=>{
+								let formatted_date = start_date.getFullYear() + "-0" + (start_date.getMonth() + 1) + "-" + start_date.getDate();
+								return formatted_date;
+							}
 							str += "<tr><th colspan='2'>예약 정보</th></tr>";
 							str += "<tr><th>성 명</th><td>" + info.m_name + "</td></tr>";
 							str += "<tr><th>성 별</th><td>" + info.m_gender + "</td></tr>";
 							str += "<tr><th>항공편명</th><td>" + info.flight_name + "</td></tr>";
-							str += "<tr><th>비행일자</th><td>" + displayTime(info.start_date) + "</td></tr>";
+							str += "<tr><th>결제가격</th><td>" + AmountCommas(info.ticket_price) + "원</td></tr>";
+							str += "<tr><th>비행일자</th><td>" + formatDate(start_date) + "</td></tr>";
 							str += "<tr><th>탑승시각</th><td>" + info.boarding_time + "</td></tr>";
 							str += "<tr><th>출발시각</th><td>" + info.depart_time + "</td></tr>";
 							str += "<tr><th>도착시각</th><td>" + info.arrive_time + "</td></tr>";
@@ -84,16 +104,32 @@
 											str += "<input type='hidden' name='ticket_price' value=" + info.ticket_price + ">";
 											str += "<input type='hidden' name='tid' value=" + info.tid + ">";
 					 						$("#refundForm").html(str);		
-											$("#refundForm").submit();
+					 						var ticket_price = $("#refundForm").find("input[name='ticket_price']").val();
+					 						var tid = $("#refundForm").find("input[name='tid']").val();
+					 						var param = {ticket_price:ticket_price, tid:tid, reservation_idx:reservation_idx}
+					 						if(info != undefined){
+						 						$.ajax({
+						 							type : 'post',
+						 							url : 'kakaoPayCancel',
+						 							data : JSON.stringify(param),
+						 							contentType : 'application/json; charset=utf-8',
+						 							success : function() {
+						 								alert("환불이 정상적으로 완료되었습니다!")
+														location.href = "${pageContext.request.contextPath}/KingTrip/main";
+													}
+						 						}) // end : ajax() => 환불 쿼리 실행 후 메인페이지 이동
+					 						}else{
+					 							return;
+					 						}
 										}
-									})
+									}) // end : ajax() => 예약번호를 통한 환불정보 가져오기
 								}else{
 									return;
 								}
 							}) // end : 환불하기 버튼 클릭 이벤트
-						} // end : else 예외처리
+						}
 					}
-				}) // end : ajax()
+				}) // end : ajax() => 예약번호를 통한 정보 가져오기
 			}
 		}) // end : 예약 조회 버튼 클릭 이벤트
 		
