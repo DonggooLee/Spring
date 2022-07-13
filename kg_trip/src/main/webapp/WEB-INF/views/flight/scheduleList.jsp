@@ -51,6 +51,7 @@
 				<button id="lowPriceleBtn">낮은가격순</button>
 				&nbsp;
 				<button id="highPriceBtn">높은가격순</button>
+				<div class="test"></div>
 			</div>
 		</div>
 		
@@ -121,7 +122,7 @@
 				alert("출발공항과 도착공항을 다르게 입력해 주세요")
 			} else {
 				if (seat_grade.val() == "FIRST") {
-					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val()}, 
+					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -131,12 +132,12 @@
 									for(var i=0; i<listSch.length; i++){
 										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
 										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].firstseatprice) + "원 </li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
 										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
 										str += "<br><hr><br>";
 									}
@@ -152,7 +153,7 @@
 							})
 					}) // end : 퍼스트 좌석 선택 일정
 				} else if (seat_grade.val() == "BUSINESS") {
-					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val()}, 
+					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -162,12 +163,12 @@
 									for(var i=0; i<listSch.length; i++){
 										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
 										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].businessseatprice) + "원</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
 										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
 										str += "<br><hr><br>";
 									}
@@ -183,7 +184,7 @@
 							})
 					}) // end : 비즈니스 좌석 선택 일정
 				} else{
-					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val()}, 
+					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -193,12 +194,12 @@
 									for(var i=0; i<listSch.length; i++){
 										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
 										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li>";
 										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].economyseatprice) + "원</li>";
 										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
 										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li><br>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
 										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
 										str += "<br><hr><br>";
 									}
@@ -215,18 +216,112 @@
 					}) // end : 이코노미 좌석 선택 일정
 				} // end : 좌석 구분 else
 			} // end : 예외처리 else
-			
 		}) // end : 일정 조회 버튼 클릭 이벤트 종료
 		
 		// 낮은가격순 버튼 클릭 이벤트
 		$("#lowPriceleBtn").on("click", function() {
-			alert("낮은가격순")
+			var str = '';
+			if(start_date.val() == ""){
+				alert("비행일자를 선택해 주세요")
+			} else if (ap_name_d.val() == ap_name_a.val()) {
+				alert("출발공항과 도착공항을 다르게 입력해 주세요")
+			} else {
+				if (seat_grade.val() == "FIRST") {
+					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+							function(listSch) {
+								if(listSch.length == 0){
+									alert("일정이 존재하지 않습니다")
+								}else{
+									str += "<ul>";
+									str += "<h1>비행일정</h1><br>";
+									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
+										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].firstseatprice) + "원 </li>";
+										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
+										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
+										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
+										str += "<br><hr><br>";
+									}
+									str += "</ul>";
+								}
+							$(".schedule").html(str)
+							// 일정 선택 버튼 클릭 이벤트
+							$(".schedule button").on("click", function() {
+								// 일정번호
+								var date_idx = $(this).data("idx");
+								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=FIRST";
+							})
+					}) // end : 퍼스트 좌석 선택 일정
+				} else if (seat_grade.val() == "BUSINESS") {
+					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+							function(listSch) {
+								if(listSch.length == 0){
+									alert("일정이 존재하지 않습니다")
+								}else{
+									str += "<ul>";
+									str += "<h1>비행일정</h1><br>";
+									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
+										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].businessseatprice) + "원</li>";
+										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
+										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
+										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
+										str += "<br><hr><br>";
+									}
+									str += "</ul>";
+								}
+							$(".schedule").html(str)
+							// 일정 선택 버튼 클릭 이벤트
+							$(".schedule button").on("click", function() {
+								// 일정번호
+								var date_idx = $(this).data("idx");
+								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=BUSINESS";
+							})
+					}) // end : 비즈니스 좌석 선택 일정
+				} else{
+					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+							function(listSch) {
+								if(listSch.length == 0){
+									alert("일정이 존재하지 않습니다")
+								}else{
+									str += "<ul>";
+									str += "<h1>비행일정</h1><br>";
+									for(var i=0; i<listSch.length; i++){
+										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
+										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
+										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].economyseatprice) + "원</li>";
+										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
+										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
+										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
+										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
+										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
+										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
+										str += "<br><hr><br>";
+									}
+									str += "</ul>";
+								}
+							$(".schedule").html(str)
+							// 일정 선택 버튼 클릭 이벤트
+							$(".schedule button").on("click", function() {
+								// 일정번호
+								var date_idx = $(this).data("idx");
+								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=ECONOMY";
+							})
+					}) // end : 이코노미 좌석 선택 일정
+				} // end : 좌석 구분 else
+			} // end : 예외처리 else
 		}) // end : 낮은가격순 버튼 클릭 이벤트
-		
-		// 높은가격순 버튼 클릭 이벤트
-		$("#highPriceBtn").on("click", function() {
-			alert("높은가격순")
-		}) // end : 높은가격순 버튼 클릭 이벤트
 		
 	}) // end : onload
 	

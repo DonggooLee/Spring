@@ -26,14 +26,23 @@ public interface K_FlightMapper {
 	// 항공일정 추가
 	public int insertSchedule(K_insertScheduleDTO insertSch);
 	
-	// 일정조회 : 이코노미 좌석
+	// 일정조회 : 이코노미 좌석 (비행일자순)
 	public List<K_getScheduleDTO> searchScheduleEco(K_inputScheduleDTO inputSch);
 	
-	// 일정조회 : 비즈니스 좌석
+	// 일정조회 : 이코노미 좌석 (최저가순)
+	public List<K_getScheduleDTO> searchScheduleEcoPrice(K_inputScheduleDTO inputSch);
+	
+	// 일정조회 : 비즈니스 좌석 (비행일자순)
 	public List<K_getScheduleDTO> searchSchedulBis(K_inputScheduleDTO inputSch);
 	
-	// 일정조회 : 퍼스트 좌석
+	// 일정조회 : 비즈니스 좌석 (최저가순)
+	public List<K_getScheduleDTO> searchSchedulBisPrice(K_inputScheduleDTO inputSch);
+	
+	// 일정조회 : 퍼스트 좌석 (비행일자순)
 	public List<K_getScheduleDTO> searchScheduleFir(K_inputScheduleDTO inputSch);
+	
+	// 일정조회 : 퍼스트 좌석 (최저가순)
+	public List<K_getScheduleDTO> searchScheduleFirPrice(K_inputScheduleDTO inputSch);
 	
 	// 항공편 일정선택
 	public K_getScheduleDTO getSchedule(int date_idx);

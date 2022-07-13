@@ -26,14 +26,23 @@ public interface K_FlightService {
 	// 항공일정 추가
 	public int insertSchedule_(K_insertScheduleDTO insertSch);
 
-	// 일정조회 (이코노미)
+	// 일정조회 (이코노미 / 비행일자)
 	public List<K_getScheduleDTO> searchScheduleEco_(K_inputScheduleDTO inputSch);
 	
-	// 일정조회 (비즈니스)
+	// 일정조회 (이코노미 / 최저가)
+	public List<K_getScheduleDTO> searchScheduleEcoPrice_(K_inputScheduleDTO inputSch);
+		
+	// 일정조회 (비즈니스 / 비행일자)
 	public List<K_getScheduleDTO> searchSchedulBis_(K_inputScheduleDTO inputSch);
 	
-	// 일정조회 (퍼스트)
+	// 일정조회 (비즈니스 / 최저가)
+	public List<K_getScheduleDTO> searchSchedulBisPrice_(K_inputScheduleDTO inputSch);
+	
+	// 일정조회 (퍼스트 / 비행일자)
 	public List<K_getScheduleDTO> searchScheduleFir_(K_inputScheduleDTO inputSch);
+	
+	// 일정조회 (퍼스트 / 최저가)
+	public List<K_getScheduleDTO> searchScheduleFirPirce_(K_inputScheduleDTO inputSch);
 	
 	// 항공편 일정선택
 	public K_getScheduleDTO getSchedule_(int date_idx);

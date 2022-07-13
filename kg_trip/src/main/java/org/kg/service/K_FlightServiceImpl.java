@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.kg.domain.K_getScheduleDTO;
 import org.kg.domain.K_getSeatVO;
+import org.apache.ibatis.annotations.Param;
 import org.kg.domain.K_airportVO;
 import org.kg.domain.K_bookInfo;
 import org.kg.domain.K_checkSeatVO;
@@ -46,22 +47,40 @@ public class K_FlightServiceImpl implements K_FlightService{
 		return mapper.insertSchedule(insertSch);
 	}
 	
-	// 일정조회 (이코노미)
+	// 일정조회 (이코노미 / 비행일자)
 	@Override
 	public List<K_getScheduleDTO> searchScheduleEco_(K_inputScheduleDTO inputSch) {
 		return mapper.searchScheduleEco(inputSch);
 	}
 	
-	// 일정조회 (비즈니스)
+	// 일정조회(이코노미 / 최저가)
+	@Override
+	public List<K_getScheduleDTO> searchScheduleEcoPrice_(K_inputScheduleDTO inputSch) {
+		return mapper.searchScheduleEcoPrice(inputSch);
+	}
+	
+	// 일정조회 (비즈니스 / 비행일자)
 	@Override
 	public List<K_getScheduleDTO> searchSchedulBis_(K_inputScheduleDTO inputSch) {
 		return mapper.searchSchedulBis(inputSch);
 	}
 	
-	// 일정조회 (퍼스트)
+	// 일정조회(비즈니스 / 최저가)
+	@Override
+	public List<K_getScheduleDTO> searchSchedulBisPrice_(K_inputScheduleDTO inputSch) {
+		return mapper.searchSchedulBisPrice(inputSch);
+	}
+	
+	// 일정조회 (퍼스트 / 비행일자)
 	@Override
 	public List<K_getScheduleDTO> searchScheduleFir_(K_inputScheduleDTO inputSch) {
 		return mapper.searchScheduleFir(inputSch);
+	}
+	
+	// 일정조회(퍼스트 / 최저가)
+	@Override
+	public List<K_getScheduleDTO> searchScheduleFirPirce_(K_inputScheduleDTO inputSch) {
+		return mapper.searchScheduleFirPrice(inputSch);
 	}
 
 	// 항공편 일정선택
