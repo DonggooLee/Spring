@@ -49,9 +49,6 @@
 				<button id="getScheduleBtn">일정조회</button>
 				&nbsp;
 				<button id="lowPriceleBtn">낮은가격순</button>
-				&nbsp;
-				<button id="highPriceBtn">높은가격순</button>
-				<div class="test"></div>
 			</div>
 		</div>
 		

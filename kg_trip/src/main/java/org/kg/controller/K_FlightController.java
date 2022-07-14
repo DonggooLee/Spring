@@ -123,7 +123,7 @@ public class K_FlightController {
 	public String scheduleConfirm(HttpServletRequest request, Model model,
 			@RequestParam("date_idx") int date_idx, 
 			@RequestParam("seat_grade") String seat_grade) {
-		log.info("페이지 이동 : scheduleConfirm...");
+		log.info("페이지 이동  : scheduleConfirm...");
 		log.info("scheduleConfirm 넘어온 정보 : " + date_idx + " / " + seat_grade);
 		HttpSession session = request.getSession(false);
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");

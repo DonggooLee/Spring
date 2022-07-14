@@ -33,8 +33,7 @@ public class K_FlightRestController {
 	private K_FlightService service;
 	
 	// 공항 조회
-	@GetMapping(value = "/airportList", 
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/airportList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<K_airportVO>> airportList(){
 		log.info("공항 조회...");
 		return new ResponseEntity<>(service.airportList_(), HttpStatus.OK);
