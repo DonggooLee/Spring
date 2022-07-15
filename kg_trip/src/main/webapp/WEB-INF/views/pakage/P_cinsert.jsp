@@ -22,7 +22,8 @@
 								패키지 번호(스펠링3자+100자리숫자)
 							</td>
 							<td>
-								<input type="text" name="p_num">
+								<input type="text" name="p_num" id="p_num">
+								<div class="check_font" id="pnum_check"></div>
 							</td>
 						</tr>
 						<tr>
@@ -152,6 +153,24 @@
 
 <script type="text/javascript">
 $(function(){
+	
+	$("#p_num").blur(function() {
+		var p_num = $('#p_num').val();
+			$.ajax({url : '${pageContext.request.contextPath}/pakage/checkp_num?p_num='+ p_num,
+						type : 'get',
+						success : function(data) {
+							console.log("1 = 중복o / 0 = 중복x : "+ data);
+							if (data == 1) {
+								// 1 : 아이디가 중복되는 문구
+								$("#pnum_check").text("번호가  이미 존재합니다.");
+							}
+						}
+					});
+		});
+	
+	
+	
+	
 	
 	var pinsert = $("#pinsert")
 	var frm = $("#frm")

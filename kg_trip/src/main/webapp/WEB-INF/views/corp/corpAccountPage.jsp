@@ -23,7 +23,11 @@
 									<li>이메일 : ${loginCorpInfo.c_demail } </li>
 									<li>자기소개 : ${loginCorpInfo.c_intro } </li>
 							</div>
-							<div class="setting">
+							<div class="setting" style="border: 1px solid; margin: 10px;">
+								<ul>
+									<!-- <li><button>비밀번호 변경</button></li> -->
+									<li><button>회원탈퇴</button></li>
+								</ul>
 							</div>
 						</div>
 					</div>

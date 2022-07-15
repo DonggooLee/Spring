@@ -55,8 +55,8 @@ public class P_PakageServiceImpl implements P_PakageService {
 
 	// 예약
 	@Override
-	public void register(P_Pakage_reser_VO board) {
-		mapper.insert(board);
+	public int register(P_Pakage_reser_VO board) {
+		return mapper.insert(board);
 	}
 
 	// 예약용 read
@@ -67,8 +67,8 @@ public class P_PakageServiceImpl implements P_PakageService {
 
 	// 예약용 update
 	@Override
-	public void update(P_Pakage_list_VO liboard) {
-		mapper.update(liboard);
+	public int update(P_Pakage_list_VO liboard) {
+		return mapper.update(liboard);
 	}
 
 	// 검색
@@ -232,9 +232,16 @@ public class P_PakageServiceImpl implements P_PakageService {
 		return mapper.getwishlist(m_idx);
 	}
 
+
+
 	
 	////////////////////////////////////////////////////////
 	
+	// 패키지 등록 p_num 중복 체크
+	@Override
+	public int checkp_num(String p_num) {
+		return mapper.checkp_num(p_num);
+	}
 	
 	// 기업 패키지 정보 등록 
 	@Override
@@ -304,6 +311,9 @@ public class P_PakageServiceImpl implements P_PakageService {
 			return false;
 		}
 	}
+
+
+
 
 
 

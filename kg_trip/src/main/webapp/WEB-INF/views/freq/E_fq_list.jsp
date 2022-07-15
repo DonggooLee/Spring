@@ -44,7 +44,7 @@
 					<input type="button" id="regBtn" value="새 게시물 등록">
 				</c:if>
 	
-				<table class="boardTbl" style="border: 1px solid pink; max-width: 800px">
+				<table class="boardTbl">
 					<thead>
 					  <tr>
 					    <th>글번호</th>
@@ -120,7 +120,6 @@
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
 <!-- 스크립트 -->
-
 <script>
 	function selChange() {
 		var sel = document.getElementById('cntPerPage').value;

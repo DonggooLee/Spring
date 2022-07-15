@@ -74,6 +74,28 @@ public class B_AdminController {
 		return "admin/publicmemberlist";
 	}
 	
+	@GetMapping("/manageAdmin")
+	public String sdffds(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return "home";
+		}
+		
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		model.addAttribute("publicList", pm_service.publicList()); // 전체 리스트 목록
+		
+		return "admin/adminmemberlist";
+	}
+	
 	@GetMapping("/manageCorp")
 	public String gpep(HttpServletRequest request, Model model) {
 		
@@ -104,13 +126,22 @@ public class B_AdminController {
 		if (session == null) {
 			return "home";
 		}
-
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
-
+		String birth_year = "";
+		String birth_month = "";
+		String birth_date = "";
+		
 		if (loginvo == null) {
 			model.addAttribute("loginPublicInfo", null);
-		} else {
+		} else{
+			birth_year = loginvo.getM_birth().substring(0, 4);
+			birth_month = loginvo.getM_birth().substring(4, 6);
+			birth_date = loginvo.getM_birth().substring(6);
+			
 			model.addAttribute("loginPublicInfo", loginvo);
+			model.addAttribute("birthYear", birth_year);
+			model.addAttribute("birthMonth", birth_month);
+			model.addAttribute("birthDate", birth_date);
 			log.info(loginvo);
 		}
 		log.info("마이페이지로 갑니다");

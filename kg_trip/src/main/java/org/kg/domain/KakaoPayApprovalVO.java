@@ -20,7 +20,12 @@ public class KakaoPayApprovalVO {
     private Integer quantity, tax_free_amount, vat_amount;
     private Date created_at, approved_at;
     
-    // 예약정보
+    // 항공권 예약정보
     private String pg_token, ticket_price, seat_name, flight_name, date_idx, m_idx, reservation_idx;
+    
+    // 패키지 예약정보
+	private String P_rnum, p_num, p_name, p_period, m_id, m_name, m_phone, p_tid, p_completion,
+	p_rpeople, p_totalfee;
+	private Date p_rdate; 
     
 }

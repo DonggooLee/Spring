@@ -2,7 +2,51 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page session="false" %>
+<meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+    />
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
 
+    <!-- Demo styles -->
+    <style>
+
+      .swiper {
+        width: 700px;
+        height: 300px;
+      }
+
+      .swiper-slide {
+        text-align: center;
+        font-size: 10px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 700px;;
+        height: 300px;
+        object-fit: cover;
+      }
+    </style>
 <style type="text/css">
 	.searchSection{
 		width: 1200px;
@@ -18,33 +62,53 @@
 		float: left;
 		background-color: white;
 	}
-	
-	.conted {
-		/* position: relative; */
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
-		height: 2600px;
-		background-color: #F0FFFF;
-
-		을지가 수정한 것들 !! 여기부터
-		background-color: gray;
-		border: 2px solid pink;
-		padding: 20px;
-		을지가 수정한 것들 !! 여기까지
-	}
 
 </style>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
-		<section class="conted">
+		<section class="cont">
 			
-			<div class="searchSection">
-				<div style="height:100px">
-					<h2 style="text-align:center">어디로 떠나세요?<a href="/pakage/P_allList"> 🎉전체 패키지 여행 구경하기😎</a></h2>
+			<div class="searchSection" style="width:1200px; height:340px;">
+				<div style="width:700px; height:300px; float: left;">
+					<!-- Swiper -->
+				    <div class="swiper mySwiper">
+				      <div class="swiper-wrapper">
+				        <div class="swiper-slide"><img alt="이미지" src="/img/p_main1.jpg"></div>
+				        <div class="swiper-slide"><img alt="이미지" src="/img/p_main2.jpg"></div>
+				        <div class="swiper-slide"><img alt="이미지" src="/img/p_main3.jpg"></div>
+				        <div class="swiper-slide"><img alt="이미지" src="/img/p_main4.jpg"></div>
+				      </div>
+				      <div class="swiper-button-next"></div>
+				      <div class="swiper-button-prev"></div>
+				      <div class="swiper-pagination"></div>
+				    </div>
+				
+				    <!-- Swiper JS -->
+				    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+				
+				    <!-- Initialize Swiper -->
+				    <script>
+				      var swiper = new Swiper(".mySwiper", {
+				        spaceBetween: 30,
+				        centeredSlides: true,
+				        autoplay: {
+				          delay: 2500,
+				          disableOnInteraction: false,
+				        },
+				        pagination: {
+				          el: ".swiper-pagination",
+				          clickable: true,
+				        },id
+				        navigation: {
+				          nextEl: ".swiper-button-next",
+				          prevEl: ".swiper-button-prev",
+				        },
+				      });
+				    </script>
 				</div>
-				<div>
-					<img alt="이미지" src="/img/pmain.png" width="1200px"/>
+				<div style="height:100px; float: right; width:500px; object-fit: cover; text-align: center;">
+					<h2 style="text-align:center">어디로 떠나세요?</h2><br><br>
+					<h2><a href="/pakage/P_allList"> 🎉전체 패키지 여행 구경하기😎</a></h2>
 				</div>
 			</div>
 			<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx}" >

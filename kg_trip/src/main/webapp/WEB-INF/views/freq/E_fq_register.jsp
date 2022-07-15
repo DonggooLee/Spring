@@ -1,4 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
 <%@ page session="false" %>
 
@@ -8,8 +9,9 @@
 
 	<section class="cont">
 	freq create 페이지여요.
-		<div class="contents" style="display: flex; justify-content: center;">
-			<form action="/freq/register" method="post" role="form" enctype="multipart/form-data">
+		<div class="contents" >
+		<!-- <div class="contents" style="display: flex; justify-content: center;"> -->
+			<form action="/freq/register" method="post" role="form" enctype="multipart/form-data" id="operForm">
 			<!-- enctype 멀티 어쩌고 삭제하니까 400 에러 사라짐 -->
 				<table class="boardTbl" style="border: 1px solid pink; max-width: 800px">
 					<thead>
@@ -26,6 +28,7 @@
 							<td>카테고리</td>
 							<td>
 								<select id = "fq_cat" name="fq_cat">
+									<option value="">카테고리를 선택하세요.</option>
 									<option value="여행">여행</option>
 									<option value="항공권">항공권</option>
 									<option value="패키지">패키지</option>
@@ -69,12 +72,8 @@
 	}		
 		
 </style>
+
 <script type="text/javascript">
-	
-	function catReg() {
-		var sel = document.getElementById('fq_cat').value;
-		location.href = "/list"
-	}
 
 	$(function() {
 		// ajax 태워보려 했으나 실패.. 
@@ -175,10 +174,38 @@
 
 		// register; button인데 type이 register인 것. []에 속성 찾아서 쓸 수 있는 것-> 클릭이벤트나 온 넣을 수 있음
 		$("button[data-oper='register']").click(function(e) {
-			operForm.attr("action", "/freq/register").submit(); // action을 보드 모디파이에 작성한 후 submit
+			
+			e.preventDefault();
+
+			// 필수 데이터 미입력시 alert
+			var title = $("input[name='fq_title']").val();
+			var cont = $("textarea[name='fq_content']").val();
+			var cat = $("select[name='fq_cat']").val();
+			
+			if(title.trim() == ""){
+				alert("제목을 입력하세요.");
+				return;
+			}else if(cont.trim() == ""){
+				alert("내용을 입력하세요.");
+				return;
+			}else if(cat.trim() == ""){
+				alert("카테고리를 선택하세요");
+				return;
+			}else{
+				operForm.submit();
+			}
+
+			console.log("fq_title : " + title);
+			console.log("fq_content : " + cont);
+			console.log("fq_cat : " + cat);
+			
+			/* if(title != "" && cont != "" && cat != ""){
+				operForm.attr("action", "/freq/register").submit(); 
+				// action을 보드 모디파이에 작성한 후 submit
+			} */ 
 		});
-		
 	}); 
+	
 </script>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
 

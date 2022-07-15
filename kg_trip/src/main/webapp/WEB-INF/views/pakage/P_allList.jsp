@@ -17,50 +17,37 @@
 		float: left;
 		background-color: white;
 	}
-	
-	.conted {
-		/* position: relative; */
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
-		height: 2000px;
-		background-color: #F0FFFF;
-		
-
-		을지가 수정한 것들 !! 여기부터
-		background-color: gray;
-		border: 2px solid pink;
-		padding: 20px;
-		을지가 수정한 것들 !! 여기까지
+	.ull .lii{
+		float: left;
 	}
 </style>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
-		<section class="conted">
+		<section class="cont">
 			
-			<div class="searchSection">
+			<div class="searchSection" style="height: 100px">
 				<h2>어디로 떠나세요?</h2>
-				<ul>
-					<li><a href='/pakage/P_allList'>전체보기</a></li>
-					<li id="slinka">유럽</li>
-					<li id="slinkb">동남아/일본</li>
-					<li id="slinkc">하와이</li>
-					<li id="slinkd">괌/사이판</li>
-					<li id="slinke">국내여행</li>
+				<ul class="ull" style="margin-top: 20px">
+					<li class="lii" style="width: 150px"><a href='/pakage/P_allList'>전체보기</a></li>
+					<li class="lii" style="width: 150px" id="slinka">유럽</li>
+					<li class="lii" style="width: 150px" id="slinkb">동남아/일본</li>
+					<li class="lii" style="width: 150px" id="slinkc">하와이/몰디브</li>
+					<li class="lii" style="width: 150px" id="slinkd">괌/사이판</li>
+					<li class="lii" style="width: 150px" id="slinke">국내여행</li>
 				</ul>
-			</div>
+			</div><br><br>
 			<div>
 				<form>
-					<h4>국가, 지역명, 도시를 검색하세요 !</h4>
+					<h2>국가, 지역명, 도시를 검색하세요 !</h2>
 					<input type="text" name="region">
 					<button data-oper="P_search" >검색</button>
 				</form>
-			</div>
+			</div><br>
 			<div>
 				<a id="linka">가격낮은순</a> / <a id="linkb">가격높은순</a> / 
 				<a id="linkc">날짜빠른순</a> / <a id="linkd">날짜느린순</a> /
 				<a id="linke">후기많은순</a> / <a id="linkf">별점높은순</a>
-			</div>
+			</div><br><br>
 
 			<!------------------------->
 			<form class="searchResult">

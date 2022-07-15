@@ -70,7 +70,7 @@
 					</tr>
 					<tr>
 						<td colspan="2" class="center">도움이 더 필요하십니까?
-							<input type="button" value="문의하기"> 
+							<button data-oper="letsGoObo" >문의하기</button> 
 						</td>
 					</tr>
 				</tfoot>
@@ -128,6 +128,9 @@ $(function() {
 
 			formObj.append(nowPageTag);
 			formObj.append(cntPageTag);
+		}else if(operation == 'letsGoObo'){
+			formObj.attr("action", "/obo/register");
+
 		}
 		formObj.submit();
 	});

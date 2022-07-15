@@ -51,9 +51,14 @@
 				</div>
 				<div class="bottomHead">
 					<nav>
+					
 						<ul class="main_menubar">
-							<li class="menu1"><a href='/flight/scheduleList'>항공권</a></li>
-							<li class="menu2"><a href='/flight/scheduleBook'>예약조회</a></li>
+							<li class="menu5"><a href='/flight/scheduleList'>항공권</a>
+								<ul class="menu5_submenu">
+									<li><a href='/flight/scheduleBook'>예약조회</a>
+								</ul>
+							</li>
+							<li class="menu2"><a href="#">커뮤니티</a></li>
 							<li class="menu4"><a href='/pakage/P_pakageMain'>패키지</a></li>
 							<li class="menu5"><a href="/notice/ntList">고객센터</a>
 								<ul class="menu5_submenu">

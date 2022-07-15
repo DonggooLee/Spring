@@ -278,7 +278,7 @@
 									$("#dphone_doublecheck").val("false");
 
 								} else {
-									$('#dphone_check').text("'-'없이 입력하세요.");
+									$('#dphone_check').text("'-'없이 숫자 10자리를 입력하세요.");
 									$('#dphone_check').css('color','red');
 									$("#dphone_doublecheck").val("false");
 								}
@@ -466,64 +466,122 @@
 	
 	// 입력되어 있는게 없을때, 회원가입 버튼을 누를시
 	$("#corpJoinBtn").on("click",function(){
-		if($("#id_doublecheck").val() == "true" && $("#demail_doublecheck").val() == "true"
+		if($("#c_type").val() != 100){
+			if($("#id_doublecheck").val() == "true" && $("#demail_doublecheck").val() == "true"
 				&& $("#dphone_doublecheck").val() == "true" && $("#c_type").val() != ""
 				&& $("#dname_doublecheck").val() == "true" && $("#pw_doublecheck").val() == "true"
 				&& $("#pwcheck_doublecheck").val() == "true" && $("#name_doublecheck").val() == "true"
 				&& $("#code_doublecheck").val() == "true" && $("#intro_doublecheck").val() == "true"
-				&& $("#address_doublecheck").val() == "true" && $("#aircode_doublecheck").val() == "true"){
+				&& $("#address_doublecheck").val() == "true"){
 			alert("회원가입을 환영합니다.");
+			}else{
+				alert("회원가입을 완료할 수 없습니다. 입력정보를 다시 한 번 확인해주십시오.");
+				if($("#id_doublecheck").val() != "true"){
+					$('#id_check').text('아이디 정보를 확인해주세요.');
+					$("#id_check").css("color", "red");
+				}
+				if($("#demail_doublecheck").val() != "true"){
+					$('#demail_check').text('이메일 정보를 확인해주세요.');
+					$("#demail_check").css("color", "red");
+				}
+				if($("#dphone_doublecheck").val() != "true"){
+					$('#dphone_check').text('전화번호 정보를 확인해주세요.');
+					$("#dphone_check").css("color", "red");
+				}
+				if($("#c_type").val() == ""){
+					$('#type_check').text('기업유형을 선택해주세요.');
+					$("#type_check").css("color", "red");
+				}
+				if($("#dname_doublecheck").val() != "true"){
+					$('#dname_check').text('담당자 이름 정보를 확인해주세요.');
+					$("#dname_check").css("color", "red");
+				}
+				if($("#pw_doublecheck").val() != "true"){
+					$('#pw_check').text('비밀번호 정보를 확인해주세요.');
+					$("#pw_check").css("color", "red");
+				}
+				if($("#pwcheck_doublecheck").val() != "true"){
+					$('#pwcheck_check').text('비밀번호 확인 정보를 확인해주세요.');
+					$("#pwcheck_check").css("color", "red");
+				}
+				if($("#name_doublecheck").val() != "true"){
+					$('#name_check').text('기업 이름 정보를 확인해주세요.');
+					$("#name_check").css("color", "red");
+				}
+				if($("#code_doublecheck").val() != "true"){
+					$('#code_check').text('사업자등록번호 정보를 확인해주세요.');
+					$("#code_check").css("color", "red");
+				}
+				if($("#intro_doublecheck").val() != "true"){
+					$('#intro_check').text('기업소개 정보를 확인해주세요.');
+					$("#intro_check").css("color", "red");
+				}
+				if($("#address_doublecheck").val() != "true"){
+					$('#address_check').text('주소 정보를 확인해주세요.');
+					$("#address_check").css("color", "red");
+				}
+				return false
+			}
 		}else{
-			alert("회원가입을 완료할 수 없습니다. 입력정보를 다시 한 번 확인해주십시오.");
-			if($("#id_doublecheck").val() != "true"){
-				$('#id_check').text('아이디 정보를 확인해주세요.');
-				$("#id_check").css("color", "red");
+			if($("#id_doublecheck").val() == "true" && $("#demail_doublecheck").val() == "true"
+					&& $("#dphone_doublecheck").val() == "true" && $("#c_type").val() != ""
+					&& $("#dname_doublecheck").val() == "true" && $("#pw_doublecheck").val() == "true"
+					&& $("#pwcheck_doublecheck").val() == "true" && $("#name_doublecheck").val() == "true"
+					&& $("#code_doublecheck").val() == "true" && $("#intro_doublecheck").val() == "true"
+					&& $("#address_doublecheck").val() == "true" && $("#aircode_doublecheck").val() == "true"){
+				alert("회원가입을 환영합니다.");
+			}else{
+				alert("회원가입을 완료할 수 없습니다. 입력정보를 다시 한 번 확인해주십시오.");
+				if($("#id_doublecheck").val() != "true"){
+					$('#id_check').text('아이디 정보를 확인해주세요.');
+					$("#id_check").css("color", "red");
+				}
+				if($("#demail_doublecheck").val() != "true"){
+					$('#demail_check').text('이메일 정보를 확인해주세요.');
+					$("#demail_check").css("color", "red");
+				}
+				if($("#dphone_doublecheck").val() != "true"){
+					$('#dphone_check').text('전화번호 정보를 확인해주세요.');
+					$("#dphone_check").css("color", "red");
+				}
+				if($("#c_type").val() == ""){
+					$('#type_check').text('기업유형을 선택해주세요.');
+					$("#type_check").css("color", "red");
+				}
+				if($("#dname_doublecheck").val() != "true"){
+					$('#dname_check').text('담당자 이름 정보를 확인해주세요.');
+					$("#dname_check").css("color", "red");
+				}
+				if($("#pw_doublecheck").val() != "true"){
+					$('#pw_check').text('비밀번호 정보를 확인해주세요.');
+					$("#pw_check").css("color", "red");
+				}
+				if($("#pwcheck_doublecheck").val() != "true"){
+					$('#pwcheck_check').text('비밀번호 확인 정보를 확인해주세요.');
+					$("#pwcheck_check").css("color", "red");
+				}
+				if($("#name_doublecheck").val() != "true"){
+					$('#name_check').text('기업 이름 정보를 확인해주세요.');
+					$("#name_check").css("color", "red");
+				}
+				if($("#code_doublecheck").val() != "true"){
+					$('#code_check').text('사업자등록번호 정보를 확인해주세요.');
+					$("#code_check").css("color", "red");
+				}
+				if($("#intro_doublecheck").val() != "true"){
+					$('#intro_check').text('기업소개 정보를 확인해주세요.');
+					$("#intro_check").css("color", "red");
+				}
+				if($("#address_doublecheck").val() != "true"){
+					$('#address_check').text('주소 정보를 확인해주세요.');
+					$("#address_check").css("color", "red");
+				}
+				if($("#aircode_doublecheck").val() != "true"){
+					$('#aircode_check').text('항공코드 정보를 확인해주세요.');
+					$("#aircode_check").css("color", "red");
+				}
+				return false
 			}
-			if($("#demail_doublecheck").val() != "true"){
-				$('#demail_check').text('이메일 정보를 확인해주세요.');
-				$("#demail_check").css("color", "red");
-			}
-			if($("#dphone_doublecheck").val() != "true"){
-				$('#dphone_check').text('전화번호 정보를 확인해주세요.');
-				$("#dphone_check").css("color", "red");
-			}
-			if($("#c_type").val() == ""){
-				$('#type_check').text('기업유형을 선택해주세요.');
-				$("#type_check").css("color", "red");
-			}
-			if($("#dname_doublecheck").val() != "true"){
-				$('#dname_check').text('담당자 이름 정보를 확인해주세요.');
-				$("#dname_check").css("color", "red");
-			}
-			if($("#pw_doublecheck").val() != "true"){
-				$('#pw_check').text('비밀번호 정보를 확인해주세요.');
-				$("#pw_check").css("color", "red");
-			}
-			if($("#pwcheck_doublecheck").val() != "true"){
-				$('#pwcheck_check').text('비밀번호 확인 정보를 확인해주세요.');
-				$("#pwcheck_check").css("color", "red");
-			}
-			if($("#name_doublecheck").val() != "true"){
-				$('#name_check').text('기업 이름 정보를 확인해주세요.');
-				$("#name_check").css("color", "red");
-			}
-			if($("#code_doublecheck").val() != "true"){
-				$('#code_check').text('사업자등록번호 정보를 확인해주세요.');
-				$("#code_check").css("color", "red");
-			}
-			if($("#intro_doublecheck").val() != "true"){
-				$('#intro_check').text('기업소개 정보를 확인해주세요.');
-				$("#intro_check").css("color", "red");
-			}
-			if($("#address_doublecheck").val() != "true"){
-				$('#address_check').text('주소 정보를 확인해주세요.');
-				$("#address_check").css("color", "red");
-			}
-			if($("#aircode_doublecheck").val() != "true"){
-				$('#aircode_check').text('항공코드 정보를 확인해주세요.');
-				$("#aircode_check").css("color", "red");
-			}
-			return false
 		}
 	})
 	

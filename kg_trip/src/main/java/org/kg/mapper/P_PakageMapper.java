@@ -2,6 +2,7 @@ package org.kg.mapper;
 
 import java.util.List;
 
+import org.kg.domain.K_getResrvationInfoVO;
 import org.kg.domain.P_Pakage_info_VO;
 import org.kg.domain.P_Pakage_list_VO;
 import org.kg.domain.P_Pakage_reser_VO;
@@ -13,7 +14,7 @@ public interface P_PakageMapper {
 	public List<P_Pakage_info_VO> getListSai();		// 사이판 리스트 목록
 	public List<P_Pakage_info_VO> getListKos();		// 사이판 리스트 목록
 	public P_Pakage_info_VO read(String p_num);		// Read
-	public void insert(P_Pakage_reser_VO board);	// 예약 등록
+	public int insert(P_Pakage_reser_VO board);	// 예약 등록
 	public P_Pakage_list_VO readp(String p_num);	// 예약용 read
 	public int update(P_Pakage_list_VO liboard);	// 예약용 update
 	public List<P_Pakage_info_VO> search(String region);	// 검색하기
@@ -44,6 +45,8 @@ public interface P_PakageMapper {
 	public List<P_Review_VO> allreview();			// 전체 후기 리스트 목록
 	public List<P_Pakage_info_VO> getwishlist(int m_idx);		// 개인  위시리스트 조회
 	
+	
+	public int checkp_num(String p_num);				// 패키지 등록 p_num 중복 체크
 	public void cinserta(P_Pakage_info_VO board);		// 기업 패키지 정보 등록
 	public void cinsertb(P_Pakage_list_VO liboard);		// 기업 패키지 리스트 등록
 	public List<P_Pakage_info_VO> getcList(int c_idx);	// 기업 패키지 리스트 목록

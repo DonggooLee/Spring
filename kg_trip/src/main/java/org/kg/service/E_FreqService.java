@@ -24,6 +24,6 @@ public interface E_FreqService {
 	// update
 	public boolean modify(E_FreqVO vo);
 
-	// update
+	// makeFileNullUpdate
 	public boolean makeFileNullUpdate(E_FreqVO vo);
 }

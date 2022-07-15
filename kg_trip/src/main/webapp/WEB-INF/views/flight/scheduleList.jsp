@@ -55,7 +55,39 @@
 		<br><br>
 		
 		<div class="schedule"></div>
-	
+		
+		<br><hr><br>
+		
+		<div class="flightContainer" style="padding: 10px;">
+			<div class="infoFlightImg">
+				<img src="/img/asiana.jpg" style="width: 90px; height: 90px;">
+			</div>
+			<div class="infoFlight">
+				<div><b>아시아나</b></div>
+				<br>
+				<div><b>AA987</b></div>
+			</div>
+			<div class="infoDepart">
+				<div><b>17:05</b></div>
+				<br>
+				<div><b>제주(CJU)</b></div>
+			</div>
+			<div class="infoDepart">
+				<img src="/img/right-arrow.png" style="width: 80px; height: 30px;">
+			</div>
+			<div class="infoArrive">
+				<div><b>18:15</b></div>
+				<br>
+				<div><b>인천(ICN)</b></div>
+			</div>
+			<div class="infoPrice">
+				<div><b>85,000원</b></div>
+			</div>
+			<div class="infoPrice">
+				<button style="padding: 15px;">선택</button>
+			</div>
+		</div>
+		
 	</section>
 	
 <style>
@@ -69,6 +101,14 @@
 		height: 3000px;
 		border: 2px solid pink;
 		padding: 20px;
+	}
+	
+	.flightContainer{
+		border: 1px solid black;
+		width: 800px; height: 100px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 
 </style>
@@ -124,21 +164,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].firstseatprice) + "원 </li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].firstseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트
@@ -155,21 +205,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].businessseatprice) + "원</li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].businessseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트
@@ -186,21 +246,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].economyseatprice) + "원</li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].economyseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트
@@ -229,21 +299,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].firstseatprice) + "원 </li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].firstseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트
@@ -260,21 +340,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].businessseatprice) + "원</li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].businessseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트
@@ -291,21 +381,31 @@
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
 								}else{
-									str += "<ul>";
-									str += "<h1>비행일정</h1><br>";
 									for(var i=0; i<listSch.length; i++){
-										str += "<li> 항공사명 : " + listSch[i].c_name + "</li>";
-										str += "<li> 항공편명 : " + listSch[i].flight_name + "</li>";
-										str += "<li> 티켓가격 : " + AmountCommas(listSch[i].economyseatprice) + "원</li>";
-										str += "<li> 탑승시각 : " + listSch[i].boarding_time + "</li>";
-										str += "<li> 출발시각 : " + listSch[i].depart_time + "</li>";
-										str += "<li> 도착시각 : " + listSch[i].arrive_time + "</li>";
-										str += "<li> 출발공항 : " + listSch[i].ap_name_d + "</li>";
-										str += "<li> 도착공항 : " + listSch[i].ap_name_a + "</li><br>";
-										str += "<button id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">일정 선택</button><br>";
-										str += "<br><hr><br>";
+										str += "<div class='flightContainer' style='padding: 20px;'>";
+										if(listSch[i].c_name == "대한항공"){
+											str += "<div class='infoFlightImg'><img src='/img/koreanAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "아시아나"){
+											str += "<div class='infoFlightImg'><img src='/img/Asiana.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "제주에어"){
+											str += "<div class='infoFlightImg'><img src='/img/JejuAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어부산"){
+											str += "<div class='infoFlightImg'><img src='/img/airBusan.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "에어서울"){
+											str += "<div class='infoFlightImg'><img src='/img/airSeoul.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "진에어"){
+											str += "<div class='infoFlightImg'><img src='/img/jinAir.png' style='width: 110px; height: 90px;'></div>";
+										}else if(listSch[i].c_name == "티웨이"){
+											str += "<div class='infoFlightImg'><img src='/img/twayAir.png' style='width: 110px; height: 90px;'></div>";
+										}
+										str += "<div class='infoFlight'><div><b>"+listSch[i].c_name+"</b></div><br><div><b>"+listSch[i].flight_name+"</b></div></div>";
+										str += "<div class='infoDepart'><div><b>"+listSch[i].ap_name_d+"</b></div><br><div><b>"+listSch[i].depart_time+"</b></div></div>";
+										str += "<div class='infoArrow'><img src='/img/right-arrow.png' style='width: 80px; height: 30px;'></div>";
+										str += "<div class='infoArrive'><div><b>"+listSch[i].ap_name_a+"</b></div><br><div><b>"+listSch[i].arrive_time+"</b></div></div>";
+										str += "<div class='infoPrice'><div><b>"+AmountCommas(listSch[i].economyseatprice)+"원</b></div></div>";
+										str += "<div class='infoButton'><button style='padding: 15px;' id=choiceScheduleBtn data-idx=" + listSch[i].date_idx + ">선택</button></div></div>";
+										str += "</div><br><br>";
 									}
-									str += "</ul>";
 								}
 							$(".schedule").html(str)
 							// 일정 선택 버튼 클릭 이벤트

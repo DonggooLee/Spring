@@ -10,17 +10,24 @@ import javax.servlet.http.HttpSession;
 
 import org.kg.domain.B_CorpMemberVO;
 import org.kg.domain.B_PublicMemberVO;
+import org.kg.domain.K_bookInfo;
+import org.kg.domain.K_getResrvationInfoVO;
+import org.kg.domain.KakaoPayReadyVO;
 import org.kg.domain.P_Pakage_info_VO;
 import org.kg.domain.P_Pakage_list_VO;
 import org.kg.domain.P_Pakage_reser_VO;
 import org.kg.domain.P_Review_VO;
+import org.kg.domain.P_bookInfo;
+import org.kg.service.P_KakaopayPay;
 import org.kg.service.P_PakageService;
+import org.kg.service.k_KakaopayPay;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +48,7 @@ public class P_Controller {
 
 	// P_pakageMain 메인페이지 이동
 	private P_PakageService service;
+	private P_KakaopayPay kakaopay;
 
 	@GetMapping("/P_pakageMain")
 	public String main(HttpServletRequest request, Model model) {
@@ -180,33 +188,67 @@ public class P_Controller {
 		return "/pakage/P_reservation";
 	}
 
+	// 결제 카카오페이
+	@PostMapping("/kakaoPayGo")
+	public String kakaoPayGo(P_bookInfo bookInfo) {
+		log.info("페이지이동 : 카카오페이 결제하기...");
+		log.info("결제 및 예약 정보..." + bookInfo);
+		// 통신에 성공하면 결제 정보를 가지고 있는 QR코드 생성하는 URL로 redirect!
+		return "redirect:" + kakaopay.kakaoPayReady(bookInfo);
+	}
+	
+	
+	// 일반회원 : QR 결제 성공 후 정상적으로 결제 요청이 완료된 경우 ! => 결제 승인 요청 API 호출 (pg_token 필수!)
+	@GetMapping(value = "/P_kakaoPaySuccess")
+	public String kakaoPaySuccess(P_bookInfo bookInfo, HttpServletRequest request, Model model) {
+		log.info("페이지이동 : 카카오페이 결제성공...");
+		log.info("결제 및 예약 정보222..." + bookInfo);
+		HttpSession session = request.getSession(false);
+		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+		if (loginvo == null) {
+			model.addAttribute("loginPublicInfo", null);
+		}else {
+			model.addAttribute("loginPublicInfo", loginvo);
+			log.info(loginvo);
+		}
+		
+		model.addAttribute("info", kakaopay.kakaoPayInfo(bookInfo));
+		return "pakage/P_reservationGO";
+	}
+	
+
 	// 예약하기 P_pakage_reser_tbl 추가, P_pakage_list_VO 수정
-	@PostMapping("/P_preservation")
-	public String register(P_Pakage_reser_VO board, P_Pakage_list_VO liboard, RedirectAttributes rttr) {
+	@PostMapping(value = "/P_preservation",
+				consumes = "application/json", 
+	    		produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> Register(@RequestBody P_Pakage_reser_VO board, P_Pakage_list_VO liboard) {
+		
+		
+		log.info("sssssssssssssssssssssssss"+board);
+		
 		
 		String p_num = board.getP_num();
 		liboard = service.getp(p_num);
 		
-		log.info(liboard.getP_available());
-		log.info(board.getP_rpeople());
-		log.info(liboard.getP_max());
+		int result1 = service.register(board);
 		
-		/* (liboard.getP_available() + board.getP_rpeople() < liboard.getP_max()) */
-			Random ran = new Random();
-			int num = ran.nextInt(999+1);
-			board.setP_rnum(board.getP_num()+board.getM_idx()+num);
-			service.register(board);
-			
-			liboard.setP_people(liboard.getP_people() + board.getP_rpeople());
-			liboard.setP_available(liboard.getP_available() - board.getP_rpeople());
-
-			service.update(liboard);
-			
-			rttr.addFlashAttribute("result", "ok");
+		liboard.setP_people(liboard.getP_people() + board.getP_rpeople());
+		liboard.setP_available(liboard.getP_available() - board.getP_rpeople());
 	
+		int result2 = service.update(liboard);
 		
-		return "redirect:/pakage/P_mlist";
+		return (result1 & result2) == 1?
+        		new ResponseEntity<>("success", HttpStatus.OK) :
+ 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	// 항공권 예약 조회
+	@GetMapping(value = "getreservation/{p_rnum}", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<P_Pakage_reser_VO> getreservation(@PathVariable("p_rnum") String p_rnum) {
+		
+		return new ResponseEntity<>(service.mread(p_rnum), HttpStatus.OK);
+	}
+	
 	
 	// P_allList 전체 리스트 페이지 이동
 	@GetMapping("/P_allList")
@@ -420,6 +462,30 @@ public class P_Controller {
 		return "pakage/P_mlist";
 	}
 	
+    @PostMapping("/P_kakaoPayCancel")
+    public String kakaoPayCancel(P_bookInfo bookInfo, HttpServletRequest request, Model model) {
+    	log.info("항공권 예약 환불하기...");
+    	log.info("환불정보..." + bookInfo);
+    	HttpSession session = request.getSession(false);
+    	B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
+    	if (loginvo == null) {
+    		model.addAttribute("loginPublicInfo", null);
+    	}else {
+    		model.addAttribute("loginPublicInfo", loginvo);
+    		log.info(loginvo);
+    	}
+    	
+		
+		model.addAttribute("refundInfo", kakaopay.kakaoPayCancel(bookInfo));
+		
+		
+		int m_idx = loginvo.getM_idx();
+		model.addAttribute("mlist", service.getmList(m_idx));
+    	return "pakage/P_mlist"; 
+    }
+	
+    
+    /*
 	// 개인 예약취소
 	@GetMapping("/P_mdelete")
 	public String mdelete(HttpServletRequest request, @RequestParam("p_rnum") String p_rnum,
@@ -465,6 +531,7 @@ public class P_Controller {
 		return "/pakage/P_pakageMain";
 	}
 	
+	*/
 	// P_rinsert 후기 등록페이지 이동
 	@GetMapping("/P_rinsert")
 	public String rinsert(HttpServletRequest request, @RequestParam("p_rnum") String p_rnum,
@@ -573,7 +640,6 @@ public class P_Controller {
 		return "pakage/P_clist";
 	}
 	
-	
 	// P_cinsert 기업 패키지 등록 페이지 이동
 	@GetMapping("/P_cinsert")
 	public String cinsert(HttpServletRequest request, Model model) {
@@ -582,9 +648,9 @@ public class P_Controller {
 		if (session == null) {
 			return "home";
 		}
-
+		
 		B_CorpMemberVO loginvo = (B_CorpMemberVO) session.getAttribute("corp");
-
+		
 		if (loginvo == null) {
 			model.addAttribute("loginCorpInfo", null);
 		} else {
@@ -594,6 +660,15 @@ public class P_Controller {
 		
 		return "pakage/P_cinsert";
 	}
+	
+	// P_cinsert p_num 중복 확인
+	@GetMapping(value = "/checkp_num", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public int checkp_num(@RequestParam("p_num") String p_num) {
+		log.info("기업회원 아이디 중복체크 : " + p_num);
+		return service.checkp_num(p_num);
+	}
+	
 	
 	// 패키지 등록
 	@PostMapping("/uploadFormGo") 

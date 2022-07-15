@@ -38,8 +38,49 @@
 		<br><hr><br>
 		
 		<h1>승객 정보</h1><br>
-		<div class="memberInfo" style="border: 1px solid black; padding: 10px; width: 270px;">
-			<table>
+		<div class="memberInfo">
+			<div class="test">
+				<label>
+					<span>이름</span>
+				</label>
+				<div>
+					<input type="text" name="m_name" value="${loginPublicInfo.m_name}" id="inputTEST">
+				</div>
+				<div>
+					<p>*공항에서 제시할 신분증 상 언어와 반드시 일치해야 합니다.</p>
+				</div>
+			</div>
+			<div class="test">
+				<label>성별</label>
+				<div>
+					<input type="text" name="m_gender" value="${loginPublicInfo.m_gender}" id="inputTEST">
+				</div>
+				<div>
+					<p>*공항에서 제시할 신분증 상 언어와 반드시 일치해야 합니다.</p>
+				</div>
+			</div>
+			<div class="test">
+				<label>이메일</label>
+				<div>
+					<input type="text" name="m_email" value="${loginPublicInfo.m_email}" id="inputTEST">
+				</div>
+				<div>
+					<p>*공항에서 제시할 신분증 상 언어와 반드시 일치해야 합니다.</p>
+				</div>
+			</div>
+			<div class="test">
+				<label>연락처</label>
+				<div>
+					<input type="text" name="m_phone" value="${loginPublicInfo.m_phone}" id="inputTEST">
+				</div>
+				<div>
+					<p>*공항에서 제시할 신분증 상 언어와 반드시 일치해야 합니다.</p>
+				</div>
+			</div>
+			<div class="test">
+				<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}" id="inputTEST">
+			</div>
+			<%-- <table>
 				<tr>
 					<th>이름</th>
 					<td>
@@ -70,7 +111,7 @@
 						<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}" readonly="readonly">
 					</td>
 				</tr>			
-			</table>
+			</table> --%>
 		</div>
 		
 		<br><hr><br>
@@ -80,16 +121,19 @@
 		
 		<br><hr><br>
 		
-		<h1>확인 및 동의</h1><br>
+		<h3>결제 방법</h3><br>
+		<img src="/img/kp.png" height="50px"><br><br>
+		
+		<h3>확인 및 동의</h3><br>
 		<div style="border: 1px solid black; border-bottom: 0px; padding: 10px; width: 680px;">
-			<input type="checkbox" id="ck1"><b>&nbsp;&nbsp;[필수] 운송약관, 운임 규정, 수하물 규정을 확인하였으며 이에 동의합니다.</b> <button style="border-radius: 15px; background-color: white; padding: 3px; border-width: thin;" id="view1">보기</button><br>
+			<input type="checkbox" id="ck1"><label><b>&nbsp;&nbsp;[필수] 운송약관, 운임 규정, 수하물 규정을 확인하였으며 이에 동의합니다.</b><button style="border-radius: 15px; background-color: white; padding: 3px; border-width: thin;" id="view1">보기</button></label><br>
 			<div style="padding: 20px">
 				대한항공 항공권을 구매하시는 것은 본 항공사와 운송계약 체결에 동의하는 것으로 운임규정은 항공권 변경, 취소 등에 따른 수수료와 사전좌석배정, 좌석승급 등 구매하는 항공권 운임에 적용되는 세부 조건을 기재하고 있으며, 운송 약관은 운송 계약 체결에 따른 계약조건을 명시합니다.
 				대한항공은 '항공교통이용자 보호기준'에 따라 항공교통이용자 서비스 계획 새 창 열림을 게시합니다.
 			</div>
 		</div>
 		<div style="border: 1px solid black; padding: 10px; width: 680px;">
-			<input type="checkbox" id="ck2"><b>&nbsp;&nbsp;[필수] 위험품 안내를 확인하였습니다.</b> <button style="border-radius: 15px; background-color: white; padding: 3px; border-width: thin;" id="view2">보기</button><br>
+			<input type="checkbox" id="ck2"><label><b>&nbsp;&nbsp;[필수] 위험품 안내를 확인하였습니다.</b> <button style="border-radius: 15px; background-color: white; padding: 3px; border-width: thin;" id="view2">보기</button></label><br>
 			<div style="padding: 20px">
 				고객 안전을 위하여 항공기 내부로 반입이 금지된 폭발성, 인화성, 유독성 물질 및 무기로 사용될 수 있는 품목에 대한 안내 사항 입니다.
 			</div>
@@ -322,6 +366,46 @@
 		text-align:center;
 		box-sizing:border-box; padding:74px 0;
 		line-height:23px; cursor:pointer;
+	}
+	
+	/* div 꾸미기 */
+	.test{
+		border: 0px; 
+		border-bottom: 1px solid #00256c; 
+		order-radius: 0; 
+		color: #000; 
+		height: 4rem;
+		box-sizing: border-box;
+	}
+	
+	#inputTEST{
+		appearance: none;
+	    box-sizing: border-box;
+	    display: block;
+	    opacity: 1;
+	    width: 100%;
+	    height: 4rem;
+	    margin: 0;
+	    padding: 0;
+	    border: 0;
+	    border-bottom: 1px solid #00256c;
+	    border-radius: 0;
+	    font-size: 1.6rem;
+	    line-height: 1.5;
+	    transition: border .2s .3s,color .2s .3s,box-shadow .2s .3s;
+	}
+	
+	.memberInfo{
+		display: flex;
+		align-items: center;
+		border: 1px solid black;
+		padding: 10px; 
+		width: 800px;
+	}
+	
+	.container_001{
+		text-align: center;
+		padding: 10px;
 	}
 	
 </style>

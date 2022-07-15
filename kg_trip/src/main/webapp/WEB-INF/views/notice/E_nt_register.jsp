@@ -7,7 +7,7 @@
 
 		<section class="cont">
 			<div class="contents" style="display: flex; justify-content: center;">
-				<form action="/notice/ntRegister" method="post" role="form" enctype="multipart/form-data">
+				<form action="/notice/ntRegister" method="post" role="form" enctype="multipart/form-data" id="operForm">
 				<!-- enctype 멀티 어쩌고 삭제하니까 400 에러 사라짐 -->
 					<table>
 						<thead>
@@ -57,6 +57,10 @@
 </style>
 <script type="text/javascript">
 	$(function() {
+		
+		
+		
+		
 		// ajax 태워보려 했으나 실패.. 
 		/* 
 		var operForm = $("#operForm");
@@ -155,9 +159,28 @@
 
 		// register; button인데 type이 register인 것. []에 속성 찾아서 쓸 수 있는 것-> 클릭이벤트나 온 넣을 수 있음
 		$("button[data-oper='register']").click(function(e) {
-			operForm.attr("action", "/notice/ntRegister").submit(); // action을 보드 모디파이에 작성한 후 submit
+			
+			e.preventDefault();
+			
+			// 필수 데이터 미입력시 alert
+			var title = $("input[name='n_title']").val();
+			var cont = $("textarea[name='n_content']").val();
+			
+			if(title == ""){
+				alert("제목을 입력하세요.");
+				return;
+			}else if(cont == ""){
+				alert("내용을 입력하세요.");
+				return;
+			}else{
+				operForm.submit();
+			}
+
+			console.log("n_title? " + title);
+			console.log("n_content? " + cont);
+			
 		});
-		
+			// operForm.attr("action", "/notice/ntRegister").submit(); // action을 보드 모디파이에 작성한 후 submit
 	}); 
 </script>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->

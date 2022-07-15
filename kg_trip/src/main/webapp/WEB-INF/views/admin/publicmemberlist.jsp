@@ -103,7 +103,7 @@ $(function() {
 			checkBoxArray.push(this.value);
 		});
 		$("#array_midx").val(checkBoxArray);
-		alert("형님 이녀석 없애버릴까요? : " +checkBoxArray);
+		alert("회원을 삭제할까요? : " +checkBoxArray);
 		
 		if($('.onecheckbox').is(':checked') == false){
 			alert("선택된 회원이 없습니다.");
@@ -115,7 +115,7 @@ $(function() {
 			data : {"m_idx" : checkBoxArray},
 			dataType: "json",
 			success : function (data) {
-				alert("형님 처리했습니다.");
+				alert("회원을 삭제했습니다.");
 				//location.reload();
 				$(".publicInfoTable").load("${contextPath}/Admin/managePublic .publicInfoTable");
 			}

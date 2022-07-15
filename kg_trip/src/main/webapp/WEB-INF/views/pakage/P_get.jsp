@@ -5,59 +5,51 @@
 <style type="text/css">
 	.left-view{
 		width: 900px;
-		height: 3000px;
 		float: left;
 		background-color: white;
+	}
+	.left-width{
+		width: 900px;
 	}
 	.right-view{
 		width: 300px;
 		float: right;
 		background-color: white;
 	}
-	.left-width{
-		width: 900px;
-	}
-	
-	.conted {
-	/* position: relative; */
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
-	height: 15000px;
-	background-color: #F0FFFF;
-	
-
-	을지가 수정한 것들 !! 여기부터
-	background-color: gray;
-	border: 2px solid pink;
-	padding: 20px;
-	을지가 수정한 것들 !! 여기까지
+	.remote{
+		width: 280px;
+		height : 400px;
+		background-color: white;
+		position : fixed;
+		top : 0;
+		right : 0;
+		margin-top: 200px;
+		margin-right: 250px;
 	}
 </style>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
-
-		<section class="conted">
+		<section class="cont">
 			<div class="left-view">
 				<div class="left-width" style="height:200px">
 					<h1>${board.p_name }</h1><br><br>
 					<c:choose>
                           <c:when test="${board.p_star gt 4.5}">
-                                      <a href="#review"><span class="gold">후기 ★★★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
+                                      <a href="#review"><span class="gold"> 후기 ★★★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
                              </c:when>
                              <c:when test="${board.p_star gt 3.5}">
-                                      <a href="#review"><span class="gold">후기 ★★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
+                                      <a href="#review"><span class="gold"> 후기 ★★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
                              </c:when>
                              <c:when test="${board.p_star gt 2.5}">
-                                      <a href="#review"><span class="gold">후기 ★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
+                                      <a href="#review"><span class="gold"> 후기 ★★★(<c:out value="${board.rcount}"></c:out>)</span></a>
                              </c:when>
                              <c:when test="${board.p_star gt 1.5}">
-                                      <a href="#review"><span class="gold">후기 ★★(<c:out value="${board.rcount}"></c:out>)</span></a>
+                                      <a href="#review"><span class="gold"> 후기 ★★(<c:out value="${board.rcount}"></c:out>)</span></a>
                              </c:when>
                              <c:when test="${board.p_star gt 0.5}">
-                                      <a href="#review"><span class="gold">후기 ★(<c:out value="${board.rcount}"></c:out>)</span></a>
+                                      <a href="#review"><span class="gold"> 후기 ★(<c:out value="${board.rcount}"></c:out>)</span></a>
                              </c:when>
 							<c:otherwise>
-								<a href="#review">후기 이벤트 진행중🪄</a>
+								<a href="#review"> 🪄후기 이벤트 진행중🪄</a>
 							</c:otherwise>
                     </c:choose>
 				</div>
@@ -66,18 +58,18 @@
 					<img alt="이미지" src="/img/${board.p_img2 }" width="800px">
 					<img alt="이미지" src="/img/${board.p_img3 }" width="800px">
 					<img alt="이미지" src="/img/${board.p_img4 }" width="800px">
-				</div>
+				</div><br><br>
 				<div class="left-width">
-					<h3>상품 정보</h3>
+					<h1>상품 정보</h1><br>
 					${board.p_information }
-				</div>
+				</div><br><br>
 				<div class="left-width">
-					<h3>이용 안내</h3>
+					<h1>이용 안내</h1><br>
 					${board.p_guide }
-				</div>
+				</div><br><br>
 				<div class="left-width">
-				취소 및 환불 규정<br>
-				■■■ 특별약관 규정안내 ■■■<br>
+					<h1>취소 및 환불 규정</h1><br>
+				■■■ 특별약관 규정안내 ■■■<br><br>
 				▶이 상품은 항공(또는 선박)좌석 또는 호텔객실에 대한 비용을 일부 선납해 놓은 상품으로, 취소시 별도의 취소료가 적용됨을 양해해 주시기 바랍니다.<br>
 				<br>
 				1) 여행자의 여행계약 해제 요청이 있는 경우(여행자의 취소 요청시)<br>
@@ -87,20 +79,16 @@
 				- 여행출발일 19~10일전까지 취소 통보시 - 여행요금의 30% 배상<br>
 				- 여행출발일 9~1일전 / 당일 취소까지 취소 통보시 - 여행요금의 60% 배상<br>
 				- 여행 출발일 이후는 취소가 불가합니다.<br>
-				</div>
-				<div class="left-width">
-				기업정보
-				</div>
+				</div><br><br>
 				<a name="review">
 				<div class="left-width" style="border: 1px solid black">
-					<h2>후기</h2>
+					<h1>후기</h1><br>
 		        	<c:choose>
 		        		<c:when test="${not empty review }">
 						<h1><fmt:formatNumber value="${star.p_star}" pattern=".0"/>점</h1>
 				             <c:forEach var="re" items="${review }">
 						             <div style="border-top : 1px solid black">
 						                   <div>
-						                 		<c:out value="${re.m_id}"></c:out><br>
 						                 		<c:choose>
 					                              <c:when test="${re.p_star eq 5}">
 					                                          <span class="gold">★★★★★</span>
@@ -121,6 +109,7 @@
 					                                 			후기를 남겨주세요
 					                                 </c:otherwise>
 					                              </c:choose>
+					                            <c:out value="${re.m_id}"></c:out>
 						                 		<c:out value="${re.p_reviewdate}"></c:out><br>
 						                 		<c:out value="${re.p_reviewcontent}"></c:out>
 						                   </div>
@@ -141,20 +130,22 @@
 							<h5>후기가 없습니다.</h5>
 	 		          </c:otherwise>
 	                </c:choose>
+	                <a name="bottom"></a>
 				</div>
 				</a>
 
 				
 			</div>
 			<div class="right-view">
-				<div style="height:300px">
+				<div class="remote" style="height:300px">
 					<h2><fmt:formatNumber value="${board.p_fee }" pattern="#,###" />원 / (1인)</h2>
-					예약 가능 인원 : <input type="text" name="p_available" value="${board.p_available }" readonly="readonly"><br>
+					예약 가능 인원 : <c:out value="${board.p_available}"/>인
+					<input type="hidden" name="p_available" value="${board.p_available }" readonly="readonly"><br>
 					<form action="people" method="post" id="operForm">
-						<input type="number" name="people">명
+						예약 인원 : <input type="number" name="people" style="width:60px">인
 						<input type="hidden" name="p_num" value="${board.p_num }"><br>
 						<input type="hidden" name="m_idx" value="${loginPublicInfo.m_idx }"><br>
-						<input type="submit" value="예약하기" name="reser" style="width:300px ;height:50px">
+						<input type="submit" value="예약하기" name="reser" style="width:250px ;height:50px">
 					</form>
 					<div class="wish1">
 						<c:choose>
@@ -175,6 +166,10 @@
 								</a>
 							</c:otherwise>
 						</c:choose>
+					</div><br><br>
+					<div style="text-align: center; width: 280px">
+						<a href = "#top">맨 위로 🔼</a><br><br>
+						<a href = "#bottom">맨 아래로 🔽</a>
 					</div>
 				</div>
 			</div>

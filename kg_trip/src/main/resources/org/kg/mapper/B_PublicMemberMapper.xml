@@ -18,6 +18,10 @@
 		select count(*) from b_publicmember_tbl where m_id = #{m_id}
 	</select>
 	
+	<select id="checkNicknamePublic" parameterType="String" resultType="int">
+		select count(*) from b_publicmember_tbl where m_nickname = #{m_nickname}
+	</select>
+	
 	<select id="checkEmailPublic" parameterType="String" resultType="int">
 		select count(*) from b_publicmember_tbl where m_email = #{m_email}
 	</select>
@@ -33,13 +37,41 @@
 		delete b_publicMember_tbl where m_idx = #{m_idx}
 	</delete>
 	
-	<update id="updatePublic">
+	<update id="updateAuthP">
 		update b_publicmember_tbl SET m_auth = 'admin' where m_idx = #{m_idx}
 	</update>
-  
-
-  
-  
+	
+	<update id="updateNickname">
+		update b_publicmember_tbl set m_nickname = #{m_nickname} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updateIntro">
+		update b_publicmember_tbl set m_intro = #{m_intro} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updateBirth">
+		update b_publicmember_tbl set m_birth = #{m_birth} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updateGender">
+		update b_publicmember_tbl set m_gender = #{m_gender} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updateEmail">
+		update b_publicmember_tbl set m_email = #{m_email} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updatePhone">
+		update b_publicmember_tbl set m_phone = #{m_phone} where m_idx = #{m_idx}
+	</update>
+	
+	<update id="updateImg">
+		update b_publicmember_tbl set m_img = #{m_img} where m_idx = #{m_idx}
+	</update>
+	
+	<select id="loginpassword" parameterType="String" resultType="String">
+		SELECT m_pw FROM b_publicmember_tbl where m_id = #{m_id}
+	</select>
   
 
   

@@ -249,5 +249,5 @@ public class K_FlightController {
 		model.addAttribute("airBookList", service.getBookingList_(loginvo.getM_idx()));
 		return "flight/myBookList";
 	}
-    
+	
 }

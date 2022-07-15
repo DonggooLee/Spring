@@ -8,13 +8,13 @@
 
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
 
-	<div class="joinBox">
-		<div class="publicJoin">
-			개인회원
+	<div class="joinBox" style="display: flex; justify-content: center; padding: 55px; margin: 10px;">
+		<div class="publicJoin" style=" margin: 55px;">
+			<h3>개인회원</h3>
 			<button id="joinBtnP">가입하기</button>
 		</div>
-		<div class="corpJoin">
-			기업회원
+		<div class="corpJoin" style=" margin: 55px;">
+			<h3>기업회원</h3>
 			<button id="joinBtnC">가입하기</button>
 		</div>
 	</div>

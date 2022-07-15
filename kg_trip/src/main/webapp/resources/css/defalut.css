@@ -21,7 +21,9 @@
 		width: 100%;
 		max-width: 1200px;
 		margin: 0 auto;
-		height: 1200px;
+		overflow:hidden;
+    	height:auto;
+    	min-height: 500px;
 		background-color: #F0FFFF;
 		
 
@@ -190,6 +192,10 @@
 	}
 	.pagination li	{
 		display:inline-block;
+	}
+	
+	a{
+		text-decoration: none;
 	}
 	
 	

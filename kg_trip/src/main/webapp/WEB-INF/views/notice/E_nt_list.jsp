@@ -40,7 +40,7 @@
 					<input type="button" id="regBtn" value="새 게시물 등록">
 				</c:if>
 	
-				<table class="boardTbl" style="border: 1px solid pink">
+				<table class="boardTbl">
 					<thead>
 					  <tr>
 					    <th>글번호</th>

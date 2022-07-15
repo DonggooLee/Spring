@@ -13,7 +13,7 @@
 							<ul>
 								<li><a href="/Admin/managePublic" >개인 회원 목록</a></li>
 								<li><a href="/Admin/manageCorp" > 기업회원 목록 </a> </li>
-								<li> 관리자 목록 </li>
+								<li><a href="/Admin/manageAdmin" > 관리자 목록</a> </li>
 							</ul>
 						<li>커뮤니티 관리</li>
 							<ul>

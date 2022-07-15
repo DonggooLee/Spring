@@ -67,7 +67,7 @@
   		insert into p_pakage_reser_tbl(p_rnum, p_num, m_idx, p_rdate, p_name, p_period,
   		m_id, m_name, m_phone, p_rpeople, p_totalfee, p_tid, p_completion)
   		values(#{p_rnum}, #{p_num}, #{m_idx}, sysdate, #{p_name}, #{p_period},
-  		#{m_id}, #{m_name}, #{m_phone}, #{p_rpeople}, #{p_totalfee}, 'p_tid','예약완료')
+  		#{m_id}, #{m_name}, #{m_phone}, #{p_rpeople}, #{p_totalfee}, #{p_tid},'예약완료')
   	</insert>
   	
   	<!-- 예약용 read -->
@@ -172,14 +172,14 @@
 		where a.p_region1 like '동남아' or a.p_country like '일본' order by c.p_star desc NULLS LAST) a
   	</select>
   	
-  	<!-- 하와이검색 -->
+  	<!-- 하와이/몰디브검색 -->
   	<select id="slinkc" resultType="org.kg.domain.P_Pakage_info_VO">
         select rownum ,a. * from (
 		select * from p_pakage_info_tbl a 
 		inner join p_pakage_list_tbl b on a.p_num = b.p_num 
 		left join (select p_num, avg(p_star) as p_star from p_review_tbl group by p_num) c on a.p_num = c.p_num
 		left join (select p_num, count(p_num) as rcount from p_review_tbl group by p_num order by rcount asc)d on c.p_num = d.p_num
-		where a.p_region2 like '하와이' order by c.p_star desc NULLS LAST) a
+		where a.p_region2 like '하와이' or a.p_region2 like '몰디브' order by c.p_star desc NULLS LAST) a
   	</select>
   	
   	<!-- 괌사이판검색 -->
@@ -266,7 +266,9 @@
 	
 	<!-- 개인 예약용 read -->
 	<select id="mread" resultType="org.kg.domain.P_Pakage_reser_VO">
-		select * from p_pakage_reser_tbl
+		select * from p_pakage_reser_tbl a
+		inner join p_pakage_info_tbl b
+		on a.p_num = b.p_num
 		where p_rnum = #{p_rnum}
 	</select>
 	
@@ -307,8 +309,10 @@
 	
 	
 	
-	
-	
+	<!-- 패키지 등록 p_num 중복 체크 -->
+	<select id="checkp_num" parameterType="String" resultType="int">
+		select count(*) from p_pakage_info_tbl where p_num = #{p_num}
+	</select>
 	
 	<!-- 기업 패키지 정보 등록 -->
   	<insert id="cinserta">
