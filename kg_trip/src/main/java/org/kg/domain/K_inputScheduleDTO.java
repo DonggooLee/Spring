@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class K_inputScheduleDTO {
 
-	private String seat_grade, start_date, ap_name_d, ap_name_a, orderby;
+	private String seat_grade, start_date, ap_name_d, ap_name_a, orderby, bookCount;
 	
 }

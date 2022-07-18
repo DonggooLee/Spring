@@ -6,6 +6,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
@@ -13,6 +17,14 @@
 <title>Home</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/defalut.css">
+	<script src="https://kit.fontawesome.com/2b055b9edf.js" crossorigin="anonymous"></script>
+<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/dohyun.css">
+<link rel="stylesheet"  href="${pageContext.request.contextPath}/resources/css/modal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-pen.css" rel="stylesheet">
+<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css" rel="stylesheet">
 <body>
 	<div class="container">
 		<header>
@@ -51,14 +63,14 @@
 				</div>
 				<div class="bottomHead">
 					<nav>
-					
 						<ul class="main_menubar">
 							<li class="menu5"><a href='/flight/scheduleList'>항공권</a>
 								<ul class="menu5_submenu">
+									<li><a href='/flight/scheduleList'>일정조회</a>
 									<li><a href='/flight/scheduleBook'>예약조회</a>
 								</ul>
 							</li>
-							<li class="menu2"><a href="#">커뮤니티</a></li>
+							<li class="menu2"><a href="/text/list">커뮤니티</a></li>
 							<li class="menu4"><a href='/pakage/P_pakageMain'>패키지</a></li>
 							<li class="menu5"><a href="/notice/ntList">고객센터</a>
 								<ul class="menu5_submenu">

@@ -46,6 +46,13 @@
 			</div>
 			<br>
 			<div>
+				<div>
+					<b>예약인원</b>&nbsp;&nbsp;
+					<input type="number" name="bookCount">
+				</div>
+			</div>
+			<br>
+			<div>
 				<button id="getScheduleBtn">일정조회</button>
 				&nbsp;
 				<button id="lowPriceleBtn">낮은가격순</button>
@@ -55,38 +62,6 @@
 		<br><br>
 		
 		<div class="schedule"></div>
-		
-		<br><hr><br>
-		
-		<div class="flightContainer" style="padding: 10px;">
-			<div class="infoFlightImg">
-				<img src="/img/asiana.jpg" style="width: 90px; height: 90px;">
-			</div>
-			<div class="infoFlight">
-				<div><b>아시아나</b></div>
-				<br>
-				<div><b>AA987</b></div>
-			</div>
-			<div class="infoDepart">
-				<div><b>17:05</b></div>
-				<br>
-				<div><b>제주(CJU)</b></div>
-			</div>
-			<div class="infoDepart">
-				<img src="/img/right-arrow.png" style="width: 80px; height: 30px;">
-			</div>
-			<div class="infoArrive">
-				<div><b>18:15</b></div>
-				<br>
-				<div><b>인천(ICN)</b></div>
-			</div>
-			<div class="infoPrice">
-				<div><b>85,000원</b></div>
-			</div>
-			<div class="infoPrice">
-				<button style="padding: 15px;">선택</button>
-			</div>
-		</div>
 		
 	</section>
 	
@@ -124,6 +99,7 @@
 		var getSchedule = $(".getSchedule");
 		var start_date = getSchedule.find("input[name='start_date']");
 		var seat_grade = getSchedule.find("select[name='seat_grade']");
+		var bookCount = getSchedule.find("input[name='bookCount']");
 		
 		// 공항 조회에 필요한 객체
 		var selectAirport_d = $(".selectAirport_d");
@@ -159,7 +135,7 @@
 				alert("출발공항과 도착공항을 다르게 입력해 주세요")
 			} else {
 				if (seat_grade.val() == "FIRST") {
-					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
+					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -195,12 +171,17 @@
 							$(".schedule button").on("click", function() {
 								// 일정번호
 								var date_idx = $(this).data("idx");
+								// 예약인원 예외처리
+								if(bookCount.val() == ""){
+									alert("예약인원을 입력해 주세요.");
+									return;
+								}
 								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
-								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=FIRST";
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=FIRST&bookCount=" + bookCount.val();
 							})
 					}) // end : 퍼스트 좌석 선택 일정
 				} else if (seat_grade.val() == "BUSINESS") {
-					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
+					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -236,12 +217,12 @@
 							$(".schedule button").on("click", function() {
 								// 일정번호
 								var date_idx = $(this).data("idx");
-								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
-								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=BUSINESS";
+								// 일정번호, 좌석등급, 예약인원을  가지고 항공권 확인 페이지로 이동
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=BUSINESS&bookCount=" + bookCount.val();
 							})
 					}) // end : 비즈니스 좌석 선택 일정
 				} else{
-					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date"}, 
+					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"date", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -278,7 +259,7 @@
 								// 일정번호
 								var date_idx = $(this).data("idx");
 								// 일정번호, 좌석등급 가지고 항공권 확인 페이지로 이동
-								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=ECONOMY";
+								location.href = "scheduleConfirm?date_idx=" + date_idx + "&seat_grade=ECONOMY&bookCount=" + bookCount.val();
 							})
 					}) // end : 이코노미 좌석 선택 일정
 				} // end : 좌석 구분 else
@@ -294,7 +275,7 @@
 				alert("출발공항과 도착공항을 다르게 입력해 주세요")
 			} else {
 				if (seat_grade.val() == "FIRST") {
-					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+					listScheduleFir({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -335,7 +316,7 @@
 							})
 					}) // end : 퍼스트 좌석 선택 일정
 				} else if (seat_grade.val() == "BUSINESS") {
-					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+					listScheduleBis({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")
@@ -376,7 +357,7 @@
 							})
 					}) // end : 비즈니스 좌석 선택 일정
 				} else{
-					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice"}, 
+					listScheduleEco({seat_grade:seat_grade.val(), start_date:start_date.val(), ap_name_d:ap_name_d.val(), ap_name_a:ap_name_a.val(), orderby:"lowPrice", bookCount:bookCount.val()}, 
 							function(listSch) {
 								if(listSch.length == 0){
 									alert("일정이 존재하지 않습니다")

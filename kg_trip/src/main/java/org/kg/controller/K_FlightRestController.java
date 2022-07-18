@@ -85,25 +85,32 @@ public class K_FlightRestController {
 	public ResponseEntity<List<K_getScheduleDTO>> getSchedule(@RequestBody K_inputScheduleDTO inputSch){
 		log.info("일정 조회...");
 		log.info("K_inputScheduleDTO : " + inputSch);
-		if(inputSch.getSeat_grade().equals("FIRST") & inputSch.getOrderby().equals("date")) {
+		
+		String ckStr = inputSch.getSeat_grade();
+		String ckOrder = inputSch.getOrderby();
+		List<K_getScheduleDTO> list = null;
+		
+		if(ckStr.equals("FIRST") & ckOrder.equals("date")) {
 			log.info("퍼스트석 & 탑승시간순 정렬");
-			return new ResponseEntity<>(service.searchScheduleFir_(inputSch), HttpStatus.OK);
-		}else if (inputSch.getSeat_grade().equals("BUSINESS") & inputSch.getOrderby().equals("date")) {
+			list = service.searchScheduleFir_(inputSch);
+		}else if (ckStr.equals("BUSINESS") & ckOrder.equals("date")) {
 			log.info("비즈니스석 & 탑승시간순 정렬");
-			return new ResponseEntity<>(service.searchSchedulBis_(inputSch), HttpStatus.OK);
-		}else if (inputSch.getSeat_grade().equals("ECONOMY") & inputSch.getOrderby().equals("date")){
+			list = service.searchSchedulBis_(inputSch);
+		}else if (ckStr.equals("ECONOMY") & ckOrder.equals("date")){
 			log.info("이코노미석 & 탑승시간순 정렬");
-			return new ResponseEntity<>(service.searchScheduleEco_(inputSch), HttpStatus.OK);
-		}else if(inputSch.getSeat_grade().equals("FIRST") & inputSch.getOrderby().equals("lowPrice")){
+			list = service.searchScheduleEco_(inputSch);
+		}else if(ckStr.equals("FIRST") & ckOrder.equals("lowPrice")){
 			log.info("퍼스트석 & 최저가순 정렬");
-			return new ResponseEntity<>(service.searchScheduleFirPirce_(inputSch), HttpStatus.OK);
-		}else if(inputSch.getSeat_grade().equals("BUSINESS") & inputSch.getOrderby().equals("lowPrice")){
+			list = service.searchScheduleFirPirce_(inputSch);
+		}else if(ckStr.equals("BUSINESS") & ckOrder.equals("lowPrice")){
 			log.info("비즈니스석 & 최저가순 정렬");
-			return new ResponseEntity<>(service.searchSchedulBisPrice_(inputSch), HttpStatus.OK);
+			list = service.searchSchedulBisPrice_(inputSch);
 		}else {
 			log.info("이코노미석 & 최저가순 정렬");
-			return new ResponseEntity<>(service.searchScheduleEcoPrice_(inputSch), HttpStatus.OK);
+			list = service.searchScheduleEcoPrice_(inputSch);
 		}
+		
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
 	// 항공권 예약 조회

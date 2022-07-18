@@ -25,7 +25,9 @@ var oboService = (function() {
 		console.log("update~~" + obbo.o_num);
 		$.ajax({
 			type : 'PUT',
-			url : '/obo/' + obbo.o_num, 
+			url : '/obo/modifyTest', 
+			processData : false,
+            contentType : false,
 			data : JSON.stringify(obbo),
 			contentType : "application/json; charset=utf-8",
 			success : function(result, status, xhr) {

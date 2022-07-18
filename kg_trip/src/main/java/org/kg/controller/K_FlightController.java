@@ -122,9 +122,10 @@ public class K_FlightController {
 	@GetMapping("scheduleConfirm")
 	public String scheduleConfirm(HttpServletRequest request, Model model,
 			@RequestParam("date_idx") int date_idx, 
-			@RequestParam("seat_grade") String seat_grade) {
+			@RequestParam("seat_grade") String seat_grade,
+			@RequestParam("bookCount") String bookCount) {
 		log.info("페이지 이동  : scheduleConfirm...");
-		log.info("scheduleConfirm 넘어온 정보 : " + date_idx + " / " + seat_grade);
+		log.info("scheduleConfirm 넘어온 정보 : " + date_idx + " / " + seat_grade + " / " + bookCount);
 		HttpSession session = request.getSession(false);
 		B_PublicMemberVO loginvo = (B_PublicMemberVO) session.getAttribute("public");
 		if (loginvo == null) {
@@ -135,6 +136,7 @@ public class K_FlightController {
 		}
 		model.addAttribute("getSchedule", service.getSchedule_(date_idx));
 		model.addAttribute("seat_grade", seat_grade);
+		model.addAttribute("bookCount", bookCount);
 		return "flight/scheduleConfirm";
 	}
 	
@@ -189,8 +191,7 @@ public class K_FlightController {
 	}
 	
 	// 일반회원 : 결제가 완료된 페이지에서 비동기 방식으로 항공권 예약 DB에 Insert !
-    @PostMapping(value = "/insertReservation", 
-    		consumes = "application/json", 
+    @PostMapping(value = "/insertReservation", consumes = "application/json", 
     		produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> insertReservation(@RequestBody K_bookInfo bookInfo) {
         log.info("항공권 예약 확정하기...");

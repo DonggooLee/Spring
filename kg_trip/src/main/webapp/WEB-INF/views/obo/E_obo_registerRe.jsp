@@ -20,21 +20,11 @@
 					<tbody>
 						<tr>
 							<td>제목</td>
-							<td><input type="text" name="o_title" style="float: left;" value="RE : "></td>
+							<td><input type="text" name="o_title" style="float: left;" value="　└ RE : "></td>
 						</tr>
 						<tr>
 							<td>카테고리</td>
-							<td>
-								<select id = "o_cat" name="o_cat">
-									<option value="">카테고리를 선택하세요.</option>
-									<option value="여행">여행</option>
-									<option value="항공권">항공권</option>
-									<option value="패키지">패키지</option>
-									<option value="계정">계정</option>
-									<option value="신뢰센터">신뢰센터</option>
-									<option value="기타">기타</option>
-								</select>
-							</td>
+							<td><input type="text" name="o_cat" value="${obo.o_cat }" readonly="readonly"></td>
 						</tr>
 						<tr>
 							<td>내용</td>
@@ -50,7 +40,7 @@
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<input type="text" name="o_num" value="${o_num }">
+								<input type="hidden" name="o_num" value="${o_num }">
 								<button data-oper="register">등록</button>
 								<button data-oper="list" onclick="location.href='/obo/list'" type="button">목록.!!!</button>
 								<button type="reset">새로쓰기.!!!</button>
@@ -179,7 +169,6 @@
 			// 필수 데이터 미입력시 alert
 			var title = $("input[name='o_title']").val();
 			var cont = $("textarea[name='o_content']").val();
-			var cat = $("select[name='o_cat']").val();
 			
 			if(title.trim() == ""){
 				alert("제목을 입력하세요.");
@@ -187,16 +176,12 @@
 			}else if(cont.trim() == ""){
 				alert("내용을 입력하세요.");
 				return;
-			}else if(cat.trim() == ""){
-				alert("카테고리를 선택하세요");
-				return;
 			}else{
 				operForm.submit();
 			}
 
 			console.log("o_title : " + title);
 			console.log("o_content : " + cont);
-			console.log("o_cat : " + cat);
 			
 		});
 	}); 
@@ -204,6 +189,3 @@
 </script>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
-
-		
-	

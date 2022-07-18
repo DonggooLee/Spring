@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -178,6 +179,7 @@ public class E_OboController {
 		
 		// o_num 넣어주기
 		model.addAttribute("o_num", o_num);
+		model.addAttribute("obo", service.view(o_num));
 		log.info("o_num? >> " + o_num);
 		log.info("/registerRe 가는 중");
        
@@ -253,7 +255,6 @@ public class E_OboController {
 	   String o_file = null;
 	   MultipartFile uploadFile = vo.getUploadFile();
 	   
-	   
 	   if(!uploadFile.isEmpty()) {
 		   String originalFileName = uploadFile.getOriginalFilename();
 		   log.info("originalFileName은?! >> " + originalFileName);
@@ -273,9 +274,6 @@ public class E_OboController {
 	   model.addAttribute("o_num", vo.getO_num());
 	   log.info("답글 register중) o_num ?? >> " + vo.getO_num());
 	   
-	   // 카테고리 넣어주기
-	   vo.setO_cat(request.getParameter("o_cat"));
-	   
 	   // 답글에 필요한 정보들 확인
 	   log.info("originNo? >> " + vo.getO_originNo());
 	   log.info("groupOrd? >> " + vo.getO_groupOrd());
@@ -289,16 +287,6 @@ public class E_OboController {
 	   return "redirect:/obo/list"; 
    }
    
-   // remove
-	/* @PostMapping("/remove") 
-   public String remove(@RequestParam("o_num") long o_num, RedirectAttributes rttr) {
-      log.info("remove..." + o_num);
-      
-      if(service.remove(o_num)) {
-         rttr.addAttribute("result", "success");
-      }
-      return "redirect:/obo/list";
-   }*/
 
    @DeleteMapping(value="/{o_num}", produces = {MediaType.TEXT_PLAIN_VALUE})
    public ResponseEntity<String> remove(@PathVariable("o_num") Long o_num, E_OboVO vo, HttpServletRequest request){
@@ -352,44 +340,39 @@ public class E_OboController {
 	   return "/obo/E_obo_modify";
    }
 
-// modify ing(파일값 빼고 수정됨 ;)
+   // modify ing(파일값 빼고 수정됨 ;)
    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, 
-         value = "/{o_num}", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
-   public ResponseEntity<String> update(@RequestBody E_OboVO vo, @PathVariable("o_num") int o_num,
+         value = "/modifyTest", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+   public ResponseEntity<String> update(@RequestBody E_OboVO vo,
 		   RedirectAttributes rttr, HttpServletRequest request) throws IOException{
       
 	   log.info("update" + vo);
 	      
 	   // 세션 처리
 	   HttpSession session = request.getSession(false);
+	   
+	   // 파일 업로드
+	   String o_file = null;
+	   MultipartFile uploadFile = vo.getUploadFile();
+	   
+	   if(!uploadFile.isEmpty()) {
+		   String originalFileName = uploadFile.getOriginalFilename();
+		   log.info("originalFileName은?! >> " + originalFileName);
+		   String ext = FilenameUtils.getExtension(originalFileName);   // 확장자 구하기
+		   log.info("ext(확장자)은?! >> " + ext);
+		   UUID uuid = UUID.randomUUID();   // uuid 구하기
+		   
+		   o_file = uuid + "." + ext ;
+		   uploadFile.transferTo(new File("C:\\upload\\"+o_file));
+		   
+		   vo.setO_file(o_file);
+	   }
   
 	   B_PublicMemberVO loginPublicvo = (B_PublicMemberVO)session.getAttribute("public");	// 세션에 저장되어있는 관리자 정보 꺼내오기 
 	   vo.setM_idx(loginPublicvo.getM_idx());                        						// 관리자 식별번호 넣어주기
   
 	   log.info("좋은 말로 할 때 vo값 내놔라.(이미지 삭제 전.) " + vo.toString());
 	     
-//	   // 파일 업로드
-//      String o_file = null;
-//      MultipartFile uploadFile = vo.getUploadFile();
-//      
-//      
-//      if(!uploadFile.isEmpty()) {
-//         String originalFileName = uploadFile.getOriginalFilename();
-//         log.info("originalFileName은?! >> " + originalFileName);
-//         String ext = FilenameUtils.getExtension(originalFileName);   // 확장자 구하기
-//         log.info("ext(확장자)은?! >> " + ext);
-//         UUID uuid = UUID.randomUUID();   // uuid 구하기
-//         
-//         o_file = uuid + "." + ext ;
-//         uploadFile.transferTo(new File("C:\\upload\\"+o_file));
-//
-//         vo.setO_file(o_file);
-//      }
-//	      
-//      log.info("파일 업로드 준비 완!");
-	   
-	   vo.setO_num(o_num);
-	   log.info("o_num : " + o_num);
 	   log.info("modify vo ? : " + vo);
       
 	   int modifyCount = service.update(vo);
@@ -401,6 +384,46 @@ public class E_OboController {
                : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
    }
    
+   @RequestMapping(value="/uploadFile/{o_num}", method=RequestMethod.POST,produces="application/json;charset=UTF-8" )
+   public ResponseEntity<String> uploadFile(@RequestBody E_OboVO vo, @PathVariable("o_num") int o_num, 
+		   MultipartFile file, HttpServletRequest request ) throws IOException {
+
+	   log.info("modify 페이지에서 ajax로 사진 업로드하기!");
+	      
+	   // 세션 처리
+	   HttpSession session = request.getSession(false);
+  
+	   B_PublicMemberVO loginPublicvo = (B_PublicMemberVO)session.getAttribute("public");	// 세션에 저장되어있는 관리자 정보 꺼내오기 
+	   vo.setM_idx(loginPublicvo.getM_idx());                        						// 관리자 식별번호 넣어주기
+  
+	   // 파일 업로드
+	   String o_file = null;
+	   MultipartFile uploadFile = vo.getUploadFile();
+	   
+	   
+	   if(!uploadFile.isEmpty()) {
+		   String originalFileName = uploadFile.getOriginalFilename();
+		   log.info("originalFileName은?! >> " + originalFileName);
+		   String ext = FilenameUtils.getExtension(originalFileName);   // 확장자 구하기
+		   log.info("ext(확장자)은?! >> " + ext);
+		   UUID uuid = UUID.randomUUID();   // uuid 구하기
+		   
+		   o_file = uuid + "." + ext ;
+		   uploadFile.transferTo(new File("C:\\upload\\"+o_file));
+		   
+		   vo.setO_file(o_file);
+	   }
+	   
+	   log.info("파일 업로드 준비 완!");
+	   
+	   int insertImageCount = service.update(vo);
+	      
+	   log.info("insertImageCount ? >> " + insertImageCount);
+      
+	   return insertImageCount == 1 ?
+            new ResponseEntity<>("success", HttpStatus.OK)
+               : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
    
    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, 
 		   value="/removeImg/{o_num}", produces = {MediaType.TEXT_PLAIN_VALUE})

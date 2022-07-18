@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="org.kg.mapper.D_mainmapper">
+  
+ 
+	
+	<insert id="insertContent">
+	
+ 
+		insert into freeboard_t(bno,title,content,writer,regDate)
+		values (seq_free.nextval, #{title},#{content},#{writer},sysdate)
+		
+		<selectKey resultType="int" keyProperty="bno" order="AFTER">
+  		
+  			SELECT seq_free.currval from dual
+  		
+  		</selectKey>
+				
+	</insert>
+	
+	<insert id="insertImg">
+		insert into image_storage(bno,fileName,uploadPath,uuid)
+		values (#{bno}, #{fileName},#{uploadPath},#{uuid})	
+	</insert>
+	
+		
+	<insert id="likeInsert">
+		insert into freelike_t(bno,likewho,liketf)
+		values (#{bno}, #{likewho},#{liketf})	
+	</insert>
+	
+	<select id="contentlist" resultType="org.kg.domain.D_BoardVO">
+		select
+			*
+	    from freeboard_t
+	       
+	</select>
+	
+	<select id="imageData" resultType="org.kg.domain.D_ImageVO">
+		select
+			*
+	    from image_storage
+	       
+	</select>
+		
+	<select id="selectCard" resultType="org.kg.domain.D_BoardVO">
+		select *from freeboard_t where bno=#{bno} 
+	</select>
+	
+	<select id="selectlike" resultType="org.kg.domain.D_likeDTO">
+		SELECT nvl(max(liketf),0) liketf From freelike_t WHERE bno=#{bno}
+	</select>
+  
+  	<select id="selectlikeNum" resultType="int">
+		SELECT COUNT(*)from freelike_t where bno=#{bno}
+	</select>
+	
+  <select id="likeNum" resultType="org.kg.domain.D_likeNumDTO">
+		select bno
+		,(select count(*) from freelike_t where bno = freeboard_t.bno) count
+		from freeboard_t
+	</select>
+	
+	  <select id="likewhotf" resultType="org.kg.domain.D_likewhotfVO">
+		select distinct a.bno, b.liketf, NVL(b.likewho, 0) as likewho from freeboard_t a left outer join freelike_t b on a.bno=b.bno order by a.bno
+	</select>
+	
+	<delete id="likedelete">
+		delete freelike_t where likewho=#{likewho} and bno=#{bno}
+	</delete>
+
+	<select id="alllikewho" resultType="org.kg.domain.D_likelistwhoDTO">
+		select likewho from freelike_t where bno=#{bno}
+	</select>
+
+  </mapper>

@@ -29,6 +29,17 @@
 		-->
 	</beans:bean>
 	
-	<context:component-scan base-package="org.kg.controller" />
+	<beans:bean class="java.lang.String" id="uploadPath">
+<!-- <beans:constructor-arg value="C:\Users\parkdohyun\Documents\workspace-spring\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\kg_trip\resources" /> -->
+	<beans:constructor-arg value="C:\Users\goott01\Documents\workspace_spring\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\kg_trip\resources" />
+	</beans:bean>
 	
+	<!-- <beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean> -->
+	
+	<context:component-scan base-package="org.kg.*" />
+	
+	<resources mapping="/ckUpload/**" location="/resources/ckUpload/" />
+	
+	
+
 </beans:beans>

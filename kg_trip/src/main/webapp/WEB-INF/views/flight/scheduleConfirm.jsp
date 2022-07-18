@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page session="false" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page session="false"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <!-- 이 부분 내용만 수정 (바디 작성 부분)-->
@@ -38,8 +39,8 @@
 		<br><hr><br>
 		
 		<h1>승객 정보</h1><br>
-		<div class="memberInfo">
-			<div class="test">
+		<div class="memberInfo" style="border: 1px solid black; width: 680px;">
+			<%-- <div class="test">
 				<label>
 					<span>이름</span>
 				</label>
@@ -79,8 +80,8 @@
 			</div>
 			<div class="test">
 				<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}" id="inputTEST">
-			</div>
-			<%-- <table>
+			</div> --%>
+			<table>
 				<tr>
 					<th>이름</th>
 					<td>
@@ -110,8 +111,8 @@
 					<td>
 						<input type="text" name="m_birth" value="${loginPublicInfo.m_birth}" readonly="readonly">
 					</td>
-				</tr>			
-			</table> --%>
+				</tr>
+			</table>
 		</div>
 		
 		<br><hr><br>
@@ -343,10 +344,9 @@
 	}
 	
 	#noneBookSeat:hover {
-		background-color: #ffc0cb;
+		background-color: #e7daff;
 		font-weight: bold;
 		color: black;
-		transform: scale(1.2);
 	}
 	
 	/* 모달창 스타일 */
@@ -369,14 +369,14 @@
 	}
 	
 	/* div 꾸미기 */
-	.test{
+	/* .test{
 		border: 0px; 
 		border-bottom: 1px solid #00256c; 
 		order-radius: 0; 
 		color: #000; 
 		height: 4rem;
 		box-sizing: border-box;
-	}
+	} */
 	
 	#inputTEST{
 		appearance: none;
@@ -413,6 +413,10 @@
 <script type="text/javascript">
 
 	$(function() {
+		
+		// 예약인원 수 !
+		var bookCount = ${bookCount};
+		console.log("예약인원 : " + bookCount)
 		
 		// 약관 1 버튼 클릭 이벤트
 		$("#view1").on("click", function() {
@@ -497,12 +501,11 @@
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
 						$(".choiceSeat #noneBookSeat").css("background-color","white");
-						$(this).css("background-color","#ffc0cb");
+						$(this).css("background-color","#e7daff");
 						var seat_es = $(this).data("idx");
 						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							var rstr = '';
-							alert("선택한 좌석 번호 : " + seat_es);
 							// 예약을 위한 정보 생성
 							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
 							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
@@ -518,6 +521,7 @@
 								// 이용약관 동의 여부 체크
 								if(!checked_1 || !checked_2){
 									alert("필수 약관에 동의해 주세요.")
+									return;
 							    }else {
 									$("#reservationForm").submit();
 								} // end : 이용약관 동의 여부 체크
@@ -557,12 +561,36 @@
 					}
 					str += "</div>"
 					div.html(str);
+					/////////////////////
+					var btnCount = 0;
+					var seat_bs = [];
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
-						$(".choiceSeat #noneBookSeat").css("background-color","white");
-						$(this).css("background-color","#ffc0cb");
-						var seat_bs = $(this).data("idx");
-						// 로그인 유무 따른 예외처리
+						// 버튼 클릭 할 때 마다 카운트
+						btnCount++;
+						console.log("버튼클릭횟수 : " + btnCount + " / 예약인원수 : " + bookCount);
+						// 예약인원보다 클릭을 적게 해야지만 값을 추가
+						if(btnCount < bookCount+1){
+							if(!seat_bs.includes($(this).data("idx"))){
+								// 값이 없을경우에 
+								seat_bs.push($(this).data("idx"));
+								$(this).css("background-color","#e7daff");
+							}else{
+								$(".choiceSeat #noneBookSeat").css("background-color","white");
+								// 배열에서 값 빼기
+								
+							}
+						}else{
+							// 예약인원보다 클릭을 많이 할 경우 버튼 클릭 카운트 0 좌석번호 초기화 시키고 css 색상 변경
+							//seat_bs = [];
+							btnCount = 0;
+							$(".choiceSeat #noneBookSeat").css("background-color","white");
+							alert("예약인원보다 많습니다.");
+							return;
+						}
+						
+						
+						/* // 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							var rstr = '';
 							alert("선택한 좌석 번호 : " + seat_bs);
@@ -581,6 +609,7 @@
 								// 이용약관 동의 여부 체크
 								if(!checked_1 || !checked_2){
 									alert("필수 약관에 동의해 주세요.")
+									return;
 							    }else {
 									$("#reservationForm").submit();
 								} // end : 이용약관 동의 여부 체크
@@ -592,7 +621,7 @@
 							}else{
 								location.href = "${pageContext.request.contextPath}/Member/login";
 							}
-						} // end : 로그인 유무 따른 예외처리
+						} // end : 로그인 유무 따른 예외처리  */
 					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 비즈니스석 선택
 				// 퍼스트석 선택
@@ -620,16 +649,39 @@
 					}
 					str += "</div>"
 					div.html(str);
+					
+					/////////
+					var seat_fs = [];
+					// 버튼 클릭이벤트를 카운트하기 위함
+					var btnCount = 0;
+					/////////
+					
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
-						// 현우가 해결해준 코드!!!
-						$(".choiceSeat #noneBookSeat").css("background-color","white");
-						$(this).css("background-color","#ffc0cb");
-						var seat_fs = $(this).data("idx");
-						// 로그인 유무 따른 예외처리
+						
+						btnCount++;
+						console.log("버튼클릭횟수" + btnCount) 
+						/////////////////
+						console.log("예약인원수 " + bookCount)
+						console.log("좌석길이  " + seat_fs.length)
+						if(btnCount < bookCount+1){
+							seat_fs += $(this).data("idx");
+							$(this).css("background-color","#e7daff");
+							console.log("선택좌석번호" + seat_fs)
+						}else{
+							btnCount = 0;
+							$(".choiceSeat #noneBookSeat").css("background-color","white");
+							alert("예약인원보다 많습니다!");
+							// 비워주기
+							seat_fs = [];
+							console.log("선택좌석번호" + seat_fs)
+							return;
+						}
+						/////////////////
+						
+						/* // 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							var rstr = '';
-							alert("선택한 좌석 번호 : " + seat_fs);
 							// 예약을 위한 정보 생성
 							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
 							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
@@ -645,6 +697,7 @@
 								// 이용약관 동의 여부 체크
 								if(!checked_1 || !checked_2){
 									alert("필수 약관에 동의해 주세요.");
+									return;
 							    }else {
 									$("#reservationForm").submit();
 								} // end : 이용약관 동의 여부 체크
@@ -656,7 +709,7 @@
 							}else{
 								location.href = "${pageContext.request.contextPath}/Member/login";
 							}
-						} // end : 로그인 유무 따른 예외처리
+						} // end : 로그인 유무 따른 예외처리 */
 					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 퍼스트석 선택
 				

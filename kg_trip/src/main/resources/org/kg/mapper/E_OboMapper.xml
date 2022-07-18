@@ -42,10 +42,11 @@
    <insert id="insertRe">
 	insert into e_obo_tbl (o_num, o_cat, m_idx, o_title, o_content, o_file,
 		o_regdate, o_originno, o_groupord, o_grouplayer)
-	VALUES (seq_e_obo_tbl.nextval, #{o_cat}, #{m_idx}, #{o_title} , #{o_content},#{o_file}, sysdate,
+	VALUES (seq_e_obo_tbl.nextval, (select o_cat from e_obo_tbl where o_num = #{o_num}),
+		#{m_idx}, #{o_title} , #{o_content},#{o_file,jdbcType=VARCHAR}, sysdate,
 		(select o_originNo from e_obo_tbl where o_num = #{o_num}),
 		(SELECT MAX (o_groupord) FROM e_obo_tbl where o_originno = #{o_num}) +1,
-		(select o_grouplayer from e_obo_tbl where o_num = #{o_num})+1
+		(select o_grouplayer from e_obo_tbl where o_num = #{o_num}+1)
 		)
    </insert>
     
@@ -64,6 +65,12 @@
    <!-- 파일 삭제 업데이트 -->
    <update id="makeFileNullUpdate">
    	update e_obo_tbl set o_file = '' , o_updDate = sysdate where o_num = #{o_num}
+   </update>
+   
+   <!-- 파일 삭제 업데이트 -->
+   <update id="uploadFile">
+   	update e_obo_tbl set o_file = #{o_file,jdbcType=VARCHAR} , o_updDate = sysdate 
+   	where o_num = #{o_num}
    </update>
    
 

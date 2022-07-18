@@ -133,6 +133,7 @@ obo 수정 페이지여요.
 			});	
 		}); // end : removeImgBtn 이벤트 종료
 		
+		
 		$("#modifyBtn").on("click", function(e) {
 			e.preventDefault();
 			
@@ -147,9 +148,9 @@ obo 수정 페이지여요.
 					o_num : o_num.val(),
 					o_cat : o_cat.val(),
 					o_title : o_title.val(),
-					o_content : o_content.val()
-					/* o_file : o_file.val(),
-					uploadFile : uploadFile.val() */
+					o_content : o_content.val(),
+					o_file : o_file.val(),
+					uploadFile : uploadFile.val()
 			};
 			
 			oboService.update(obbo,function() {
