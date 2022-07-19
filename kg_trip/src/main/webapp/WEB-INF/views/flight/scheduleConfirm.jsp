@@ -368,16 +368,6 @@
 		line-height:23px; cursor:pointer;
 	}
 	
-	/* div 꾸미기 */
-	/* .test{
-		border: 0px; 
-		border-bottom: 1px solid #00256c; 
-		order-radius: 0; 
-		color: #000; 
-		height: 4rem;
-		box-sizing: border-box;
-	} */
-	
 	#inputTEST{
 		appearance: none;
 	    box-sizing: border-box;
@@ -536,19 +526,38 @@
 						} // end : 로그인 유무 따른 예외처리
 					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 이코노미석 선택
+				
+				///////////////////////////////////////////////////////////////////////////////////
+				
 				// 비즈니스석 선택
 				if(seat.businessseat != null){
 					var pBs = seat.businessseatprice;
 					price = pBs;
            			pBs = AmountCommas(pBs)+'원';
 					$("#ticketPrice").html(pBs);
+					var split_seatName = [];
+					
+					for(var i=0; i<seatList.length; i++) {
+						split_seatName += seatList[i].seat_name.split(',');
+					}
+					console.log("seatList0 : " + seatList[0].seat_name)
+					console.log("seatList1 : " + seatList[1].seat_name)
+					
+					console.log("seatList 타입 : " + typeof(seatList))
+					console.log("seatList  : " + seatList.seatName)
+					
+					console.log("split_seatName 타입 : " + typeof(split_seatName))
+					console.log("split_seatName : " + split_seatName)
+					
 					var bs = seat.businessseat;
 					var split_bs = bs.split(',');
 					var str = '';
+					console.log("split_bs 타입 : " + typeof(split_bs))
+					console.log("split_bs : " + split_bs)
 					str += "<div style='border: 1px solid black; padding: 10px; text-align: center; width: 680px;'>"
            			for(var i=0; i<split_bs.length; i++){
-						for(var j=0; j<seatList.length; j++) {
-							if(split_bs[i] == seatList[j].seat_name) {
+						for(var j=0; j<split_seatName.length; j++) {
+							if(split_bs[i] == split_seatName[j]) {
 								if(seatList[j].completion != "환불완료"){
 									str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_bs[i] + "</button>"
 									i++;
@@ -559,47 +568,56 @@
 							str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx=" + split_bs[i] + ">" + split_bs[i] + "</button>"
 						}
 					}
-					str += "</div>"
+					str += "</div>";
 					div.html(str);
-					/////////////////////
-					var btnCount = 0;
 					var seat_bs = [];
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
-						// 버튼 클릭 할 때 마다 카운트
-						btnCount++;
-						console.log("버튼클릭횟수 : " + btnCount + " / 예약인원수 : " + bookCount);
-						// 예약인원보다 클릭을 적게 해야지만 값을 추가
-						if(btnCount < bookCount+1){
-							if(!seat_bs.includes($(this).data("idx"))){
-								// 값이 없을경우에 
-								seat_bs.push($(this).data("idx"));
-								$(this).css("background-color","#e7daff");
-							}else{
-								$(".choiceSeat #noneBookSeat").css("background-color","white");
-								// 배열에서 값 빼기
-								
+						console.log("예약인원수 : " + bookCount);
+						var seatBs = $(this).data("idx");
+						// 배열의 길이와 예약인원수가 동일한 경우 ! (예외처리)
+						if(seat_bs.length == bookCount) {
+							console.log("길이랑 인원수랑 동일할 때");
+							for(var i=0; i<seat_bs.length; i++) {
+								if(seat_bs[i] === seatBs){
+									seat_bs.splice(i,1);
+									i--; // 배열의 요소가 즉시 삭제되고 배열의 길이가 변경되기 때문
+									$(this).css("background-color", "white");
+									console.log("배열에 담긴 값(삭제 후): " + seat_bs);
+								}
 							}
 						}else{
-							// 예약인원보다 클릭을 많이 할 경우 버튼 클릭 카운트 0 좌석번호 초기화 시키고 css 색상 변경
-							//seat_bs = [];
-							btnCount = 0;
-							$(".choiceSeat #noneBookSeat").css("background-color","white");
-							alert("예약인원보다 많습니다.");
-							return;
+							// 배열의 길이가 예약인원수 보다 적을때 !
+							console.log("길이랑 인원수랑 다를 때");
+							// seatBs 값이 seat_bs 배열 안에 없을 경우 !
+							if(!seat_bs.includes(seatBs)){
+								console.log("선택값과 배열에 같은값이 포함되지 않을 경우 타는 곳!");
+								seat_bs.push(seatBs);
+								$(this).css("background-color", "#e7daff");
+								console.log("배열에 담긴 값: " + seat_bs);
+							}else{
+								// seatBs 값이 seat_bs 배열 안에 있을 경우 !
+								console.log("선택값과 배열에 같은값이 포함될 경우 타는 곳!")
+								for(var i=0; i<seat_bs.length; i++) {
+									if(seat_bs[i] === seatBs){
+										seat_bs.splice(i,1);
+										i--; // 배열의 요소가 즉시 삭제되고 배열의 길이가 변경되기 때문
+										$(this).css("background-color","white");
+										console.log("배열에 담긴 값(삭제 후): " + seat_bs);
+									}
+								}
+							}
 						}
-						
-						
-						/* // 로그인 유무 따른 예외처리
+						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							var rstr = '';
-							alert("선택한 좌석 번호 : " + seat_bs);
+							console.log("배열에 담긴 값2222222222222222222: " + seat_bs);
 							// 예약을 위한 정보 생성
-							rstr += "<input type='hidden' name='m_idx' value=" + m_idx.val() + ">";
-							rstr += "<input type='hidden' name='date_idx' value=" + date_idx.val() + ">";
-							rstr += "<input type='hidden' name='flight_name' value=" + flight_name.val() + ">";
-							rstr += "<input type='hidden' name='seat_name' value=" + seat_bs + ">";
-							rstr += "<input type='hidden' name='ticket_price' value=" + price + ">";
+							rstr += "<input type='text' name='m_idx' value=" + m_idx.val() + ">";
+							rstr += "<input type='text' name='date_idx' value=" + date_idx.val() + ">";
+							rstr += "<input type='text' name='flight_name' value=" + flight_name.val() + ">";
+							rstr += "<input type='text' name='seat_name' value=" + seat_bs + ">";
+							rstr += "<input type='text' name='ticket_price' value=" + price + ">";
 							$("#reservationForm").html(rstr);
 							// 결제하기 버튼 클릭 이벤트
 							$("#payBtn").on("click", function() {
@@ -621,9 +639,13 @@
 							}else{
 								location.href = "${pageContext.request.contextPath}/Member/login";
 							}
-						} // end : 로그인 유무 따른 예외처리  */
+						} // end : 로그인 유무 따른 예외처리 
 					}) // end : 좌석 버튼 클릭 이벤트
+					
 				} // end : 비즈니스석 선택
+				
+				///////////////////////////////////////////////////////////////////////////////////
+				
 				// 퍼스트석 선택
 				if(seat.firstseat != null){
 					var pFs = seat.firstseatprice;
@@ -634,52 +656,24 @@
 					var split_fs = fs.split(',');
 					var str = '';
 					str += "<div style='border: 1px solid black; padding: 10px; text-align: center; width: 680px;'>"
-           			for(var i=0; i<split_fs.length; i++){
+           			alert(split_fs.length)
+					for(var i=0; i<split_fs.length; i++){
 						for(var j=0; j<seatList.length; j++) {
 							if(split_fs[i] == seatList[j].seat_name) {
 								if(seatList[j].completion != "환불완료"){
 									str += "<button style='padding: 15px; margin: 5px;' id='BookSeat'>" + split_fs[i] + "</button>"
-									i++;
 								}
 							}
 						}
-						if(split_fs[i] != undefined){
+						//if(split_fs[i] != undefined){
 							str += "<button style='padding: 15px; margin: 5px;' id='noneBookSeat' data-idx=" + split_fs[i] + ">" + split_fs[i] + "</button>"
-						}
+						//}
 					}
 					str += "</div>"
 					div.html(str);
-					
-					/////////
-					var seat_fs = [];
-					// 버튼 클릭이벤트를 카운트하기 위함
-					var btnCount = 0;
-					/////////
-					
 					// 좌석 버튼 클릭 이벤트
 					$(".choiceSeat button").on("click", function() {
-						
-						btnCount++;
-						console.log("버튼클릭횟수" + btnCount) 
-						/////////////////
-						console.log("예약인원수 " + bookCount)
-						console.log("좌석길이  " + seat_fs.length)
-						if(btnCount < bookCount+1){
-							seat_fs += $(this).data("idx");
-							$(this).css("background-color","#e7daff");
-							console.log("선택좌석번호" + seat_fs)
-						}else{
-							btnCount = 0;
-							$(".choiceSeat #noneBookSeat").css("background-color","white");
-							alert("예약인원보다 많습니다!");
-							// 비워주기
-							seat_fs = [];
-							console.log("선택좌석번호" + seat_fs)
-							return;
-						}
-						/////////////////
-						
-						/* // 로그인 유무 따른 예외처리
+						// 로그인 유무 따른 예외처리
 						if(m_idx.val() != ""){
 							var rstr = '';
 							// 예약을 위한 정보 생성
@@ -709,7 +703,7 @@
 							}else{
 								location.href = "${pageContext.request.contextPath}/Member/login";
 							}
-						} // end : 로그인 유무 따른 예외처리 */
+						} // end : 로그인 유무 따른 예외처리
 					}) // end : 좌석 버튼 클릭 이벤트
 				} // end : 퍼스트석 선택
 				
